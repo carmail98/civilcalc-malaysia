@@ -7,6 +7,10 @@ interface CalcInputProps {
   value: string;
   onChange: (value: string) => void;
   name: string;
+  min?: number;
+  max?: number;
+  error?: string;
+  warning?: string;
 }
 
 export default function CalcInput({
@@ -16,6 +20,10 @@ export default function CalcInput({
   value,
   onChange,
   name,
+  min,
+  max,
+  error,
+  warning,
 }: CalcInputProps) {
   return (
     <div className="mb-4">
@@ -30,12 +38,22 @@ export default function CalcInput({
         name={name}
         type="number"
         step="any"
+        min={min}
+        max={max}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        className={`w-full rounded-lg border px-3 py-2 text-sm focus:outline-none focus:ring-1 ${
+          error
+            ? "border-red-400 focus:border-red-500 focus:ring-red-500"
+            : warning
+            ? "border-amber-400 focus:border-amber-500 focus:ring-amber-500"
+            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+        }`}
         placeholder={hint}
       />
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+      {warning && !error && <p className="mt-1 text-xs text-amber-600">{warning}</p>}
+      {hint && !error && !warning && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
     </div>
   );
 }

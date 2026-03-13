@@ -20,7 +20,24 @@ export default function DrainagePage() {
   const iVal = parseFloat(i);
   const aVal = parseFloat(A);
 
-  const allValid = !isNaN(cVal) && !isNaN(iVal) && !isNaN(aVal);
+  // Validation
+  const cError = C !== "" && !isNaN(cVal)
+    ? cVal < 0 ? "Value cannot be negative"
+    : cVal > 1 ? "Runoff coefficient must be between 0 and 1 (per MSMA)"
+    : undefined
+    : undefined;
+
+  const iError = i !== "" && !isNaN(iVal) && iVal < 0
+    ? "Value cannot be negative" : undefined;
+
+  const aError = A !== "" && !isNaN(aVal) && aVal < 0
+    ? "Value cannot be negative" : undefined;
+
+  const aWarning = A !== "" && !isNaN(aVal) && aVal > 80
+    ? "Rational Method is typically valid for A ≤ 80 ha (MSMA)" : undefined;
+
+  const hasErrors = !!cError || !!iError || !!aError;
+  const allValid = !isNaN(cVal) && !isNaN(iVal) && !isNaN(aVal) && !hasErrors;
   const result = allValid ? rationalMethod(cVal, iVal, aVal) : null;
 
   return (
@@ -41,6 +58,9 @@ export default function DrainagePage() {
               hint={data.variables.C.hint}
               value={C}
               onChange={setC}
+              min={0}
+              max={1}
+              error={cError}
             />
             <CalcInput
               name="i"
@@ -49,6 +69,8 @@ export default function DrainagePage() {
               hint={data.variables.i.hint}
               value={i}
               onChange={setI}
+              min={0}
+              error={iError}
             />
             <CalcInput
               name="A"
@@ -57,6 +79,9 @@ export default function DrainagePage() {
               hint={data.variables.A.hint}
               value={A}
               onChange={setA}
+              min={0}
+              error={aError}
+              warning={aWarning}
             />
 
             {allValid && (
