@@ -1,0 +1,29 @@
+{
+  "rational_method": {
+    "name": "Rational Method — Peak Flow",
+    "reference": "MSMA 2nd Edition, Chapter 2",
+    "formula": "Q = C × i × A / 360",
+    "variables": {
+      "C": { "label": "Runoff Coefficient", "unit": "", "hint": "Typical 0.3–0.9 depending on land use" },
+      "i": { "label": "Rainfall Intensity", "unit": "mm/hr", "hint": "From IDF curve for selected ARI and Tc" },
+      "A": { "label": "Catchment Area", "unit": "ha", "hint": "Total contributing catchment area" }
+    },
+    "result": {
+      "Q": { "label": "Peak Flow", "unit": "m³/s" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "time_of_concentration": {
+    "name": "Time of Concentration (Tc)",
+    "reference": "MSMA 2nd Edition, Chapter 2",
+    "formula": "Tc = to + td",
+    "variables": {
+      "to": { "label": "Overland Flow Time", "unit": "min", "hint": "Time for runoff to reach nearest drain" },
+      "td": { "label": "Drain Travel Time", "unit": "min", "hint": "Time for flow to travel through drain to outlet" }
+    },
+    "result": {
+      "Tc": { "label": "Time of Concentration", "unit": "min" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  }
+}
