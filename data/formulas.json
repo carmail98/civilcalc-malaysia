@@ -104,6 +104,135 @@
     },
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
   },
+  "flexible_pavement": {
+    "name": "Flexible Pavement Design (JKR Method)",
+    "reference": "JKR Arahan Teknik Jalan 5/85 (Revised 2013)",
+    "formula": "ESAL = ADT_cv × TF × 365 × DD × LDF × GF",
+    "sub_formulas": {
+      "growth_factor": "GF = ((1 + r)^n − 1) / r",
+      "traffic_category": "TC from cumulative ESAL → pavement layers from JKR design table"
+    },
+    "variables": {
+      "adtCommercial": { "label": "ADT Commercial Vehicles", "unit": "veh/day", "hint": "Vehicles >3 tonnes (from traffic count)" },
+      "truckFactor": { "label": "Truck Factor (TF)", "unit": "ESAL/veh", "hint": "Typical 1.0–5.0 (ATJ Table 2)" },
+      "growthRate": { "label": "Traffic Growth Rate", "unit": "%", "hint": "Typical 4–6% per annum" },
+      "designPeriod": { "label": "Design Period", "unit": "years", "hint": "Typical 10–20 years" },
+      "directionalDist": { "label": "Directional Distribution (DD)", "unit": "", "hint": "Typically 0.50 for 2-way roads" },
+      "laneDistFactor": { "label": "Lane Distribution Factor (LDF)", "unit": "", "hint": "1-lane: 1.0, 2-lane: 0.80, 3-lane: 0.60" },
+      "cbr": { "label": "Subgrade CBR", "unit": "%", "hint": "From lab CBR test (soaked, 4-day)" }
+    },
+    "result": {
+      "ESAL": { "label": "Cumulative ESAL", "unit": "" },
+      "TC": { "label": "Traffic Category", "unit": "" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "culvert_design": {
+    "name": "Culvert Hydraulic Design",
+    "reference": "MSMA 2nd Edition Ch 36 & REAM Road Drainage Design Vol 4",
+    "formula": "Q = (1/n) × A × R^(2/3) × S^(1/2) × N",
+    "sub_formulas": {
+      "box": "A = B×D  |  P = 2(B + D)",
+      "pipe": "A = π·d²/4  |  P = π·d"
+    },
+    "variables": {
+      "n": { "label": "Manning Roughness Coefficient", "unit": "", "hint": "Concrete pipe 0.013, Corrugated metal 0.024, RCBC 0.013–0.015" },
+      "slope": { "label": "Culvert Slope", "unit": "m/m", "hint": "Typical 0.005–0.02, match drain invert" },
+      "numBarrels": { "label": "Number of Barrels", "unit": "", "hint": "Single, twin, or triple barrel" },
+      "B": { "label": "Box Width (Span)", "unit": "m", "hint": "Internal clear width" },
+      "D": { "label": "Box Height (Rise)", "unit": "m", "hint": "Internal clear height" },
+      "d": { "label": "Pipe Diameter", "unit": "m", "hint": "Internal diameter (e.g. 0.6, 0.9, 1.2 m)" },
+      "Qdesign": { "label": "Design Flow", "unit": "m³/s", "hint": "Optional — from Rational Method for adequacy check" }
+    },
+    "result": {
+      "Q": { "label": "Total Culvert Capacity", "unit": "m³/s" },
+      "V": { "label": "Flow Velocity", "unit": "m/s" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "drain_sizing": {
+    "name": "Manning's Drain Sizing",
+    "reference": "MSMA 2nd Edition, Chapter 14 & 16",
+    "formula": "Q = (1/n) × A × R^(2/3) × S^(1/2)",
+    "sub_formulas": {
+      "rectangular": "A = b×y  |  P = b + 2y",
+      "trapezoidal": "A = (b + z·y)·y  |  P = b + 2y·√(1 + z²)"
+    },
+    "variables": {
+      "n": { "label": "Manning Roughness Coefficient", "unit": "", "hint": "Concrete 0.013, Stone masonry 0.020, Earth 0.025, Grass 0.030" },
+      "b": { "label": "Base Width", "unit": "m", "hint": "Bottom width of drain channel" },
+      "y": { "label": "Flow Depth", "unit": "m", "hint": "Depth of water in drain" },
+      "S": { "label": "Bed Slope", "unit": "m/m", "hint": "Typical 0.001–0.05, min 0.001 for self-cleansing" },
+      "z": { "label": "Side Slope (H:V)", "unit": "", "hint": "Trapezoidal only — e.g. 1.0 for 1H:1V, 1.5 for 1.5H:1V" }
+    },
+    "result": {
+      "Q": { "label": "Discharge Capacity", "unit": "m³/s" },
+      "V": { "label": "Flow Velocity", "unit": "m/s" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "idf_curve": {
+    "name": "IDF Curve — Rainfall Intensity",
+    "reference": "MSMA 2nd Edition, Appendix 2.B & DID Hydrological Procedure No. 1 (HP1)",
+    "formula": "i = (λ × T^κ) / (d + θ)^η",
+    "variables": {
+      "station": { "label": "Rainfall Station / Region", "unit": "", "hint": "Select preset or enter custom IDF constants" },
+      "lambda": { "label": "λ (Lambda)", "unit": "", "hint": "Fitting constant from MSMA/HP1 table" },
+      "kappa": { "label": "κ (Kappa)", "unit": "", "hint": "ARI exponent from MSMA/HP1 table" },
+      "theta": { "label": "θ (Theta)", "unit": "", "hint": "Duration offset from MSMA/HP1 table" },
+      "eta": { "label": "η (Eta)", "unit": "", "hint": "Duration exponent from MSMA/HP1 table" },
+      "ari": { "label": "Average Recurrence Interval (ARI)", "unit": "years", "hint": "Common: 2, 5, 10, 20, 50, 100 years" },
+      "duration": { "label": "Storm Duration", "unit": "min", "hint": "Typically 5–360 minutes" }
+    },
+    "result": {
+      "i": { "label": "Rainfall Intensity", "unit": "mm/hr" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "detention_pond": {
+    "name": "Detention Pond Volume (MSMA)",
+    "reference": "MSMA 2nd Edition, Chapter 5 — On-Site Detention (OSD)",
+    "formula": "V_s = (Q_post − PSD) × t_d × 60",
+    "sub_formulas": {
+      "q_pre": "Q_pre = C_pre × i × A / 360",
+      "q_post": "Q_post = C_post × i × A / 360"
+    },
+    "variables": {
+      "area": { "label": "Catchment Area", "unit": "ha", "hint": "Total contributing catchment area" },
+      "cPre": { "label": "Pre-Development Runoff Coefficient", "unit": "", "hint": "Undeveloped: 0.1–0.3 (forest/grass)" },
+      "cPost": { "label": "Post-Development Runoff Coefficient", "unit": "", "hint": "Developed: 0.6–0.9 (residential/commercial)" },
+      "intensity": { "label": "Rainfall Intensity", "unit": "mm/hr", "hint": "From IDF curve for design ARI (typically 10yr or 100yr)" },
+      "stormDuration": { "label": "Storm Duration", "unit": "min", "hint": "Try several durations to find critical (max) storage" },
+      "psd": { "label": "Permissible Site Discharge (PSD)", "unit": "m³/s", "hint": "Optional — leave blank to use Q_pre as PSD" }
+    },
+    "result": {
+      "V": { "label": "Required Storage Volume", "unit": "m³" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "sewer_sizing": {
+    "name": "Sewer Pipe Sizing (MSIG/SPAN)",
+    "reference": "MSIG (Malaysian Sewerage Industry Guidelines) & SPAN UTG",
+    "formula": "Q_design = PF × DWF + Infiltration",
+    "sub_formulas": {
+      "dwf": "DWF = PE × q / 86400  (L/s)",
+      "harmon": "PF = 1 + 14 / (4 + √(PE/1000))",
+      "pipe": "Q_full = (1/n) × A × R^(2/3) × S^(1/2)"
+    },
+    "variables": {
+      "PE": { "label": "Population Equivalent", "unit": "PE", "hint": "Total PE served (residential: 1 PE per person)" },
+      "perCapitaFlow": { "label": "Per Capita Sewage Flow", "unit": "L/person/day", "hint": "MSIG standard: 225 L/person/day (domestic)" },
+      "pipeDia": { "label": "Pipe Diameter", "unit": "mm", "hint": "Min 150mm (house), 200mm (public sewer)" },
+      "pipeSlope": { "label": "Pipe Slope", "unit": "m/m", "hint": "Min 1:200 for 150mm, 1:250 for 200mm" },
+      "manningN": { "label": "Manning Roughness (n)", "unit": "", "hint": "uPVC/VC 0.011, Concrete 0.013" },
+      "infiltration": { "label": "Infiltration Allowance", "unit": "L/s", "hint": "Typical 0.05 L/s per mm dia per km of sewer" }
+    },
+    "result": {
+      "Qdesign": { "label": "Design Flow", "unit": "L/s" },
+      "Qfull": { "label": "Pipe Full Capacity", "unit": "L/s" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
   "rc_beam_moment": {
     "name": "RC Beam Moment Capacity (EC2)",
     "reference": "MS EN 1992-1-1:2010, Malaysia NA — αcc = 0.85",

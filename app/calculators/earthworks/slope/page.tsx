@@ -8,6 +8,9 @@ import Disclaimer from "@/components/Disclaimer";
 import PrintNote from "@/components/PrintNote";
 import { slopeGradient } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.slope_gradient;
 
@@ -17,6 +20,8 @@ export default function SlopePage() {
 
   const vVal = parseFloat(vertical);
   const hVal = parseFloat(horizontal);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("slope-gradient");
 
   const vError =
     vertical !== "" && !isNaN(vVal) && vVal < 0.01
@@ -51,6 +56,14 @@ export default function SlopePage() {
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
 
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { vertical, horizontal })}
+          onLoad={(v) => { setVertical(v.vertical ?? ""); setHorizontal(v.horizontal ?? ""); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
+
         <FormulaBox formula={data.formula} reference={data.reference} />
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -76,13 +89,24 @@ export default function SlopePage() {
               error={hError}
             />
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && result !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: data.formula,
+                  inputs: [
+                    { label: data.variables.vertical.label, value: vertical, unit: data.variables.vertical.unit },
+                    { label: data.variables.horizontal.label, value: horizontal, unit: data.variables.horizontal.unit },
+                  ],
+                  result: {
+                    label: "Slope",
+                    value: `1 : ${result.ratio.toFixed(2)}  |  ${result.percentage.toFixed(1)}%  |  ${result.angle.toFixed(1)}°`,
+                    unit: "",
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 

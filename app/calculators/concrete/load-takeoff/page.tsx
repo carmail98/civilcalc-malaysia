@@ -8,6 +8,9 @@ import Disclaimer from "@/components/Disclaimer";
 import PrintNote from "@/components/PrintNote";
 import { loadTakeOff } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.load_takeoff;
 
@@ -35,6 +38,8 @@ export default function LoadTakeOffPage() {
   const fVal = parseFloat(finishes);
   const iVal = parseFloat(imposed);
   const twVal = parseFloat(tribWidth);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("load-takeoff");
 
   // Validation
   const tError =
@@ -83,6 +88,14 @@ export default function LoadTakeOffPage() {
       <div className="print:hidden">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { thickness, finishes, imposed, imposedPreset, tribWidth })}
+          onLoad={(v) => { setThickness(v.thickness ?? ""); setFinishes(v.finishes ?? "1.2"); setImposed(v.imposed ?? "1.5"); setImposedPreset(v.imposedPreset ?? "1.5"); setTribWidth(v.tribWidth ?? ""); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
@@ -158,13 +171,29 @@ export default function LoadTakeOffPage() {
               error={twError}
             />
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && result !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: data.formula,
+                  inputs: [
+                    { label: data.variables.thickness.label, value: thickness, unit: data.variables.thickness.unit },
+                    { label: data.variables.finishes.label, value: finishes, unit: data.variables.finishes.unit },
+                    { label: data.variables.imposed.label, value: imposed, unit: data.variables.imposed.unit },
+                    { label: data.variables.tribWidth.label, value: tribWidth, unit: data.variables.tribWidth.unit },
+                    { label: "Slab Self-Weight", value: result.slabSW.toFixed(2), unit: "kN/m²" },
+                    { label: "Total Dead Load (Gk)", value: result.Gk.toFixed(2), unit: "kN/m²" },
+                    { label: "Imposed Load (Qk)", value: result.Qk.toFixed(2), unit: "kN/m²" },
+                  ],
+                  result: {
+                    label: `ULS: ${result.ULS.toFixed(2)} kN/m² | Line Load: ${result.lineLoad.toFixed(2)} kN/m`,
+                    value: result.lineLoad.toFixed(4),
+                    unit: "kN/m",
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 

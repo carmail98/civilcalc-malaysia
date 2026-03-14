@@ -46,6 +46,9 @@ export default function RootLayout({
               <a href="/calculators/roads" className="hover:text-blue-700 whitespace-nowrap">
                 Roads
               </a>
+              <a href="/calculators/sewerage" className="hover:text-blue-700 whitespace-nowrap">
+                Sewerage
+              </a>
               <a href="/calculators/concrete" className="hover:text-blue-700 whitespace-nowrap">
                 Structural
               </a>

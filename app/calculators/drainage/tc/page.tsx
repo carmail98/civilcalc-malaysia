@@ -12,6 +12,9 @@ import {
   timeOfConcentration,
 } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.time_of_concentration;
 
@@ -27,6 +30,8 @@ export default function TcPage() {
   const sVal = parseFloat(S);
   const ldVal = parseFloat(Ld);
   const vVal = parseFloat(V);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("time-of-concentration");
 
   // Validation
   const nError =
@@ -97,6 +102,14 @@ export default function TcPage() {
       <div className="print:hidden">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { n, L, S, Ld, V })}
+          onLoad={(v) => { setN(v.n ?? ""); setL(v.L ?? ""); setS(v.S ?? ""); setLd(v.Ld ?? ""); setV(v.V ?? ""); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
@@ -184,13 +197,29 @@ export default function TcPage() {
               warning={vWarning}
             />
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && tcRaw !== null && toVal !== null && tdVal !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: `${data.formula}  |  ${data.sub_formulas.to}  |  ${data.sub_formulas.td}`,
+                  inputs: [
+                    { label: data.variables.n.label, value: n, unit: "—" },
+                    { label: data.variables.L.label, value: L, unit: data.variables.L.unit },
+                    { label: data.variables.S.label, value: S, unit: data.variables.S.unit },
+                    { label: data.variables.Ld.label, value: Ld, unit: data.variables.Ld.unit },
+                    { label: data.variables.V.label, value: V, unit: data.variables.V.unit },
+                    { label: "Overland Flow Time (to)", value: toVal.toFixed(2), unit: "min" },
+                    { label: "Drain Flow Time (td)", value: tdVal.toFixed(2), unit: "min" },
+                  ],
+                  result: {
+                    label: data.result.tc.label,
+                    value: tcRaw.toFixed(2),
+                    unit: data.result.tc.unit,
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 

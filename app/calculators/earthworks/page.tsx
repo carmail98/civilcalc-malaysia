@@ -8,6 +8,9 @@ import Disclaimer from "@/components/Disclaimer";
 import PrintNote from "@/components/PrintNote";
 import { cutFillVolume } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.cut_fill_volume;
 
@@ -21,6 +24,8 @@ export default function CutFillPage() {
   const a1Val = parseFloat(A1);
   const a2Val = parseFloat(A2);
   const lVal = parseFloat(L);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("cut-fill-volume");
 
   // Validation
   const a1Error =
@@ -68,6 +73,14 @@ export default function CutFillPage() {
       <div className="print:hidden">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { A1, A2, L, method, type })}
+          onLoad={(v) => { setA1(v.A1 ?? ""); setA2(v.A2 ?? ""); setL(v.L ?? ""); setMethod((v.method as "average" | "prismoidal") ?? "average"); setType((v.type as "Cut" | "Fill") ?? "Cut"); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
 
         <FormulaBox formula={formulaDisplay} reference={data.reference} />
 
@@ -140,13 +153,27 @@ export default function CutFillPage() {
               <p className="mt-1 text-xs text-amber-600">{variationWarning}</p>
             )}
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && result !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: formulaDisplay,
+                  inputs: [
+                    { label: "Method", value: method === "prismoidal" ? "Prismoidal" : "Average End Area", unit: "—" },
+                    { label: "Type", value: type, unit: "—" },
+                    { label: data.variables.A1.label, value: A1, unit: data.variables.A1.unit },
+                    { label: data.variables.A2.label, value: A2, unit: data.variables.A2.unit },
+                    { label: data.variables.L.label, value: L, unit: data.variables.L.unit },
+                  ],
+                  result: {
+                    label: `${type} ${data.result.V.label}`,
+                    value: result.toFixed(4),
+                    unit: data.result.V.unit,
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 

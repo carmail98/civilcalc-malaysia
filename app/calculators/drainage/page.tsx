@@ -8,6 +8,9 @@ import Disclaimer from "@/components/Disclaimer";
 import PrintNote from "@/components/PrintNote";
 import { rationalMethod } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.rational_method;
 
@@ -19,6 +22,8 @@ export default function DrainagePage() {
   const cVal = parseFloat(C);
   const iVal = parseFloat(i);
   const aVal = parseFloat(A);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("rational-method");
 
   // Validation
   const cError = C !== "" && !isNaN(cVal)
@@ -46,6 +51,14 @@ export default function DrainagePage() {
       <div className="print:hidden">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { C, i, A })}
+          onLoad={(v) => { setC(v.C ?? ""); setI(v.i ?? ""); setA(v.A ?? ""); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
@@ -84,13 +97,25 @@ export default function DrainagePage() {
               warning={aWarning}
             />
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && result !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: data.formula,
+                  inputs: [
+                    { label: data.variables.C.label, value: C, unit: data.variables.C.unit || "—" },
+                    { label: data.variables.i.label, value: i, unit: data.variables.i.unit },
+                    { label: data.variables.A.label, value: A, unit: data.variables.A.unit },
+                  ],
+                  result: {
+                    label: data.result.Q.label,
+                    value: result.toFixed(4),
+                    unit: data.result.Q.unit,
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 

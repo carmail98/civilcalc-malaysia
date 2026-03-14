@@ -8,6 +8,9 @@ import Disclaimer from "@/components/Disclaimer";
 import PrintNote from "@/components/PrintNote";
 import { roadCarriagewayWidth } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.road_width;
 
@@ -44,6 +47,8 @@ export default function RoadWidthPage() {
 
   const nlVal = parseInt(numLanes);
   const pwVal = parseFloat(proposedWidth);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("road-width");
 
   const nlError =
     numLanes !== "" && !isNaN(nlVal) && (nlVal < 1 || nlVal > 8)
@@ -98,6 +103,14 @@ export default function RoadWidthPage() {
       <div className="print:hidden">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { roadType, roadClass, terrain, numLanes, proposedWidth })}
+          onLoad={(v) => { setRoadType((v.roadType as "rural" | "urban") ?? "rural"); setRoadClass(v.roadClass ?? "R4"); setTerrain(v.terrain ?? "flat"); setNumLanes(v.numLanes ?? "2"); setProposedWidth(v.proposedWidth ?? ""); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
@@ -196,13 +209,28 @@ export default function RoadWidthPage() {
               </p>
             )}
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && result !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: data.formula,
+                  inputs: [
+                    { label: "Road Type", value: roadType === "rural" ? "Rural" : "Urban", unit: "—" },
+                    { label: "Road Class", value: roadClass, unit: "—" },
+                    { label: "Terrain", value: terrainLabels[terrain as keyof typeof terrainLabels] ?? terrain, unit: "—" },
+                    { label: "Lane Width (ATJ 8/86)", value: laneWidth.toString(), unit: "m" },
+                    { label: "Number of Lanes", value: numLanes, unit: "—" },
+                    { label: "Proposed Width", value: proposedWidth, unit: "m" },
+                  ],
+                  result: {
+                    label: `Min Width: ${result.minWidth.toFixed(2)} m — ${result.pass ? "PASS" : "FAIL"}`,
+                    value: `${pwVal} m ${result.pass ? "≥" : "<"} ${result.minWidth.toFixed(2)} m`,
+                    unit: "",
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 

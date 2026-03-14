@@ -8,6 +8,9 @@ import Disclaimer from "@/components/Disclaimer";
 import PrintNote from "@/components/PrintNote";
 import { dryDensityCompaction } from "@/lib/calcEngine";
 import formulaData from "@/data/formulas.json";
+import PdfExportButton from "@/components/PdfExportButton";
+import { useCalcStorage } from "@/lib/useCalcStorage";
+import SaveLoadBar from "@/components/SaveLoadBar";
 
 const data = formulaData.dry_density;
 
@@ -25,6 +28,8 @@ export default function CompactionPage() {
   const moistVal = parseFloat(moisture);
   const mddVal = parseFloat(MDD);
   const reqVal = parseFloat(requirement);
+
+  const { savedList, save, remove, clearAll } = useCalcStorage("compaction-check");
 
   // Validation
   const wmError =
@@ -86,6 +91,14 @@ export default function CompactionPage() {
       <div className="print:hidden">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <SaveLoadBar
+          savedList={savedList}
+          onSave={(name) => save(name, { wetMass, mouldMass, mouldVol, moisture, MDD, requirement })}
+          onLoad={(v) => { setWetMass(v.wetMass ?? ""); setMouldMass(v.mouldMass ?? ""); setMouldVol(v.mouldVol ?? "944"); setMoisture(v.moisture ?? ""); setMDD(v.MDD ?? ""); setRequirement(v.requirement ?? "95"); }}
+          onRemove={remove}
+          onClearAll={clearAll}
+        />
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
@@ -154,13 +167,29 @@ export default function CompactionPage() {
               error={reqError}
             />
 
-            {allValid && (
-              <button
-                onClick={() => window.print()}
-                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
-              >
-                Print Calculation Sheet
-              </button>
+            {allValid && result !== null && (
+              <PdfExportButton
+                data={{
+                  title: data.name,
+                  reference: data.reference,
+                  formula: data.formula,
+                  inputs: [
+                    { label: data.variables.wetMass.label, value: wetMass, unit: data.variables.wetMass.unit },
+                    { label: data.variables.mouldMass.label, value: mouldMass, unit: data.variables.mouldMass.unit },
+                    { label: data.variables.mouldVol.label, value: mouldVol, unit: data.variables.mouldVol.unit },
+                    { label: data.variables.moisture.label, value: moisture, unit: data.variables.moisture.unit },
+                    { label: data.variables.MDD.label, value: MDD, unit: data.variables.MDD.unit },
+                    { label: data.variables.requirement.label, value: requirement, unit: data.variables.requirement.unit },
+                    { label: "Wet Density", value: result.wetDensity.toFixed(3), unit: "Mg/m³" },
+                  ],
+                  result: {
+                    label: `${data.result.dryDensity.label} — ${result.pass ? "PASS" : "FAIL"}`,
+                    value: `${result.dryDensity.toFixed(3)} Mg/m³  (${result.compactionPercent.toFixed(1)}%)`,
+                    unit: "",
+                  },
+                  disclaimer: data.disclaimer,
+                }}
+              />
             )}
           </div>
 
