@@ -28,7 +28,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}
       >
-        <header className="border-b border-gray-200 bg-white">
+        <header className="border-b border-gray-200 bg-white print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
             <a href="/" className="text-xl font-bold text-blue-700 shrink-0">
               CivilCalc<span className="text-gray-500">.my</span>
@@ -40,11 +40,20 @@ export default function RootLayout({
               <a href="/calculators/drainage" className="hover:text-blue-700 whitespace-nowrap">
                 Drainage
               </a>
+              <a href="/calculators/earthworks" className="hover:text-blue-700 whitespace-nowrap">
+                Earthworks
+              </a>
+              <a href="/calculators/roads" className="hover:text-blue-700 whitespace-nowrap">
+                Roads
+              </a>
+              <a href="/calculators/concrete" className="hover:text-blue-700 whitespace-nowrap">
+                Structural
+              </a>
             </nav>
           </div>
         </header>
         <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
-        <footer className="border-t border-gray-200 bg-white mt-12">
+        <footer className="border-t border-gray-200 bg-white mt-12 print:hidden">
           <div className="mx-auto max-w-5xl px-4 py-6 text-center text-xs text-gray-400">
             CivilCalc Malaysia &copy; {new Date().getFullYear()} — Engineering
             calculation aid only. All designs must be endorsed by a registered

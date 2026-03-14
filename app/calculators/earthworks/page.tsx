@@ -1,0 +1,193 @@
+"use client";
+
+import { useState } from "react";
+import CalcInput from "@/components/CalcInput";
+import CalcResult from "@/components/CalcResult";
+import FormulaBox from "@/components/FormulaBox";
+import Disclaimer from "@/components/Disclaimer";
+import PrintNote from "@/components/PrintNote";
+import { cutFillVolume } from "@/lib/calcEngine";
+import formulaData from "@/data/formulas.json";
+
+const data = formulaData.cut_fill_volume;
+
+export default function CutFillPage() {
+  const [A1, setA1] = useState("");
+  const [A2, setA2] = useState("");
+  const [L, setL] = useState("");
+  const [method, setMethod] = useState<"average" | "prismoidal">("average");
+  const [type, setType] = useState<"Cut" | "Fill">("Cut");
+
+  const a1Val = parseFloat(A1);
+  const a2Val = parseFloat(A2);
+  const lVal = parseFloat(L);
+
+  // Validation
+  const a1Error =
+    A1 !== "" && !isNaN(a1Val) && a1Val < 0
+      ? "Area cannot be negative"
+      : undefined;
+  const a2Error =
+    A2 !== "" && !isNaN(a2Val) && a2Val < 0
+      ? "Area cannot be negative"
+      : undefined;
+  const lError =
+    L !== "" && !isNaN(lVal) && lVal < 0.1
+      ? "Distance must be at least 0.1 m"
+      : undefined;
+
+  // Warning for large cross-section variation
+  const variationWarning =
+    A1 !== "" &&
+    A2 !== "" &&
+    !isNaN(a1Val) &&
+    !isNaN(a2Val) &&
+    a1Val > 0 &&
+    Math.abs(a1Val - a2Val) > a1Val * 0.5
+      ? "Large cross-section variation — Prismoidal method recommended"
+      : undefined;
+
+  const hasErrors = !!a1Error || !!a2Error || !!lError;
+  const allValid =
+    !isNaN(a1Val) &&
+    !isNaN(a2Val) &&
+    !isNaN(lVal) &&
+    a1Val >= 0 &&
+    a2Val >= 0 &&
+    lVal >= 0.1 &&
+    !hasErrors;
+
+  const result = allValid ? cutFillVolume(a1Val, a2Val, lVal, method) : null;
+
+  const formulaDisplay =
+    method === "prismoidal" ? data.formula_prismoidal : data.formula;
+
+  return (
+    <>
+      {/* Screen view */}
+      <div className="print:hidden">
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
+        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+
+        <FormulaBox formula={formulaDisplay} reference={data.reference} />
+
+        <div className="grid gap-6 md:grid-cols-2">
+          <div>
+            {/* Method selector */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Calculation Method
+              </label>
+              <select
+                value={method}
+                onChange={(e) =>
+                  setMethod(e.target.value as "average" | "prismoidal")
+                }
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="average">Average End Area</option>
+                <option value="prismoidal">Prismoidal</option>
+              </select>
+            </div>
+
+            {/* Type selector */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Earthworks Type
+              </label>
+              <select
+                value={type}
+                onChange={(e) => setType(e.target.value as "Cut" | "Fill")}
+                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+              >
+                <option value="Cut">Cut</option>
+                <option value="Fill">Fill</option>
+              </select>
+            </div>
+
+            <CalcInput
+              name="A1"
+              label={data.variables.A1.label}
+              unit={data.variables.A1.unit}
+              hint={data.variables.A1.hint}
+              value={A1}
+              onChange={setA1}
+              min={0}
+              error={a1Error}
+            />
+            <CalcInput
+              name="A2"
+              label={data.variables.A2.label}
+              unit={data.variables.A2.unit}
+              hint={data.variables.A2.hint}
+              value={A2}
+              onChange={setA2}
+              min={0}
+              error={a2Error}
+            />
+            <CalcInput
+              name="L"
+              label={data.variables.L.label}
+              unit={data.variables.L.unit}
+              hint={data.variables.L.hint}
+              value={L}
+              onChange={setL}
+              min={0.1}
+              error={lError}
+            />
+
+            {variationWarning && (
+              <p className="mt-1 text-xs text-amber-600">{variationWarning}</p>
+            )}
+
+            {allValid && (
+              <button
+                onClick={() => window.print()}
+                className="mt-4 rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-300"
+              >
+                Print Calculation Sheet
+              </button>
+            )}
+          </div>
+
+          <div>
+            <CalcResult
+              label={`${type} ${data.result.V.label}`}
+              value={result}
+              unit={data.result.V.unit}
+            />
+            {result !== null && (
+              <p className="mt-2 text-sm text-gray-500">
+                Method: {method === "prismoidal" ? "Prismoidal" : "Average End Area"} | Type: {type}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <Disclaimer text={data.disclaimer} />
+      </div>
+
+      {/* Print view */}
+      {allValid && result !== null && (
+        <PrintNote
+          title={data.name}
+          reference={data.reference}
+          formula={formulaDisplay}
+          inputs={[
+            { label: "Method", value: method === "prismoidal" ? "Prismoidal" : "Average End Area", unit: "—" },
+            { label: "Type", value: type, unit: "—" },
+            { label: data.variables.A1.label, value: A1, unit: data.variables.A1.unit },
+            { label: data.variables.A2.label, value: A2, unit: data.variables.A2.unit },
+            { label: data.variables.L.label, value: L, unit: data.variables.L.unit },
+          ]}
+          result={{
+            label: `${type} ${data.result.V.label}`,
+            value: result.toFixed(4),
+            unit: data.result.V.unit,
+          }}
+          disclaimer={data.disclaimer}
+        />
+      )}
+    </>
+  );
+}

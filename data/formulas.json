@@ -15,14 +15,114 @@
   },
   "time_of_concentration": {
     "name": "Time of Concentration (Tc)",
-    "reference": "MSMA 2nd Edition, Chapter 2",
-    "formula": "Tc = to + td",
+    "reference": "MSMA 2nd Edition, Chapter 2, Eq. 2.3 & 2.5",
+    "formula": "tc = to + td",
+    "sub_formulas": {
+      "to": "to = 107·n·L^(1/3) / S^(1/5)",
+      "td": "td = L_d / (60·V)"
+    },
     "variables": {
-      "to": { "label": "Overland Flow Time", "unit": "min", "hint": "Time for runoff to reach nearest drain" },
-      "td": { "label": "Drain Travel Time", "unit": "min", "hint": "Time for flow to travel through drain to outlet" }
+      "n": { "label": "Manning Roughness (Overland)", "unit": "", "hint": "Typical 0.01–0.80" },
+      "L": { "label": "Overland Flow Path Length", "unit": "m", "hint": "Max 50m steep (>10%), max 100m gentle" },
+      "S": { "label": "Surface Slope", "unit": "m/m", "hint": "Range 0.001–0.5" },
+      "Ld": { "label": "Drain/Channel Length", "unit": "m", "hint": "Length of drain to outlet" },
+      "V": { "label": "Flow Velocity in Drain", "unit": "m/s", "hint": "Typical 0.5–3.0 m/s" }
     },
     "result": {
-      "Tc": { "label": "Time of Concentration", "unit": "min" }
+      "tc": { "label": "Time of Concentration", "unit": "min" }
+    },
+    "tc_min": 5,
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "cut_fill_volume": {
+    "name": "Earthworks Cut & Fill Volume",
+    "reference": "JKR Earthworks Manual — Average End Area / Prismoidal",
+    "formula": "V = L/2 × (A1 + A2)",
+    "formula_prismoidal": "V = L/6 × (A1 + A2 + √(A1×A2))",
+    "variables": {
+      "A1": { "label": "Cross-Section Area at Station 1", "unit": "m²", "hint": "From cross-section drawing" },
+      "A2": { "label": "Cross-Section Area at Station 2", "unit": "m²", "hint": "From cross-section drawing" },
+      "L": { "label": "Distance Between Sections", "unit": "m", "hint": "Typical 20–50m" }
+    },
+    "result": {
+      "V": { "label": "Volume", "unit": "m³" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "slope_gradient": {
+    "name": "Slope Gradient & Batter",
+    "reference": "JKR Road Design / MASMA Slope Stability Guidelines",
+    "formula": "Slope = 1 : (H/V)  |  % = (V/H) × 100  |  θ = atan(V/H)",
+    "variables": {
+      "vertical": { "label": "Vertical Rise", "unit": "m", "hint": "Height difference" },
+      "horizontal": { "label": "Horizontal Run", "unit": "m", "hint": "Horizontal distance" }
+    },
+    "result": {
+      "ratio": { "label": "Slope Ratio", "unit": "" },
+      "percentage": { "label": "Slope Percentage", "unit": "%" },
+      "angle": { "label": "Slope Angle", "unit": "°" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "dry_density": {
+    "name": "Dry Density & Compaction Check",
+    "reference": "JKR Standard Specification for Road Works, Section S/4",
+    "formula": "ρd = ρw / (1 + w/100)  |  Compaction % = (ρd / MDD) × 100",
+    "variables": {
+      "wetMass": { "label": "Wet Mass of Soil + Mould", "unit": "g", "hint": "From weighing" },
+      "mouldMass": { "label": "Mass of Mould Only", "unit": "g", "hint": "Empty mould mass" },
+      "mouldVol": { "label": "Mould Volume", "unit": "cm³", "hint": "Standard: 944 cm³ (BS 1377) or 2305 cm³ (CBR)" },
+      "moisture": { "label": "Moisture Content", "unit": "%", "hint": "From oven-dry test" },
+      "MDD": { "label": "Maximum Dry Density (Lab)", "unit": "Mg/m³", "hint": "From Proctor test" },
+      "requirement": { "label": "Compaction Requirement", "unit": "%", "hint": "JKR: 95% subgrade, 98% subbase" }
+    },
+    "result": {
+      "dryDensity": { "label": "Dry Density", "unit": "Mg/m³" },
+      "compaction": { "label": "Compaction", "unit": "%" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "road_width": {
+    "name": "Road Carriageway Width Check",
+    "reference": "JKR Arahan Teknik Jalan (ATJ) 8/86",
+    "formula": "Min Width = Number of Lanes × Lane Width (from ATJ 8/86 Table 3)",
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "load_takeoff": {
+    "name": "Load Take-Off (Slab to Beam)",
+    "reference": "MS EN 1991-1-1 (EC1), Malaysia National Annex",
+    "formula": "w = 1.35Gk + 1.5Qk  |  W = w × tributary width",
+    "variables": {
+      "thickness": { "label": "Slab Thickness", "unit": "mm", "hint": "Typical 125–250 mm" },
+      "finishes": { "label": "Superimposed Dead Load (Finishes)", "unit": "kN/m²", "hint": "Typical 1.0–1.5 kN/m²" },
+      "imposed": { "label": "Imposed Load", "unit": "kN/m²", "hint": "Residential 1.5–2.0, Office 2.5–3.0" },
+      "tribWidth": { "label": "Tributary Width to Beam", "unit": "m", "hint": "Half span each side of beam" }
+    },
+    "result": {
+      "ULS": { "label": "ULS Design Load", "unit": "kN/m²" },
+      "lineLoad": { "label": "Line Load on Beam", "unit": "kN/m" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "rc_beam_moment": {
+    "name": "RC Beam Moment Capacity (EC2)",
+    "reference": "MS EN 1992-1-1:2010, Malaysia NA — αcc = 0.85",
+    "formula": "Mu = 0.87·fyk·As·z",
+    "sub_formulas": {
+      "lever_arm": "z = d·[0.5 + √(0.25 - K/1.134)]  ≤ 0.95d",
+      "K": "K = M / (b·d²·fck)",
+      "K_limit": "K' = 0.167 (no redistribution)"
+    },
+    "variables": {
+      "b": { "label": "Beam Width", "unit": "mm", "hint": "Typical 200–400 mm" },
+      "d": { "label": "Effective Depth", "unit": "mm", "hint": "h − cover − bar radius" },
+      "As": { "label": "Steel Area Provided", "unit": "mm²", "hint": "Total tension reinforcement area" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "25, 30, 35, or 40 MPa" },
+      "fyk": { "label": "Steel Yield Strength", "unit": "MPa", "hint": "500 MPa (H-bar, Malaysia)" },
+      "MEd": { "label": "Applied Design Moment", "unit": "kN·m", "hint": "Optional — for utilisation check" }
+    },
+    "result": {
+      "Mu": { "label": "Moment Capacity", "unit": "kN·m" }
     },
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
   }
