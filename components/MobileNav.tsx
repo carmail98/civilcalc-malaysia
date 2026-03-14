@@ -1,18 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/calculators/drainage", label: "Drainage" },
-  { href: "/calculators/earthworks", label: "Earthworks" },
-  { href: "/calculators/roads", label: "Roads" },
-  { href: "/calculators/sewerage", label: "Sewerage" },
-  { href: "/calculators/concrete", label: "Structural" },
+  { href: "/calculators", label: "Calculators" },
+  { href: "/news", label: "News" },
+  { href: "/community", label: "Community" },
+  { href: "/about", label: "About" },
 ];
 
 export default function MobileNav() {
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <div className="md:hidden">
@@ -37,7 +38,7 @@ export default function MobileNav() {
           <nav className="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
-                key={link.href}
+                key={link.label}
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
@@ -45,6 +46,48 @@ export default function MobileNav() {
                 {link.label}
               </a>
             ))}
+
+            {/* Auth links */}
+            <div className="border-t border-gray-100 mt-1 pt-1">
+              {session ? (
+                <>
+                  <a
+                    href="/profile"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                  >
+                    My Profile
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      signOut({ callbackUrl: "/" });
+                    }}
+                    className="block w-full text-left rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                  >
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <a
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors"
+                  >
+                    Sign In
+                  </a>
+                  <a
+                    href="/register"
+                    onClick={() => setOpen(false)}
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                  >
+                    Create Account
+                  </a>
+                </>
+              )}
+            </div>
           </nav>
         </div>
       )}

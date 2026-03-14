@@ -1,0 +1,408 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
+import Link from "next/link";
+
+interface Author {
+  id: string;
+  name: string;
+  image: string | null;
+  bemNumber: string | null;
+  role: string;
+}
+
+interface VoteData {
+  value: number;
+  userId: string;
+}
+
+interface AnswerData {
+  id: string;
+  body: string;
+  isAccepted: boolean;
+  createdAt: string;
+  author: Author;
+  votes: VoteData[];
+  voteScore: number;
+}
+
+interface QuestionData {
+  id: string;
+  title: string;
+  body: string;
+  tags: string[];
+  standardRef: string | null;
+  isResolved: boolean;
+  viewCount: number;
+  voteScore: number;
+  createdAt: string;
+  author: Author;
+  answers: AnswerData[];
+  votes: VoteData[];
+}
+
+function VoteButton({
+  score,
+  userVote,
+  onVote,
+  disabled,
+}: {
+  score: number;
+  userVote: number | null;
+  onVote: (value: number) => void;
+  disabled: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => onVote(1)}
+        className={`p-1 rounded transition-colors ${
+          userVote === 1
+            ? "text-blue-700 bg-blue-50"
+            : "text-gray-400 hover:text-blue-600 hover:bg-gray-100"
+        } disabled:opacity-40`}
+        title="Upvote"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <polyline points="18 15 12 9 6 15" />
+        </svg>
+      </button>
+      <span className={`text-sm font-semibold ${score > 0 ? "text-blue-700" : score < 0 ? "text-red-500" : "text-gray-400"}`}>
+        {score}
+      </span>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => onVote(-1)}
+        className={`p-1 rounded transition-colors ${
+          userVote === -1
+            ? "text-red-500 bg-red-50"
+            : "text-gray-400 hover:text-red-500 hover:bg-gray-100"
+        } disabled:opacity-40`}
+        title="Downvote"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
+      </button>
+    </div>
+  );
+}
+
+function timeAgo(dateStr: string) {
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString("en-MY");
+}
+
+export default function QuestionDetailPage() {
+  const { data: session } = useSession();
+  const params = useParams();
+  const questionId = params.id as string;
+
+  const [question, setQuestion] = useState<QuestionData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Answer form
+  const [answerBody, setAnswerBody] = useState("");
+  const [answerLoading, setAnswerLoading] = useState(false);
+  const [answerError, setAnswerError] = useState("");
+
+  const fetchQuestion = useCallback(async () => {
+    const res = await fetch(`/api/questions/${questionId}`);
+    if (!res.ok) {
+      setError("Question not found.");
+      setLoading(false);
+      return;
+    }
+    const data = await res.json();
+    setQuestion(data);
+    setLoading(false);
+  }, [questionId]);
+
+  useEffect(() => {
+    fetchQuestion();
+  }, [fetchQuestion]);
+
+  function getUserVote(votes: VoteData[]) {
+    if (!session?.user?.id) return null;
+    const v = votes.find((v) => v.userId === session?.user?.id);
+    return v ? v.value : null;
+  }
+
+  async function handleQuestionVote(value: number) {
+    if (!session?.user) return;
+    await fetch(`/api/questions/${questionId}/vote`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ value }),
+    });
+    fetchQuestion();
+  }
+
+  async function handleAnswerVote(answerId: string, value: number) {
+    if (!session?.user) return;
+    await fetch(`/api/answers/${answerId}/vote`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ value }),
+    });
+    fetchQuestion();
+  }
+
+  async function handleAccept(answerId: string) {
+    if (!session?.user) return;
+    await fetch(`/api/answers/${answerId}/accept`, { method: "POST" });
+    fetchQuestion();
+  }
+
+  async function handleSubmitAnswer(e: React.FormEvent) {
+    e.preventDefault();
+    setAnswerError("");
+    setAnswerLoading(true);
+
+    const res = await fetch(`/api/questions/${questionId}/answers`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ body: answerBody }),
+    });
+
+    const data = await res.json();
+    setAnswerLoading(false);
+
+    if (!res.ok) {
+      setAnswerError(data.error || "Failed to post answer.");
+      return;
+    }
+
+    setAnswerBody("");
+    fetchQuestion();
+  }
+
+  if (loading) {
+    return <div className="text-center py-12 text-sm text-gray-400">Loading question...</div>;
+  }
+
+  if (error || !question) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 mb-2">{error || "Question not found."}</p>
+        <Link href="/community" className="text-sm text-blue-700 hover:underline">
+          Back to Q&A
+        </Link>
+      </div>
+    );
+  }
+
+  const isAuthor = session?.user?.id === question.author.id;
+
+  return (
+    <div className="max-w-3xl mx-auto">
+      {/* Breadcrumb */}
+      <div className="text-sm text-gray-400 mb-4">
+        <Link href="/community" className="hover:text-blue-600">Q&A</Link>
+        <span className="mx-2">/</span>
+        <span className="text-gray-600">Question</span>
+      </div>
+
+      {/* Question */}
+      <div className="flex gap-4">
+        <div className="hidden sm:block pt-1">
+          <VoteButton
+            score={question.voteScore}
+            userVote={getUserVote(question.votes)}
+            onVote={handleQuestionVote}
+            disabled={!session?.user || isAuthor}
+          />
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl font-bold text-gray-900 mb-2 leading-snug">
+            {question.isResolved && (
+              <span className="text-green-600 mr-2" title="Resolved">&#10003;</span>
+            )}
+            {question.title}
+          </h1>
+
+          <div className="flex flex-wrap items-center gap-2 mb-4 text-xs text-gray-400">
+            <span className="font-medium text-gray-600">{question.author.name}</span>
+            {question.author.bemNumber && (
+              <span className="text-blue-600 bg-blue-50 rounded px-1.5 py-0.5 text-[10px] font-medium">
+                PE
+              </span>
+            )}
+            <span>&middot;</span>
+            <span>Asked {timeAgo(question.createdAt)}</span>
+            <span>&middot;</span>
+            <span>{question.viewCount} views</span>
+
+            {/* Mobile vote */}
+            <span className="sm:hidden">&middot;</span>
+            <span className="sm:hidden font-medium text-gray-600">{question.voteScore} votes</span>
+          </div>
+
+          {/* Tags & standard */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {question.tags.map((tag) => (
+              <Link
+                key={tag}
+                href={`/community?tag=${tag}`}
+                className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs text-blue-600 hover:bg-blue-100"
+              >
+                #{tag}
+              </Link>
+            ))}
+            {question.standardRef && (
+              <span className="text-xs text-amber-600 bg-amber-50 rounded px-2.5 py-0.5">
+                {question.standardRef}
+              </span>
+            )}
+          </div>
+
+          {/* Body */}
+          <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap mb-6">
+            {question.body}
+          </div>
+        </div>
+      </div>
+
+      {/* Answers section */}
+      <div className="border-t border-gray-200 pt-6 mt-2">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">
+          {question.answers.length} Answer{question.answers.length !== 1 ? "s" : ""}
+        </h2>
+
+        {question.answers.length === 0 && (
+          <p className="text-sm text-gray-400 mb-6">No answers yet. Be the first to help!</p>
+        )}
+
+        <div className="space-y-6">
+          {question.answers.map((answer) => {
+            const answerIsAuthor = session?.user?.id === answer.author.id;
+            return (
+              <div
+                key={answer.id}
+                className={`flex gap-4 rounded-lg p-4 ${
+                  answer.isAccepted ? "bg-green-50 border border-green-200" : "bg-white border border-gray-200"
+                }`}
+              >
+                <div className="hidden sm:flex flex-col items-center gap-1">
+                  <VoteButton
+                    score={answer.voteScore}
+                    userVote={getUserVote(answer.votes)}
+                    onVote={(v) => handleAnswerVote(answer.id, v)}
+                    disabled={!session?.user || answerIsAuthor}
+                  />
+                  {answer.isAccepted && (
+                    <span className="text-green-600 mt-1" title="Accepted answer">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </span>
+                  )}
+                  {isAuthor && !answer.isAccepted && (
+                    <button
+                      type="button"
+                      onClick={() => handleAccept(answer.id)}
+                      className="text-gray-300 hover:text-green-500 mt-1 transition-colors"
+                      title="Accept this answer"
+                    >
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="20 6 9 17 4 12" />
+                      </svg>
+                    </button>
+                  )}
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="prose prose-sm max-w-none text-gray-700 whitespace-pre-wrap mb-3">
+                    {answer.body}
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <span className="font-medium text-gray-600">{answer.author.name}</span>
+                    {answer.author.bemNumber && (
+                      <span className="text-blue-600 bg-blue-50 rounded px-1.5 py-0.5 text-[10px] font-medium">
+                        PE
+                      </span>
+                    )}
+                    <span>&middot;</span>
+                    <span>{timeAgo(answer.createdAt)}</span>
+                    {answer.isAccepted && (
+                      <>
+                        <span>&middot;</span>
+                        <span className="text-green-600 font-medium">Accepted</span>
+                      </>
+                    )}
+
+                    {/* Mobile vote & accept */}
+                    <span className="sm:hidden">&middot;</span>
+                    <span className="sm:hidden">{answer.voteScore} votes</span>
+                    {isAuthor && !answer.isAccepted && (
+                      <button
+                        type="button"
+                        onClick={() => handleAccept(answer.id)}
+                        className="sm:hidden text-gray-400 hover:text-green-500 ml-1"
+                      >
+                        Accept
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Post answer form */}
+      <div className="border-t border-gray-200 pt-6 mt-6">
+        <h3 className="text-base font-semibold text-gray-900 mb-3">Your Answer</h3>
+
+        {!session?.user ? (
+          <p className="text-sm text-gray-500">
+            <Link href="/login" className="text-blue-700 hover:underline">Sign in</Link> to post an answer.
+          </p>
+        ) : (
+          <form onSubmit={handleSubmitAnswer} className="space-y-3">
+            {answerError && (
+              <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+                {answerError}
+              </div>
+            )}
+            <textarea
+              required
+              rows={5}
+              value={answerBody}
+              onChange={(e) => setAnswerBody(e.target.value)}
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y"
+              placeholder="Share your knowledge. Reference standards where applicable..."
+            />
+            <div className="flex items-center gap-3">
+              <button
+                type="submit"
+                disabled={answerLoading}
+                className="rounded-lg bg-blue-700 px-5 py-2 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-50 transition-colors"
+              >
+                {answerLoading ? "Posting..." : "Post Answer"}
+              </button>
+              <p className="text-xs text-gray-400">
+                Answers from PE-registered engineers are highlighted.
+              </p>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -1,0 +1,136 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  CONTRIBUTOR    // Any registered engineer (GE/PE) — submit calculators, notes
+  VERIFIER      // Professional Engineers (PE/PEPC) — endorse technical accuracy
+  MODERATOR     // Core team — manage disputes, flag outdated codes
+  ADMIN         // Platform administrators
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  passwordHash  String?              // Nullable for Google/magic-link users
+  image         String?
+
+  // Professional profile
+  bemNumber     String?   @unique  // BEM registration number
+  role          UserRole  @default(CONTRIBUTOR)
+  organisation  String?             // Company or institution
+  state         String?             // Malaysian state (e.g., Selangor, Johor)
+  specialisation String?            // e.g., Structural, Geotechnical, Hydraulic
+  yearsExp      Int?                // Years of experience
+  bio           String?
+
+  // Status
+  emailVerified Boolean   @default(false)
+  isActive      Boolean   @default(true)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  questions     Question[] @relation("UserQuestions")
+  answers       Answer[]   @relation("UserAnswers")
+  votes         Vote[]     @relation("UserVotes")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── Q&A Forum ───────────────────────────────────────────────
+
+model Question {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  tags        String[]           // e.g. ["MSMA", "drainage", "retaining-wall"]
+  standardRef String?            // e.g. "MSMA 2nd Ed, Section 4.3"
+  isResolved  Boolean  @default(false)
+  viewCount   Int      @default(0)
+
+  authorId    String
+  author      User     @relation("UserQuestions", fields: [authorId], references: [id], onDelete: Cascade)
+
+  answers     Answer[]
+  votes       Vote[]   @relation("QuestionVotes")
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  body       String
+  isAccepted Boolean  @default(false)
+
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  authorId   String
+  author     User     @relation("UserAnswers", fields: [authorId], references: [id], onDelete: Cascade)
+
+  votes      Vote[]   @relation("AnswerVotes")
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Vote {
+  id    String @id @default(cuid())
+  value Int    // +1 upvote, -1 downvote
+
+  userId     String
+  user       User     @relation("UserVotes", fields: [userId], references: [id], onDelete: Cascade)
+
+  questionId String?
+  question   Question? @relation("QuestionVotes", fields: [questionId], references: [id], onDelete: Cascade)
+
+  answerId   String?
+  answer     Answer?   @relation("AnswerVotes", fields: [answerId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, questionId])
+  @@unique([userId, answerId])
+}

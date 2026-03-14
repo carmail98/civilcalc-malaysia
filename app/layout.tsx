@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import MobileNav from "@/components/MobileNav";
+import NavSearch from "@/components/NavSearch";
+import UserMenu from "@/components/UserMenu";
+import SessionProvider from "@/components/SessionProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,11 +24,10 @@ export const metadata: Metadata = {
 
 const navLinks = [
   { href: "/", label: "Home" },
-  { href: "/calculators/drainage", label: "Drainage" },
-  { href: "/calculators/earthworks", label: "Earthworks" },
-  { href: "/calculators/roads", label: "Roads" },
-  { href: "/calculators/sewerage", label: "Sewerage" },
-  { href: "/calculators/concrete", label: "Structural" },
+  { href: "/calculators", label: "Calculators" },
+  { href: "/news", label: "News" },
+  { href: "/community", label: "Community" },
+  { href: "/about", label: "About" },
 ];
 
 const footerCalcs = [
@@ -55,6 +57,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}
       >
+        <SessionProvider>
         <header className="relative border-b border-gray-200 bg-white print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
             <a href="/" className="text-xl font-bold text-blue-700 shrink-0">
@@ -62,20 +65,26 @@ export default function RootLayout({
             </a>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex gap-6 text-sm font-medium text-gray-600">
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
               {navLinks.map((link) => (
                 <a
-                  key={link.href}
+                  key={link.label}
                   href={link.href}
                   className="hover:text-blue-700 transition-colors"
                 >
                   {link.label}
                 </a>
               ))}
+              <NavSearch />
             </nav>
 
-            {/* Mobile hamburger */}
-            <MobileNav />
+            {/* Auth + Mobile */}
+            <div className="flex items-center gap-3">
+              <div className="hidden md:block">
+                <UserMenu />
+              </div>
+              <MobileNav />
+            </div>
           </div>
         </header>
 
@@ -143,6 +152,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        </SessionProvider>
       </body>
     </html>
   );
