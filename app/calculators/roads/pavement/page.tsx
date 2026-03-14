@@ -11,6 +11,7 @@ import formulaData from "@/data/formulas.json";
 import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
+import Breadcrumbs from "@/components/Breadcrumbs";
 
 const data = formulaData.flexible_pavement;
 
@@ -135,6 +136,7 @@ export default function PavementPage() {
     <>
       {/* Screen view */}
       <div className="print:hidden">
+        <Breadcrumbs items={[{ label: "Roads", href: "/calculators/roads" }, { label: "Pavement Design" }]} />
         <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
         <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
 
