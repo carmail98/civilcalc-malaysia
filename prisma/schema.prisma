@@ -42,6 +42,7 @@ model User {
   questions     Question[] @relation("UserQuestions")
   answers       Answer[]   @relation("UserAnswers")
   votes         Vote[]     @relation("UserVotes")
+  feedbacks     Feedback[] @relation("UserFeedback")
 }
 
 model Account {
@@ -133,4 +134,39 @@ model Vote {
 
   @@unique([userId, questionId])
   @@unique([userId, answerId])
+}
+
+// ─── Feedback ───────────────────────────────────────────────
+
+enum FeedbackCategory {
+  CALCULATION_ERROR   // Wrong formula or result
+  STANDARD_OUTDATED   // Reference standard needs updating
+  FEATURE_REQUEST     // New calculator or feature suggestion
+  UI_ISSUE            // Layout, usability, or display problem
+  OTHER               // General feedback
+}
+
+enum FeedbackStatus {
+  NEW
+  REVIEWING
+  RESOLVED
+  WONT_FIX
+}
+
+model Feedback {
+  id         String           @id @default(cuid())
+  category   FeedbackCategory
+  message    String
+  pageUrl    String?          // Which calculator page the feedback is about
+  status     FeedbackStatus   @default(NEW)
+
+  // Optional link to logged-in user
+  userId     String?
+  user       User?            @relation("UserFeedback", fields: [userId], references: [id], onDelete: SetNull)
+
+  // Contact for anonymous users
+  email      String?
+
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
 }

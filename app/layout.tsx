@@ -4,6 +4,7 @@ import MobileNav from "@/components/MobileNav";
 import NavSearch from "@/components/NavSearch";
 import UserMenu from "@/components/UserMenu";
 import SessionProvider from "@/components/SessionProvider";
+import FeedbackButton from "@/components/FeedbackButton";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -152,6 +153,7 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+        <FeedbackButton />
         </SessionProvider>
       </body>
     </html>
