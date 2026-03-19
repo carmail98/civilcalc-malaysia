@@ -593,3 +593,538 @@ export function rcBeamMoment(
 
   return { K, K_limit, z, Mu, singlyReinforced, utilisation, passUtilisation };
 }
+
+/**
+ * RC Beam Shear Design (EC2 Cl. 6.2.3)
+ * VRd,c = [CRd,c · k · (100 · ρl · fck)^(1/3)] · bw · d
+ * VRd,s = (Asw/s) · z · fywd · cot θ
+ * VRd,max = αcw · bw · z · ν1 · fcd / (cot θ + tan θ)
+ * Reference: MS EN 1992-1-1:2010, Clause 6.2.3, Malaysia NA
+ */
+export function rcBeamShear(
+  bw: number,
+  d: number,
+  Asl: number,
+  fck: number,
+  fyk: number,
+  VEd: number,
+  AswProvided?: number,
+  sProvided?: number
+): {
+  k: number;
+  rhoL: number;
+  VRdc: number;
+  VRdcMin: number;
+  shearReinfRequired: boolean;
+  cotTheta: number;
+  VRdmax: number;
+  AswsRequired: number;
+  AswsMin: number;
+  slMax: number;
+  VRds: number | null;
+  utilisation: number;
+  pass: boolean;
+} {
+  const gammaC = 1.5;
+  const gammaS = 1.15;
+  const CRdc = 0.18 / gammaC;
+
+  // k factor (d in mm)
+  const k = Math.min(1 + Math.sqrt(200 / d), 2.0);
+
+  // Longitudinal reinforcement ratio
+  const rhoL = Math.min(Asl / (bw * d), 0.02);
+
+  // Concrete shear resistance (N → kN)
+  const VRdc =
+    (CRdc * k * Math.pow(100 * rhoL * fck, 1 / 3) * bw * d) / 1000;
+
+  // Minimum concrete shear resistance
+  const vMin = 0.035 * Math.pow(k, 1.5) * Math.pow(fck, 0.5);
+  const VRdcMin = (vMin * bw * d) / 1000;
+
+  const VRdcDesign = Math.max(VRdc, VRdcMin);
+  const shearReinfRequired = VEd > VRdcDesign;
+
+  // Lever arm
+  const z = 0.9 * d;
+  const fywd = fyk / gammaS;
+  const fcd = 0.85 * fck / gammaC;
+  const v1 = 0.6 * (1 - fck / 250);
+
+  // Optimise cot θ: start at 2.5 (flattest strut), check VRd,max
+  let cotTheta = 2.5;
+  let VRdmax = (bw * z * v1 * fcd) / ((cotTheta + 1 / cotTheta) * 1000);
+  if (VEd > VRdmax) {
+    // Need steeper strut — solve for θ from VEd = VRd,max
+    // cot θ + tan θ = bw·z·v1·fcd / (VEd·1000)
+    const ratio = (bw * z * v1 * fcd) / (VEd * 1000);
+    if (ratio >= 2) {
+      // Solve cot²θ - ratio·cotθ + 1 = 0
+      const disc = ratio * ratio - 4;
+      cotTheta = disc > 0 ? (ratio - Math.sqrt(disc)) / 2 : 1.0;
+      cotTheta = Math.max(1.0, Math.min(cotTheta, 2.5));
+    } else {
+      cotTheta = 1.0;
+    }
+    VRdmax = (bw * z * v1 * fcd) / ((cotTheta + 1 / cotTheta) * 1000);
+  }
+
+  // Required Asw/s (mm²/mm)
+  const AswsRequired = shearReinfRequired
+    ? (VEd * 1000) / (z * fywd * cotTheta)
+    : 0;
+
+  // Minimum shear reinforcement ρw,min = 0.08√fck / fyk
+  const rhoWmin = (0.08 * Math.sqrt(fck)) / fyk;
+  const AswsMin = rhoWmin * bw;
+
+  // Maximum link spacing
+  const slMax = 0.75 * d;
+
+  // If user provides Asw and spacing, compute VRd,s
+  let VRds: number | null = null;
+  if (
+    AswProvided !== undefined &&
+    sProvided !== undefined &&
+    AswProvided > 0 &&
+    sProvided > 0
+  ) {
+    VRds = ((AswProvided / sProvided) * z * fywd * cotTheta) / 1000;
+  }
+
+  const capacity = VRds !== null ? Math.min(VRds, VRdmax) : VRdmax;
+  const utilisation = VEd / capacity;
+  const pass = VEd <= capacity && VEd <= VRdmax;
+
+  return {
+    k,
+    rhoL,
+    VRdc: VRdcDesign,
+    VRdcMin,
+    shearReinfRequired,
+    cotTheta,
+    VRdmax,
+    AswsRequired: Math.max(AswsRequired, AswsMin),
+    AswsMin,
+    slMax,
+    VRds,
+    utilisation,
+    pass,
+  };
+}
+
+/**
+ * RC Column N-M Interaction (EC2 Cl. 6.1)
+ * Rectangular stress block with symmetric reinforcement
+ * ε_cu = 0.0035, λ = 0.8, η = 1.0 for fck ≤ 50 MPa
+ * Reference: MS EN 1992-1-1:2010, Clause 6.1, Malaysia NA
+ */
+export interface ColumnInteractionPoint {
+  N: number;
+  M: number;
+}
+
+export function rcColumnInteraction(
+  b: number,
+  h: number,
+  dPrime: number,
+  AsFace1: number,
+  AsFace2: number,
+  fck: number,
+  fyk: number
+): {
+  points: ColumnInteractionPoint[];
+  Nmax: number;
+  Nbal: number;
+  Mbal: number;
+  M0: number;
+  AsMin: number;
+  AsMax: number;
+} {
+  const gammaC = 1.5;
+  const gammaS = 1.15;
+  const fcd = 0.85 * fck / gammaC;
+  const fyd = fyk / gammaS;
+  const Es = 200000; // MPa
+  const epsCu = 0.0035;
+  const lambda = 0.8;
+  const eta = 1.0;
+
+  const d = h - dPrime;
+  const Ac = b * h;
+
+  // Min/max steel checks
+  const AsTotal = AsFace1 + AsFace2;
+  const NEdApprox = fcd * Ac / 1000; // rough for min check
+  const AsMin = Math.max(0.002 * Ac, (0.10 * NEdApprox * 1000) / fyd);
+  const AsMax = 0.04 * Ac;
+
+  // Generate interaction diagram by varying neutral axis x
+  const points: ColumnInteractionPoint[] = [];
+
+  // Pure compression (x → ∞, all concrete and steel in compression)
+  const Nmax =
+    (eta * fcd * Ac + fyd * AsTotal) / 1000; // kN
+
+  // Pure tension
+  const Ntension = -(fyd * AsTotal) / 1000;
+
+  // Sweep x from small to large
+  const steps = 50;
+  for (let i = 0; i <= steps; i++) {
+    // x ranges from 0 to 2h (covers all cases)
+    const x = (i / steps) * 2 * h;
+
+    // Concrete compression block
+    const sBlock = Math.min(lambda * x, h);
+    const Fcc = eta * fcd * b * sBlock;
+
+    // Steel strains (compression positive)
+    const eps1 = x > 0 ? epsCu * (x - dPrime) / x : -Infinity;
+    const eps2 = x > 0 ? epsCu * (x - d) / x : -Infinity;
+
+    // Steel stresses (capped at fyd)
+    const sig1 = Math.min(Math.max(eps1 * Es, -fyd), fyd);
+    const sig2 = Math.min(Math.max(eps2 * Es, -fyd), fyd);
+
+    const Fs1 = sig1 * AsFace1;
+    const Fs2 = sig2 * AsFace2;
+
+    // Axial force (kN) — positive compression, centroid at h/2
+    const N = (Fcc + Fs1 + Fs2) / 1000;
+
+    // Moment about centroid (kN.m)
+    const M =
+      (Fcc * (h / 2 - sBlock / 2) +
+        Fs1 * (h / 2 - dPrime) +
+        Fs2 * (h / 2 - d)) /
+      1e6;
+
+    points.push({ N, M: Math.abs(M) });
+  }
+
+  // Add pure tension point
+  points.push({ N: Ntension, M: 0 });
+
+  // Find balanced point (steel at d just yields: εs = fyd/Es)
+  const xBal = (epsCu * d) / (epsCu + fyd / Es);
+  const sBlockBal = Math.min(lambda * xBal, h);
+  const FccBal = eta * fcd * b * sBlockBal;
+  const eps1Bal = epsCu * (xBal - dPrime) / xBal;
+  const sig1Bal = Math.min(Math.max(eps1Bal * Es, -fyd), fyd);
+  const Fs1Bal = sig1Bal * AsFace1;
+  const Fs2Bal = -fyd * AsFace2; // tension steel yields
+  const Nbal = (FccBal + Fs1Bal + Fs2Bal) / 1000;
+  const Mbal =
+    Math.abs(
+      FccBal * (h / 2 - sBlockBal / 2) +
+        Fs1Bal * (h / 2 - dPrime) +
+        Fs2Bal * (h / 2 - d)
+    ) / 1e6;
+
+  // Pure bending (N ≈ 0): find x where N = 0 by bisection
+  let xLow = 0;
+  let xHigh = h;
+  let M0 = 0;
+  for (let iter = 0; iter < 50; iter++) {
+    const xMid = (xLow + xHigh) / 2;
+    const sB = Math.min(lambda * xMid, h);
+    const Fc = eta * fcd * b * sB;
+    const e1 = xMid > 0 ? epsCu * (xMid - dPrime) / xMid : 0;
+    const e2 = xMid > 0 ? epsCu * (xMid - d) / xMid : 0;
+    const s1 = Math.min(Math.max(e1 * Es, -fyd), fyd);
+    const s2 = Math.min(Math.max(e2 * Es, -fyd), fyd);
+    const Ntest = Fc + s1 * AsFace1 + s2 * AsFace2;
+    if (Ntest > 0) xHigh = xMid;
+    else xLow = xMid;
+    if (Math.abs(Ntest) < 10) {
+      // close enough to 0
+      M0 =
+        Math.abs(
+          Fc * (h / 2 - sB / 2) +
+            s1 * AsFace1 * (h / 2 - dPrime) +
+            s2 * AsFace2 * (h / 2 - d)
+        ) / 1e6;
+      break;
+    }
+  }
+
+  return { points, Nmax, Nbal, Mbal, M0, AsMin, AsMax };
+}
+
+/**
+ * Check if (NEd, MEd) is inside column interaction diagram
+ */
+export function rcColumnCheck(
+  b: number,
+  h: number,
+  dPrime: number,
+  AsFace1: number,
+  AsFace2: number,
+  fck: number,
+  fyk: number,
+  NEd: number,
+  MEd: number
+): {
+  pass: boolean;
+  utilisationRatio: number;
+} {
+  const { points } = rcColumnInteraction(b, h, dPrime, AsFace1, AsFace2, fck, fyk);
+
+  // Find capacity moment at given N level by interpolation on the envelope
+  // Ratio = distance from origin to (NEd, MEd) / distance to envelope
+  let MCapacity = 0;
+  for (let i = 0; i < points.length - 1; i++) {
+    const p1 = points[i];
+    const p2 = points[i + 1];
+    if ((p1.N >= NEd && p2.N <= NEd) || (p1.N <= NEd && p2.N >= NEd)) {
+      const t = Math.abs(p1.N - p2.N) > 0.01 ? (NEd - p1.N) / (p2.N - p1.N) : 0;
+      const Mint = p1.M + t * (p2.M - p1.M);
+      MCapacity = Math.max(MCapacity, Mint);
+    }
+  }
+
+  const utilisationRatio = MCapacity > 0 ? MEd / MCapacity : 999;
+  const pass = utilisationRatio <= 1.0;
+
+  return { pass, utilisationRatio };
+}
+
+/**
+ * Isolated Pad Footing Design (EC2/EC7)
+ * Bearing: q = N/A ± 6M/(B·L²)
+ * Flexure: K = M/(b·d²·fck), As = M/(0.87·fyk·z)
+ * Punching: vEd = β·V/(u₁·d), vRd,c = CRd,c·k·(100·ρl·fck)^(1/3)
+ * Reference: MS EN 1992-1-1:2010 Cl 6.4, MS EN 1997-1, Malaysia NA
+ */
+export function padFootingDesign(
+  colWidth: number,
+  colDepth: number,
+  Nsls: number,
+  Nuls: number,
+  B: number,
+  L: number,
+  h: number,
+  cover: number,
+  barDia: number,
+  fck: number,
+  fyk: number,
+  qAllowable: number,
+  Msls?: number,
+  Muls?: number
+): {
+  footingSW: number;
+  qMaxSLS: number;
+  qMinSLS: number;
+  bearingPass: boolean;
+  bearingUtilisation: number;
+  dEff: number;
+  qUls: number;
+  MEdLong: number;
+  AsReqLong: number;
+  MEdShort: number;
+  AsReqShort: number;
+  AsMinFooting: number;
+  u1: number;
+  vEdPunch: number;
+  vRdcPunch: number;
+  punchingPass: boolean;
+  punchingUtilisation: number;
+  overallPass: boolean;
+} {
+  const gammaC = 1.5;
+
+  // Effective depth (mm)
+  const dEff = h - cover - barDia;
+
+  // Footing self-weight (kN)
+  const footingSW = 24 * (B / 1000) * (L / 1000) * (h / 1000);
+
+  // Bearing pressure (SLS) — convert B, L from mm to m
+  const Bm = B / 1000;
+  const Lm = L / 1000;
+  const Atot = Bm * Lm;
+  const NslsTotal = Nsls + footingSW;
+  const mSls = Msls ?? 0;
+  const qDirect = NslsTotal / Atot;
+  const qMoment = mSls > 0 ? (6 * mSls) / (Bm * Lm * Lm) : 0;
+  const qMaxSLS = qDirect + qMoment;
+  const qMinSLS = qDirect - qMoment;
+  const bearingUtilisation = qMaxSLS / qAllowable;
+  const bearingPass = qMaxSLS <= qAllowable && qMinSLS >= 0;
+
+  // ULS bearing pressure for flexure design (kPa)
+  const mUls = Muls ?? 0;
+  const qUls = Nuls / Atot + (mUls > 0 ? (6 * mUls) / (Bm * Lm * Lm) : 0);
+
+  // Flexure — cantilever from column face
+  // Long direction (spanning along L)
+  const cantL = (Lm / 2 - (colDepth / 1000) / 2);
+  const MEdLong = qUls * Bm * cantL * cantL / 2; // kN.m
+
+  // Short direction (spanning along B)
+  const cantB = (Bm / 2 - (colWidth / 1000) / 2);
+  const MEdShort = qUls * Lm * cantB * cantB / 2; // kN.m
+
+  // Steel area required (per m width)
+  const calcAs = (Med: number, width: number): number => {
+    const K = (Med * 1e6) / (width * dEff * dEff * fck);
+    const zCalc = dEff * Math.min(0.5 + Math.sqrt(0.25 - K / 1.134), 0.95);
+    return (Med * 1e6) / (0.87 * fyk * zCalc);
+  };
+
+  const AsReqLong = calcAs(MEdLong, B);
+  const AsReqShort = calcAs(MEdShort, L);
+
+  // Minimum reinforcement
+  const fctm = 0.3 * Math.pow(fck, 2 / 3);
+  const AsMinFooting = Math.max(0.26 * (fctm / fyk) * 1000 * dEff, 0.0013 * 1000 * dEff);
+
+  // Punching shear (EC2 Cl. 6.4)
+  const CRdc = 0.18 / gammaC;
+  const k = Math.min(1 + Math.sqrt(200 / dEff), 2.0);
+
+  // Control perimeter at 2d from column face
+  const u1 =
+    2 * (colWidth + colDepth) + 2 * Math.PI * 2 * dEff;
+
+  // Punching shear stress
+  const beta = 1.0; // concentric (no eccentricity factor)
+  const VEdPunch = Nuls - qUls * ((colWidth / 1000 + 4 * dEff / 1000) * (colDepth / 1000 + 4 * dEff / 1000));
+  const vEdPunch = (beta * Math.max(VEdPunch, 0) * 1000) / (u1 * dEff);
+
+  // Punching resistance
+  const rhoLx = AsReqLong > 0 ? AsReqLong / (B * dEff) : 0.002;
+  const rhoLy = AsReqShort > 0 ? AsReqShort / (L * dEff) : 0.002;
+  const rhoL = Math.min(Math.sqrt(rhoLx * rhoLy), 0.02);
+  const vRdcPunch = CRdc * k * Math.pow(100 * rhoL * fck, 1 / 3);
+  const vMin = 0.035 * Math.pow(k, 1.5) * Math.pow(fck, 0.5);
+  const vRdcFinal = Math.max(vRdcPunch, vMin);
+
+  const punchingUtilisation = vEdPunch / vRdcFinal;
+  const punchingPass = vEdPunch <= vRdcFinal;
+
+  const overallPass = bearingPass && punchingPass;
+
+  return {
+    footingSW,
+    qMaxSLS,
+    qMinSLS,
+    bearingPass,
+    bearingUtilisation,
+    dEff,
+    qUls,
+    MEdLong,
+    AsReqLong,
+    MEdShort,
+    AsReqShort,
+    AsMinFooting,
+    u1,
+    vEdPunch,
+    vRdcPunch: vRdcFinal,
+    punchingPass,
+    punchingUtilisation,
+    overallPass,
+  };
+}
+
+/**
+ * Crack Width Control SLS (EC2 Cl. 7.3.4)
+ * wk = sr,max · (εsm − εcm)
+ * sr,max = 3.4c + 0.425·k1·k2·φ/ρp,eff
+ * Reference: MS EN 1992-1-1:2010, Clause 7.3.4, Malaysia NA
+ */
+export function crackWidthEC2(
+  b: number,
+  h: number,
+  d: number,
+  As: number,
+  phi: number,
+  cover: number,
+  fck: number,
+  Msls: number,
+  kt: number,
+  wkLimit?: number
+): {
+  Ecm: number;
+  fctEff: number;
+  alphaE: number;
+  xCracked: number;
+  z: number;
+  sigmaS: number;
+  rhoEff: number;
+  hcEff: number;
+  AcEff: number;
+  srMax: number;
+  epsilonDiff: number;
+  wk: number;
+  wkLimit: number;
+  pass: boolean;
+  utilisation: number;
+} {
+  const Es = 200000; // MPa
+  const limit = wkLimit ?? 0.3;
+
+  // Concrete properties (EC2 Table 3.1)
+  const Ecm = 22 * Math.pow(fck / 10 + 0.8, 0.3) * 1000; // MPa
+  const fctm = fck <= 50 ? 0.3 * Math.pow(fck, 2 / 3) : 2.12 * Math.log(1 + fck / 10 + 0.8);
+  const fctEff = fctm;
+  const alphaE = Es / Ecm;
+
+  // Cracked neutral axis by solving quadratic: b·x²/2 = αe·As·(d - x)
+  // → b·x²/2 + αe·As·x - αe·As·d = 0
+  const a = b / 2;
+  const bCoeff = alphaE * As;
+  const c = -alphaE * As * d;
+  const disc = bCoeff * bCoeff - 4 * a * c;
+  const xCracked = (-bCoeff + Math.sqrt(disc)) / (2 * a);
+
+  // Lever arm
+  const z = d - xCracked / 3;
+
+  // Steel stress under SLS moment (Msls in kN.m → N.mm)
+  const sigmaS = (Msls * 1e6) / (As * z);
+
+  // Effective tension area
+  const hcEff = Math.min(2.5 * (h - d), (h - xCracked) / 3, h / 2);
+  const AcEff = b * hcEff;
+  const rhoEff = As / AcEff;
+
+  // Crack spacing
+  const k1 = 0.8; // deformed bars
+  const k2 = 0.5; // bending
+  const k3 = 3.4;
+  const k4 = 0.425;
+  const srMax = k3 * cover + k1 * k2 * k4 * phi / rhoEff;
+
+  // Strain difference
+  const epsilonDiff = Math.max(
+    (sigmaS - kt * (fctEff / rhoEff) * (1 + alphaE * rhoEff)) / Es,
+    0.6 * sigmaS / Es
+  );
+
+  // Crack width
+  const wk = srMax * epsilonDiff;
+
+  const utilisation = wk / limit;
+  const pass = wk <= limit;
+
+  return {
+    Ecm: Ecm / 1000, // return in GPa
+    fctEff,
+    alphaE,
+    xCracked,
+    z,
+    sigmaS,
+    rhoEff,
+    hcEff,
+    AcEff,
+    srMax,
+    epsilonDiff,
+    wk,
+    wkLimit: limit,
+    pass,
+    utilisation,
+  };
+}

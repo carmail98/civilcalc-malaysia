@@ -39,6 +39,11 @@ const footerCalcs = [
   { href: "/calculators/roads/pavement", label: "Pavement Design" },
   { href: "/calculators/sewerage", label: "Sewer Pipe Sizing" },
   { href: "/calculators/concrete", label: "RC Beam Capacity" },
+  { href: "/calculators/concrete/beam-shear", label: "Beam Shear Design" },
+  { href: "/calculators/concrete/column-interaction", label: "Column N-M Interaction" },
+  { href: "/calculators/concrete/pad-footing", label: "Pad Footing Design" },
+  { href: "/calculators/concrete/crack-width", label: "Crack Width SLS" },
+  { href: "/calculators/report-generator", label: "Report Generator" },
 ];
 
 const footerStandards = [

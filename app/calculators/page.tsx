@@ -64,6 +64,17 @@ const categoryConfig: Record<
       </svg>
     ),
   },
+  Tools: {
+    bg: "bg-violet-100",
+    text: "text-violet-700",
+    border: "border-violet-200",
+    hoverBorder: "hover:border-violet-400",
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6zm1 2h6v1H7V4zm0 3h6v1H7V7zm0 3h4v1H7v-1z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
 };
 
 const calculators = [
@@ -165,9 +176,44 @@ const calculators = [
     standard: "MS EN 1992-1-1",
     category: "Structural",
   },
+  {
+    name: "RC Beam Shear Design",
+    description: "Variable angle truss model shear design with VRd,c, VRd,max, and required Asw/s per EC2 Cl. 6.2.3.",
+    href: "/calculators/concrete/beam-shear",
+    standard: "MS EN 1992-1-1, Cl. 6.2.3",
+    category: "Structural",
+  },
+  {
+    name: "RC Column N-M Interaction",
+    description: "Generate N-M interaction diagram using rectangular stress block with SVG visualisation and load point check.",
+    href: "/calculators/concrete/column-interaction",
+    standard: "MS EN 1992-1-1, Cl. 6.1",
+    category: "Structural",
+  },
+  {
+    name: "Isolated Pad Footing Design",
+    description: "Three-check design: bearing pressure (SLS), flexure (ULS), and punching shear at 2d control perimeter.",
+    href: "/calculators/concrete/pad-footing",
+    standard: "MS EN 1992-1-1 Cl. 6.4 & EN 1997-1",
+    category: "Structural",
+  },
+  {
+    name: "Crack Width Control SLS",
+    description: "Calculate wk per EC2 Cl. 7.3.4 with cracked section analysis, sr,max, and check against wmax.",
+    href: "/calculators/concrete/crack-width",
+    standard: "MS EN 1992-1-1, Cl. 7.3.4",
+    category: "Structural",
+  },
+  {
+    name: "Calculation Report Generator",
+    description: "Compile saved calculations into a multi-page PDF report for PBT/JKR submission with PE endorsement block.",
+    href: "/calculators/report-generator",
+    standard: "BEM / JKR submission format",
+    category: "Tools",
+  },
 ];
 
-const categories = ["All", "Drainage", "Earthworks", "Roads", "Sewerage", "Structural"];
+const categories = ["All", "Drainage", "Earthworks", "Roads", "Sewerage", "Structural", "Tools"];
 
 export default function CalculatorsPage() {
   const [activeFilter, setActiveFilter] = useState("All");

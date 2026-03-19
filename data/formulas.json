@@ -233,6 +233,109 @@
     },
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
   },
+  "rc_beam_shear": {
+    "name": "RC Beam Shear Design (EC2)",
+    "reference": "MS EN 1992-1-1:2010, Clause 6.2.3, Malaysia NA",
+    "formula": "VRd,c = [CRd,c · k · (100 · ρl · fck)^(1/3)] · bw · d",
+    "sub_formulas": {
+      "k_factor": "k = min(1 + √(200/d), 2.0)  [d in mm]",
+      "v_min": "vmin = 0.035 · k^(3/2) · fck^(1/2)",
+      "shear_reinf": "VRd,s = (Asw/s) · z · fywd · cot θ  [z = 0.9d]",
+      "strut_crush": "VRd,max = bw · z · ν1 · fcd / (cot θ + tan θ)  [cot θ: 1.0–2.5]"
+    },
+    "variables": {
+      "bw": { "label": "Beam Width", "unit": "mm", "hint": "Typical 200–400 mm" },
+      "d": { "label": "Effective Depth", "unit": "mm", "hint": "h − cover − bar radius" },
+      "Asl": { "label": "Longitudinal Tension Steel Area", "unit": "mm²", "hint": "Total tension reinforcement area in span" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "25, 30, 35, or 40 MPa" },
+      "fyk": { "label": "Steel Yield Strength", "unit": "MPa", "hint": "500 MPa (H-bar, Malaysia)" },
+      "VEd": { "label": "Applied Shear Force", "unit": "kN", "hint": "ULS shear at critical section (d from face)" },
+      "AswProvided": { "label": "Link Area per Leg (Asw)", "unit": "mm²", "hint": "Optional — e.g. 78.5 mm² for R10, 157 mm² for R12 (2 legs)" },
+      "sProvided": { "label": "Link Spacing Provided", "unit": "mm", "hint": "Optional — enter if checking provided links" }
+    },
+    "result": {
+      "VRdc": { "label": "Concrete Shear Resistance", "unit": "kN" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "rc_column_interaction": {
+    "name": "RC Column N-M Interaction (EC2)",
+    "reference": "MS EN 1992-1-1:2010, Clause 6.1, Malaysia NA",
+    "formula": "N-M interaction from rectangular stress block (λ = 0.8, εcu = 0.0035)",
+    "sub_formulas": {
+      "concrete_force": "Fcc = η · fcd · b · λx  [capped at h]",
+      "steel_strain": "εs = εcu · (x − d') / x  |  εs2 = εcu · (x − d) / x",
+      "max_compression": "Nmax = η · fcd · Ac + fyd · As,total"
+    },
+    "variables": {
+      "b": { "label": "Column Width", "unit": "mm", "hint": "Horizontal dimension (bending axis direction)" },
+      "h": { "label": "Column Depth", "unit": "mm", "hint": "Dimension in bending plane" },
+      "dPrime": { "label": "Cover to Rebar Centroid (d')", "unit": "mm", "hint": "Nominal cover + link dia + bar radius. Typical 40–60 mm" },
+      "AsFace1": { "label": "Steel Area — Compression Face (As')", "unit": "mm²", "hint": "Total rebar area on face nearer to compression" },
+      "AsFace2": { "label": "Steel Area — Tension Face (As)", "unit": "mm²", "hint": "Total rebar area on tension face" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "25, 30, 35, or 40 MPa" },
+      "fyk": { "label": "Steel Yield Strength", "unit": "MPa", "hint": "500 MPa (H-bar, Malaysia)" },
+      "NEd": { "label": "Applied Axial Force", "unit": "kN", "hint": "ULS axial load (compression positive)" },
+      "MEd": { "label": "Applied Moment", "unit": "kN·m", "hint": "ULS bending moment at critical section" }
+    },
+    "result": {
+      "Nmax": { "label": "Pure Compression Capacity", "unit": "kN" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "pad_footing": {
+    "name": "Isolated Pad Footing Design (EC2/EC7)",
+    "reference": "MS EN 1992-1-1:2010 Cl 6.4, MS EN 1997-1, Malaysia NA",
+    "formula": "Bearing: q = N/A ± 6M/(B·L²)  |  Punching: vEd = β·V/(u₁·d)",
+    "sub_formulas": {
+      "flexure": "K = MEd/(b·d²·fck)  →  As = MEd/(0.87·fyk·z)",
+      "punch_perimeter": "u₁ = 2(a + b) + 4π·d  [at 2d from column face]",
+      "punch_resist": "vRd,c = CRd,c · k · (100 · ρl · fck)^(1/3)"
+    },
+    "variables": {
+      "colWidth": { "label": "Column Width (a)", "unit": "mm", "hint": "Column dimension parallel to B" },
+      "colDepth": { "label": "Column Depth (b)", "unit": "mm", "hint": "Column dimension parallel to L" },
+      "Nsls": { "label": "SLS Axial Load", "unit": "kN", "hint": "Characteristic load for bearing pressure check" },
+      "Nuls": { "label": "ULS Axial Load", "unit": "kN", "hint": "Design load for flexure and punching" },
+      "B": { "label": "Footing Width", "unit": "mm", "hint": "Dimension parallel to column width" },
+      "L": { "label": "Footing Length", "unit": "mm", "hint": "Dimension parallel to column depth" },
+      "h": { "label": "Footing Depth", "unit": "mm", "hint": "Overall thickness, typical 400–800 mm" },
+      "cover": { "label": "Concrete Cover", "unit": "mm", "hint": "Nominal cover. Exposure XC2 (soil): 35–40 mm" },
+      "barDia": { "label": "Bar Diameter", "unit": "mm", "hint": "Assumed bar diameter for effective depth. Typical 16–20 mm" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "30 MPa minimum for footings (exposure XC2)" },
+      "fyk": { "label": "Steel Yield Strength", "unit": "MPa", "hint": "500 MPa (H-bar, Malaysia)" },
+      "qAllowable": { "label": "Allowable Bearing Pressure", "unit": "kPa", "hint": "From geotechnical report or site investigation" }
+    },
+    "result": {
+      "qMax": { "label": "Max Bearing Pressure", "unit": "kPa" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "crack_width": {
+    "name": "Crack Width Control SLS (EC2)",
+    "reference": "MS EN 1992-1-1:2010, Clause 7.3.4, Malaysia NA",
+    "formula": "wk = sr,max · (εsm − εcm)",
+    "sub_formulas": {
+      "sr_max": "sr,max = 3.4c + 0.425·k1·k2·φ/ρp,eff  [k1=0.8, k2=0.5]",
+      "strain_diff": "(εsm − εcm) = [σs − kt·fct,eff/ρp,eff·(1 + αe·ρp,eff)] / Es  ≥ 0.6σs/Es",
+      "rho_eff": "ρp,eff = As / Ac,eff  |  hc,ef = min(2.5(h−d), (h−x)/3, h/2)"
+    },
+    "variables": {
+      "b": { "label": "Section Width", "unit": "mm", "hint": "Beam or slab width" },
+      "h": { "label": "Section Total Depth", "unit": "mm", "hint": "Overall section depth" },
+      "d": { "label": "Effective Depth", "unit": "mm", "hint": "h − cover − bar radius" },
+      "As": { "label": "Tension Steel Area", "unit": "mm²", "hint": "Total tension reinforcement area" },
+      "phi": { "label": "Bar Diameter", "unit": "mm", "hint": "Dominant tension bar diameter" },
+      "cover": { "label": "Nominal Cover to Bar", "unit": "mm", "hint": "Cover to outer face of tension bar (not to link)" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "25, 30, 35, or 40 MPa" },
+      "Msls": { "label": "SLS Bending Moment", "unit": "kN·m", "hint": "Frequent or quasi-permanent combination" },
+      "kt": { "label": "Load Duration Factor (kt)", "unit": "", "hint": "0.6 short-term (frequent), 0.4 long-term (quasi-permanent)" }
+    },
+    "result": {
+      "wk": { "label": "Calculated Crack Width", "unit": "mm" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
   "rc_beam_moment": {
     "name": "RC Beam Moment Capacity (EC2)",
     "reference": "MS EN 1992-1-1:2010, Malaysia NA — αcc = 0.85",
