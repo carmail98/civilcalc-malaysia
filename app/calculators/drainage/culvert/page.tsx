@@ -136,8 +136,8 @@ export default function CulvertPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "Culvert Design" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -151,24 +151,24 @@ export default function CulvertPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-2 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.box}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Box culvert (RCBC)</p>
+            <p className="text-xs text-stone-400 mt-1">Box culvert (RCBC)</p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.pipe}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Pipe culvert (RCP)</p>
+            <p className="text-xs text-stone-400 mt-1">Pipe culvert (RCP)</p>
           </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             {/* Culvert type selector */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Culvert Type
             </h3>
             <div className="flex gap-2 mb-4">
@@ -176,8 +176,8 @@ export default function CulvertPage() {
                 onClick={() => setCulvertType("box")}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   culvertType === "box"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-amber-600 text-white"
+                    : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                 }`}
               >
                 Box (RCBC)
@@ -186,8 +186,8 @@ export default function CulvertPage() {
                 onClick={() => setCulvertType("pipe")}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   culvertType === "pipe"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-amber-600 text-white"
+                    : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                 }`}
               >
                 Pipe (RCP)
@@ -195,7 +195,7 @@ export default function CulvertPage() {
             </div>
 
             {/* Common inputs */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Culvert Properties
             </h3>
             <CalcInput
@@ -232,7 +232,7 @@ export default function CulvertPage() {
             />
 
             {/* Dimension inputs */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Dimensions
             </h3>
             {culvertType === "box" ? (
@@ -272,7 +272,7 @@ export default function CulvertPage() {
             )}
 
             {/* Optional design flow */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Adequacy Check (Optional)
             </h3>
             <CalcInput
@@ -376,7 +376,7 @@ export default function CulvertPage() {
             {/* Adequacy check */}
             {result !== null && result.adequacy !== null && (
               <div
-                className={`rounded-lg border p-4 ${
+                className={`rounded-2xl border p-4 ${
                   result.pass
                     ? "border-green-200 bg-green-50"
                     : "border-red-200 bg-red-50"
@@ -404,7 +404,7 @@ export default function CulvertPage() {
             {/* Velocity warning */}
             {velocityWarning && (
               <div
-                className={`rounded-lg border p-3 text-sm ${
+                className={`rounded-2xl border p-3 text-sm ${
                   result && result.velocity > 6.0
                     ? "border-red-200 bg-red-50 text-red-800"
                     : "border-amber-200 bg-amber-50 text-amber-800"

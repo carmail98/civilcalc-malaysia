@@ -88,8 +88,8 @@ export default function LoadTakeOffPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Structural", href: "/calculators/concrete" }, { label: "Load Take-Off" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -102,11 +102,11 @@ export default function LoadTakeOffPage() {
         <FormulaBox formula={data.formula} reference={data.reference} />
 
         {/* Load combination note */}
-        <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 mb-6">
-          <p className="text-sm text-gray-700">
+        <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3 mb-6">
+          <p className="text-sm text-stone-700">
             <strong>ULS Load Combination:</strong> w = 1.35G<sub>k</sub> + 1.5Q<sub>k</sub> (MS EN 1990, Eq. 6.10)
           </p>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="text-xs text-stone-500 mt-1">
             Slab self-weight = 24 kN/m³ × thickness (RC unit weight per EC1)
           </p>
         </div>
@@ -136,13 +136,13 @@ export default function LoadTakeOffPage() {
 
             {/* Imposed load preset */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Occupancy Type (EC1 Table 6.1)
               </label>
               <select
                 value={imposedPreset}
                 onChange={(e) => handlePresetChange(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
               >
                 {imposedLoadPresets.map((p) => (
                   <option key={p.label} value={p.value}>

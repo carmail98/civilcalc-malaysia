@@ -102,8 +102,8 @@ export default function ColumnInteractionPage() {
             { label: "Column N-M Interaction" },
           ]}
         />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -127,8 +127,8 @@ export default function ColumnInteractionPage() {
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
-        <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 mb-6">
-          <p className="text-sm text-gray-700">
+        <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3 mb-6">
+          <p className="text-sm text-stone-700">
             <strong>Simplified rectangular stress block (EC2 Cl. 6.1):</strong> λ = 0.8, η = 1.0, εcu = 0.0035.
             γc = 1.5, γs = 1.15, αcc = 0.85. Symmetric reinforcement (2 faces).
           </p>
@@ -136,18 +136,18 @@ export default function ColumnInteractionPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">Section &amp; Steel</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3">Section &amp; Steel</h3>
             <CalcInput name="b" label={data.variables.b.label} unit={data.variables.b.unit} hint={data.variables.b.hint} value={b} onChange={setB} min={0} />
             <CalcInput name="h" label={data.variables.h.label} unit={data.variables.h.unit} hint={data.variables.h.hint} value={h} onChange={setH} min={0} />
             <CalcInput name="dPrime" label={data.variables.dPrime.label} unit={data.variables.dPrime.unit} hint={data.variables.dPrime.hint} value={dPrime} onChange={setDPrime} min={0} />
             <CalcInput name="AsFace1" label={data.variables.AsFace1.label} unit={data.variables.AsFace1.unit} hint={data.variables.AsFace1.hint} value={AsFace1} onChange={setAsFace1} min={0} />
             <CalcInput name="AsFace2" label={data.variables.AsFace2.label} unit={data.variables.AsFace2.unit} hint={data.variables.AsFace2.hint} value={AsFace2} onChange={setAsFace2} min={0} />
 
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3 mt-4">Materials</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3 mt-4">Materials</h3>
             <CalcInput name="fck" label={data.variables.fck.label} unit={data.variables.fck.unit} hint={data.variables.fck.hint} value={fck} onChange={setFck} min={0} />
             <CalcInput name="fyk" label={data.variables.fyk.label} unit={data.variables.fyk.unit} hint={data.variables.fyk.hint} value={fyk} onChange={setFyk} min={0} />
 
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3 mt-4">Applied Load Point (optional)</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3 mt-4">Applied Load Point (optional)</h3>
             <CalcInput name="NEd" label={data.variables.NEd.label} unit={data.variables.NEd.unit} hint={data.variables.NEd.hint} value={NEd} onChange={setNEd} />
             <CalcInput name="MEd" label={data.variables.MEd.label} unit={data.variables.MEd.unit} hint={data.variables.MEd.hint} value={MEd} onChange={setMEd} min={0} />
 
@@ -199,11 +199,11 @@ export default function ColumnInteractionPage() {
           <div className="space-y-4">
             {diagram ? (
               <>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">N-M Interaction Diagram</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">N-M Interaction Diagram</h3>
 
                 {/* SVG diagram */}
                 {svgDiagram && (
-                  <div className="rounded-lg border border-gray-200 bg-white p-2 overflow-auto">
+                  <div className="rounded-2xl border border-stone-200 bg-white p-2 overflow-auto">
                     <svg width={svgDiagram.W} height={svgDiagram.H} viewBox={`0 0 ${svgDiagram.W} ${svgDiagram.H}`}>
                       {/* Grid lines */}
                       <line x1={svgDiagram.pad.left} y1={svgDiagram.pad.top}
@@ -267,20 +267,20 @@ export default function ColumnInteractionPage() {
                   </div>
                 )}
 
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 pt-2">Key Points</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 pt-2">Key Points</h3>
                 <CalcResult label="Nmax (pure compression)" value={diagram.Nmax} unit="kN" decimals={1} />
                 <CalcResult label="Nbal (balanced)" value={diagram.Nbal} unit="kN" decimals={1} />
                 <CalcResult label="Mbal (balanced moment)" value={diagram.Mbal} unit="kN·m" />
                 <CalcResult label="M₀ (pure bending)" value={diagram.M0} unit="kN·m" />
 
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 pt-2">Steel Check</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 pt-2">Steel Check</h3>
                 <CalcResult label="As,min" value={diagram.AsMin} unit="mm²" decimals={0} />
                 <CalcResult label="As,max (4% Ac)" value={diagram.AsMax} unit="mm²" decimals={0} />
 
                 {checkResult && (
                   <>
-                    <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 pt-2">Load Point Check</h3>
-                    <div className={`rounded-lg p-3 border ${checkResult.pass ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+                    <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 pt-2">Load Point Check</h3>
+                    <div className={`rounded-2xl p-3 border ${checkResult.pass ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
                       <p className={`text-sm font-semibold ${checkResult.pass ? "text-green-800" : "text-red-800"}`}>
                         {checkResult.pass ? "PASS" : "FAIL"} — {(checkResult.utilisationRatio * 100).toFixed(1)}% utilisation
                       </p>

@@ -78,8 +78,8 @@ export default function CrackWidthPage() {
             { label: "Crack Width Control" },
           ]}
         />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -104,8 +104,8 @@ export default function CrackWidthPage() {
 
         <FormulaBox formula={data.formula} reference={data.reference} />
 
-        <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 mb-6">
-          <p className="text-sm text-gray-700">
+        <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3 mb-6">
+          <p className="text-sm text-stone-700">
             <strong>SLS crack control (EC2 Cl. 7.3.4):</strong> Cracked section analysis (elastic) for σs.
             k₁ = 0.8 (deformed bars), k₂ = 0.5 (bending), k₃ = 3.4, k₄ = 0.425.
             wmax = 0.3 mm for most Malaysian exposures (XC2–XS3).
@@ -114,28 +114,28 @@ export default function CrackWidthPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3">Section Geometry</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3">Section Geometry</h3>
             <CalcInput name="b" label={data.variables.b.label} unit={data.variables.b.unit} hint={data.variables.b.hint} value={b} onChange={setB} min={0} />
             <CalcInput name="h" label={data.variables.h.label} unit={data.variables.h.unit} hint={data.variables.h.hint} value={h} onChange={setH} min={0} />
             <CalcInput name="d" label={data.variables.d.label} unit={data.variables.d.unit} hint={data.variables.d.hint} value={d} onChange={setD} min={0} />
 
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3 mt-4">Reinforcement</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3 mt-4">Reinforcement</h3>
             <CalcInput name="As" label={data.variables.As.label} unit={data.variables.As.unit} hint={data.variables.As.hint} value={As} onChange={setAs} min={0} />
             <CalcInput name="phi" label={data.variables.phi.label} unit={data.variables.phi.unit} hint={data.variables.phi.hint} value={phi} onChange={setPhi} min={0} />
             <CalcInput name="cover" label={data.variables.cover.label} unit={data.variables.cover.unit} hint={data.variables.cover.hint} value={cover} onChange={setCover} min={0} />
 
-            <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-3 mt-4">Materials &amp; Loading</h3>
+            <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3 mt-4">Materials &amp; Loading</h3>
             <CalcInput name="fck" label={data.variables.fck.label} unit={data.variables.fck.unit} hint={data.variables.fck.hint} value={fck} onChange={setFck} min={0} />
             <CalcInput name="Msls" label={data.variables.Msls.label} unit={data.variables.Msls.unit} hint={data.variables.Msls.hint} value={Msls} onChange={setMsls} min={0} />
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Load Duration (kt)
               </label>
               <select
                 value={kt}
                 onChange={(e) => setKt(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
               >
                 {ktOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -144,13 +144,13 @@ export default function CrackWidthPage() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Crack Width Limit wmax (EC2 Table 7.1N)
               </label>
               <select
                 value={wkLimit}
                 onChange={(e) => setWkLimit(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
               >
                 {wkLimitOptions.map((o) => (
                   <option key={o.value} value={o.value}>{o.label}</option>
@@ -198,7 +198,7 @@ export default function CrackWidthPage() {
           <div className="space-y-4">
             {result ? (
               <>
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500">Cracked Section Analysis</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500">Cracked Section Analysis</h3>
                 <CalcResult label="Ecm (secant modulus)" value={result.Ecm} unit="GPa" decimals={2} />
                 <CalcResult label="fct,eff" value={result.fctEff} unit="MPa" decimals={2} />
                 <CalcResult label="αe = Es/Ecm" value={result.alphaE} unit="" decimals={1} />
@@ -206,18 +206,18 @@ export default function CrackWidthPage() {
                 <CalcResult label="Lever arm z" value={result.z} unit="mm" decimals={1} />
                 <CalcResult label="Steel stress σs" value={result.sigmaS} unit="MPa" decimals={1} />
 
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 pt-2">Effective Tension Zone</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 pt-2">Effective Tension Zone</h3>
                 <CalcResult label="hc,ef" value={result.hcEff} unit="mm" decimals={1} />
                 <CalcResult label="Ac,eff" value={result.AcEff} unit="mm²" decimals={0} />
                 <CalcResult label="ρp,eff" value={result.rhoEff * 100} unit="%" decimals={3} />
 
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-500 pt-2">Crack Width</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 pt-2">Crack Width</h3>
                 <CalcResult label="Max crack spacing sr,max" value={result.srMax} unit="mm" decimals={1} />
                 <CalcResult label="Strain difference (εsm − εcm)" value={result.epsilonDiff} unit="" decimals={6} />
                 <CalcResult label="Calculated wk" value={result.wk} unit="mm" decimals={4} />
                 <CalcResult label="Limit wmax" value={result.wkLimit} unit="mm" decimals={2} />
 
-                <div className={`rounded-lg p-3 border ${result.pass ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
+                <div className={`rounded-2xl p-3 border ${result.pass ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"}`}>
                   <p className={`text-sm font-semibold ${result.pass ? "text-green-800" : "text-red-800"}`}>
                     {result.pass ? "PASS" : "FAIL"} — {(result.utilisation * 100).toFixed(1)}% utilisation
                   </p>

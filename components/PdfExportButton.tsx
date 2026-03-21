@@ -54,7 +54,7 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+        className="mt-4 inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 transition-colors"
       >
         <svg
           className="h-4 w-4"
@@ -76,16 +76,16 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-bold text-gray-900 mb-1">
+            <h2 className="text-lg font-bold text-stone-800 mb-1">
               Export Calculation Sheet
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-stone-500 mb-4">
               Optional details for your PDF document.
             </p>
 
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   Project Name
                 </label>
                 <input
@@ -93,11 +93,11 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
                   value={projectName}
                   onChange={(e) => setProjectName(e.target.value)}
                   placeholder="e.g. Taman Seri Indah Phase 2"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   Prepared By
                 </label>
                 <input
@@ -105,11 +105,11 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
                   value={engineerName}
                   onChange={(e) => setEngineerName(e.target.value)}
                   placeholder="e.g. Ir. Ahmad bin Ismail"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   Notes / Remarks
                 </label>
                 <textarea
@@ -117,7 +117,7 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
                   onChange={(e) => setNotes(e.target.value)}
                   rows={3}
                   placeholder="e.g. Design for 10-year ARI storm event"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"
                 />
               </div>
             </div>
@@ -125,7 +125,7 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
             <div className="mt-5 flex gap-3 justify-end">
               <button
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-stone-600 hover:bg-stone-100"
                 disabled={generating}
               >
                 Cancel
@@ -133,7 +133,7 @@ export default function PdfExportButton({ data }: PdfExportButtonProps) {
               <button
                 onClick={handleExport}
                 disabled={generating}
-                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-50 transition-colors"
               >
                 {generating ? (
                   <>

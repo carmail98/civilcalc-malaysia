@@ -6,7 +6,7 @@ export default function FeedbackButton() {
   return (
     <Link
       href="/feedback"
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg hover:bg-blue-700 transition-colors print:hidden"
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-amber-600 px-4 py-2.5 text-sm font-medium text-white shadow-lg hover:bg-amber-700 transition-colors print:hidden"
       title="Send Feedback"
     >
       <svg

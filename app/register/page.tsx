@@ -95,10 +95,10 @@ export default function RegisterPage() {
   return (
     <div className="flex justify-center py-4">
       <div className="w-full max-w-lg">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="text-2xl font-bold text-stone-800 mb-2">
           Create Account
         </h1>
-        <p className="text-sm text-gray-500 mb-6">
+        <p className="text-sm text-stone-500 mb-6">
           Join the CivilCalc Malaysia community. Your BEM registration number
           helps build trust — it&apos;s optional but recommended.
         </p>
@@ -108,7 +108,7 @@ export default function RegisterPage() {
           <button
             type="button"
             disabled
-            className="flex w-full items-center justify-center gap-3 rounded-lg border border-gray-200 bg-gray-100 px-4 py-2.5 text-sm font-medium text-gray-400 cursor-not-allowed mb-2"
+            className="flex w-full items-center justify-center gap-3 rounded-lg border border-stone-200 bg-stone-100 px-4 py-2.5 text-sm font-medium text-stone-400 cursor-not-allowed mb-2"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" className="opacity-40">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -123,10 +123,10 @@ export default function RegisterPage() {
 
         <div className="relative my-5">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200" />
+            <div className="w-full border-t border-stone-200" />
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-gray-50 px-3 text-gray-400">or register with email</span>
+            <span className="bg-stone-50 px-3 text-stone-400">or register with email</span>
           </div>
         </div>
 
@@ -139,12 +139,12 @@ export default function RegisterPage() {
 
           {/* Required fields */}
           <fieldset className="space-y-4">
-            <legend className="text-sm font-semibold text-gray-900 mb-2">
+            <legend className="text-sm font-semibold text-stone-800 mb-2">
               Account Details
             </legend>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <input
@@ -152,13 +152,13 @@ export default function RegisterPage() {
                 required
                 value={form.name}
                 onChange={(e) => update("name", e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 placeholder="Ahmad bin Ibrahim"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -166,14 +166,14 @@ export default function RegisterPage() {
                 required
                 value={form.email}
                 onChange={(e) => update("email", e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 placeholder="you@example.com"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   Password <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -181,12 +181,12 @@ export default function RegisterPage() {
                   required
                   value={form.password}
                   onChange={(e) => update("password", e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                   placeholder="Min 8 characters"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   Confirm Password <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -194,7 +194,7 @@ export default function RegisterPage() {
                   required
                   value={form.confirmPassword}
                   onChange={(e) => update("confirmPassword", e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                   placeholder="Repeat password"
                 />
               </div>
@@ -202,52 +202,52 @@ export default function RegisterPage() {
           </fieldset>
 
           {/* Professional profile (optional) */}
-          <fieldset className="space-y-4 border-t border-gray-200 pt-4">
-            <legend className="text-sm font-semibold text-gray-900 mb-2">
+          <fieldset className="space-y-4 border-t border-stone-200 pt-4">
+            <legend className="text-sm font-semibold text-stone-800 mb-2">
               Professional Profile{" "}
-              <span className="font-normal text-gray-400">(optional)</span>
+              <span className="font-normal text-stone-400">(optional)</span>
             </legend>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 BEM Registration Number
               </label>
               <input
                 type="text"
                 value={form.bemNumber}
                 onChange={(e) => update("bemNumber", e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 placeholder="e.g. PE12345"
               />
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-stone-400">
                 Your BEM number will appear on your profile and endorsed
                 contributions.
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Organisation
               </label>
               <input
                 type="text"
                 value={form.organisation}
                 onChange={(e) => update("organisation", e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 placeholder="e.g. JKR, Consultant Firm, University"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   State
                 </label>
                 <select
                   aria-label="State"
                   value={form.state}
                   onChange={(e) => update("state", e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 >
                   <option value="">Select state</option>
                   {MY_STATES.map((s) => (
@@ -258,14 +258,14 @@ export default function RegisterPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-stone-700 mb-1">
                   Specialisation
                 </label>
                 <select
                   aria-label="Specialisation"
                   value={form.specialisation}
                   onChange={(e) => update("specialisation", e.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 >
                   <option value="">Select area</option>
                   {SPECIALISATIONS.map((s) => (
@@ -281,15 +281,15 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-lg bg-blue-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-50 transition-colors"
+            className="w-full rounded-lg bg-amber-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-amber-800 disabled:opacity-50 transition-colors"
           >
             {loading ? "Creating account…" : "Create Account"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-sm text-stone-500">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-700 hover:underline font-medium">
+          <a href="/login" className="text-amber-700 hover:underline font-medium">
             Sign in
           </a>
         </p>

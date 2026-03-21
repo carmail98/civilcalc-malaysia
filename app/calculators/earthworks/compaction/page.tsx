@@ -91,8 +91,8 @@ export default function CompactionPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Earthworks", href: "/calculators/earthworks" }, { label: "Compaction Check" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -214,7 +214,7 @@ export default function CompactionPage() {
 
             {result && (
               <div
-                className={`rounded-lg border p-4 text-center text-lg font-bold ${
+                className={`rounded-2xl border p-4 text-center text-lg font-bold ${
                   result.pass
                     ? "border-green-200 bg-green-50 text-green-800"
                     : "border-red-200 bg-red-50 text-red-800"

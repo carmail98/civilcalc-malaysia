@@ -31,19 +31,45 @@ const navLinks = [
   { href: "/about", label: "About" },
 ];
 
-const footerCalcs = [
-  { href: "/calculators/drainage", label: "Rational Method" },
-  { href: "/calculators/drainage/idf", label: "IDF Curve" },
-  { href: "/calculators/drainage/drain-sizing", label: "Drain Sizing" },
-  { href: "/calculators/earthworks", label: "Cut & Fill" },
-  { href: "/calculators/roads/pavement", label: "Pavement Design" },
-  { href: "/calculators/sewerage", label: "Sewer Pipe Sizing" },
-  { href: "/calculators/concrete", label: "RC Beam Capacity" },
-  { href: "/calculators/concrete/beam-shear", label: "Beam Shear Design" },
-  { href: "/calculators/concrete/column-interaction", label: "Column N-M Interaction" },
-  { href: "/calculators/concrete/pad-footing", label: "Pad Footing Design" },
-  { href: "/calculators/concrete/crack-width", label: "Crack Width SLS" },
-  { href: "/calculators/report-generator", label: "Report Generator" },
+const footerCalcCategories = [
+  {
+    category: "Drainage",
+    items: [
+      { href: "/calculators/drainage", label: "Rational Method" },
+      { href: "/calculators/drainage/idf", label: "IDF Curve" },
+      { href: "/calculators/drainage/drain-sizing", label: "Drain Sizing" },
+    ],
+  },
+  {
+    category: "Earthworks",
+    items: [
+      { href: "/calculators/earthworks", label: "Cut & Fill" },
+      { href: "/calculators/earthworks/compaction", label: "Compaction" },
+      { href: "/calculators/earthworks/slope", label: "Slope Gradient" },
+    ],
+  },
+  {
+    category: "Roads",
+    items: [
+      { href: "/calculators/roads/pavement", label: "Pavement Design" },
+    ],
+  },
+  {
+    category: "Sewerage",
+    items: [
+      { href: "/calculators/sewerage", label: "Sewer Pipe Sizing" },
+    ],
+  },
+  {
+    category: "Concrete",
+    items: [
+      { href: "/calculators/concrete", label: "RC Beam Capacity" },
+      { href: "/calculators/concrete/beam-shear", label: "Beam Shear" },
+      { href: "/calculators/concrete/column-interaction", label: "Column N-M" },
+      { href: "/calculators/concrete/pad-footing", label: "Pad Footing" },
+      { href: "/calculators/concrete/crack-width", label: "Crack Width" },
+    ],
+  },
 ];
 
 const footerStandards = [
@@ -61,22 +87,22 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50 text-gray-900`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#faf8f5] text-stone-900`}
       >
         <SessionProvider>
-        <header className="relative border-b border-gray-200 bg-white print:hidden">
+        <header className="relative border-b border-stone-200/80 bg-white/90 backdrop-blur-sm print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-            <a href="/" className="text-xl font-bold text-blue-700 shrink-0">
-              CivilCalc<span className="text-gray-500">.my</span>
+            <a href="/" className="text-xl font-bold text-amber-700 shrink-0">
+              CivilCalc<span className="text-stone-400">.my</span>
             </a>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-600">
+            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
               {navLinks.map((link) => (
                 <a
                   key={link.label}
                   href={link.href}
-                  className="hover:text-blue-700 transition-colors"
+                  className="hover:text-amber-700 transition-colors"
                 >
                   {link.label}
                 </a>
@@ -96,65 +122,106 @@ export default function RootLayout({
 
         <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
 
-        <footer className="border-t border-gray-200 bg-white mt-12 print:hidden">
-          <div className="mx-auto max-w-5xl px-4 py-8">
-            <div className="grid gap-8 sm:grid-cols-3">
-              {/* About */}
-              <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                  CivilCalc<span className="text-gray-400">.my</span>
+        <footer className="border-t border-stone-200/80 bg-white/90 backdrop-blur-sm mt-12 print:hidden">
+          <div className="mx-auto max-w-5xl px-4 py-10">
+            {/* Top row: About + Calculators by category */}
+            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-[1fr_2fr]">
+              {/* About column */}
+              <div className="space-y-4">
+                <h4 className="text-sm font-semibold text-stone-800">
+                  CivilCalc<span className="text-stone-400">.my</span>
                 </h4>
-                <p className="text-xs text-gray-500 leading-relaxed">
+                <p className="text-xs text-stone-500 leading-relaxed">
                   Free civil engineering calculators based on Malaysian
                   standards. Built for engineers, students, and consultants.
                 </p>
+
+                {/* Utility links */}
+                <div className="space-y-1.5">
+                  <a
+                    href="/feedback"
+                    className="block text-xs font-medium text-amber-600 hover:text-amber-700 transition-colors"
+                  >
+                    Send Feedback / Request a Calculator &rarr;
+                  </a>
+                  <a
+                    href="/news"
+                    className="block text-xs text-stone-500 hover:text-amber-600 transition-colors"
+                  >
+                    Changelog &amp; Release Notes
+                  </a>
+                  <a
+                    href="/about"
+                    className="block text-xs text-stone-500 hover:text-amber-600 transition-colors"
+                  >
+                    Roadmap &amp; Planned Modules
+                  </a>
+                </div>
+
+                {/* Standards */}
+                <div>
+                  <h4 className="text-xs font-semibold text-stone-800 mb-1.5 mt-4">
+                    Referenced Standards
+                  </h4>
+                  <ul className="space-y-1">
+                    {footerStandards.map((s) => (
+                      <li key={s.label}>
+                        <a
+                          href={s.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-stone-500 hover:text-amber-600 transition-colors"
+                        >
+                          {s.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
 
-              {/* Quick links */}
+              {/* Calculators by category */}
               <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">
+                <h4 className="text-sm font-semibold text-stone-800 mb-3">
                   Popular Calculators
                 </h4>
-                <ul className="space-y-1.5">
-                  {footerCalcs.map((c) => (
-                    <li key={c.href}>
-                      <a
-                        href={c.href}
-                        className="text-xs text-gray-500 hover:text-blue-600 transition-colors"
-                      >
-                        {c.label}
-                      </a>
-                    </li>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-4">
+                  {footerCalcCategories.map((cat) => (
+                    <div key={cat.category}>
+                      <h5 className="text-[11px] font-semibold text-stone-400 uppercase tracking-wide mb-1.5">
+                        {cat.category}
+                      </h5>
+                      <ul className="space-y-1">
+                        {cat.items.map((c) => (
+                          <li key={c.href}>
+                            <a
+                              href={c.href}
+                              className="text-xs text-stone-500 hover:text-amber-600 transition-colors"
+                            >
+                              {c.label}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
-              </div>
-
-              {/* Standards */}
-              <div>
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">
-                  Referenced Standards
-                </h4>
-                <ul className="space-y-1.5">
-                  {footerStandards.map((s) => (
-                    <li key={s.label}>
-                      <a
-                        href={s.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-gray-500 hover:text-blue-600 transition-colors"
-                      >
-                        {s.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                </div>
               </div>
             </div>
 
-            <div className="mt-8 border-t border-gray-100 pt-4 text-center text-xs text-gray-400">
-              CivilCalc Malaysia &copy; {new Date().getFullYear()} — Engineering
-              calculation aid only. All designs must be endorsed by a registered
-              PE under BEM.
+            {/* Bottom bar */}
+            <div className="mt-8 border-t border-stone-100 pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-stone-400">
+              <span>
+                CivilCalc Malaysia &copy; {new Date().getFullYear()} — Engineering
+                calculation aid only. All designs must be endorsed by a registered
+                PE under BEM.
+              </span>
+              <a
+                href="/feedback"
+                className="text-amber-500 hover:text-amber-600 font-medium transition-colors"
+              >
+                Send Feedback
+              </a>
             </div>
           </div>
         </footer>

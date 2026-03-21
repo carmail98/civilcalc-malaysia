@@ -121,8 +121,8 @@ export default function IDFPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "IDF Curve" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -137,13 +137,13 @@ export default function IDFPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             {/* Station selector */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Rainfall Station
             </h3>
             <select
               value={station}
               onChange={(e) => setStation(e.target.value)}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 mb-4 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              className="w-full rounded-2xl border border-stone-300 bg-white px-3 py-2 text-sm text-stone-800 mb-4 focus:border-amber-500 focus:ring-1 focus:ring-amber-500"
             >
               {Object.entries(IDF_PRESETS).map(([key, val]) => (
                 <option key={key} value={key}>
@@ -155,7 +155,7 @@ export default function IDFPage() {
             {/* Custom constants */}
             {isCustom && (
               <>
-                <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
                   IDF Constants
                 </h3>
                 <CalcInput
@@ -203,11 +203,11 @@ export default function IDFPage() {
 
             {/* Show active constants */}
             {!isCustom && (
-              <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 mb-4">
-                <p className="text-xs font-semibold text-gray-500 mb-1">
+              <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3 mb-4">
+                <p className="text-xs font-semibold text-stone-500 mb-1">
                   Active IDF Constants
                 </p>
-                <p className="text-sm font-mono text-gray-700">
+                <p className="text-sm font-mono text-stone-700">
                   λ = {constants.lambda} &nbsp; κ = {constants.kappa} &nbsp; θ ={" "}
                   {constants.theta} &nbsp; η = {constants.eta}
                 </p>
@@ -215,7 +215,7 @@ export default function IDFPage() {
             )}
 
             {/* Single-point lookup */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-4 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-4 uppercase tracking-wide">
               Single-Point Lookup
             </h3>
             <CalcInput
@@ -284,7 +284,7 @@ export default function IDFPage() {
             )}
 
             {/* Note about presets */}
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+            <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
               Preset constants are representative values. Always verify with your
               local JPS/DID office or MSMA Appendix 2.B for site-specific
               constants.
@@ -295,20 +295,20 @@ export default function IDFPage() {
         {/* Full IDF Table */}
         {constantsValid && tableData.length > 0 && (
           <div className="mt-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            <h3 className="text-lg font-semibold text-stone-700 mb-3">
               IDF Table — Intensity (mm/hr)
             </h3>
-            <div className="overflow-x-auto rounded-lg border border-gray-200">
+            <div className="overflow-x-auto rounded-2xl border border-stone-200">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50 border-b border-gray-200">
-                    <th className="px-3 py-2 text-left text-gray-600 font-semibold">
+                  <tr className="bg-stone-50 border-b border-stone-200">
+                    <th className="px-3 py-2 text-left text-stone-600 font-semibold">
                       Duration (min)
                     </th>
                     {ARI_LIST.map((a) => (
                       <th
                         key={a}
-                        className="px-3 py-2 text-right text-gray-600 font-semibold"
+                        className="px-3 py-2 text-right text-stone-600 font-semibold"
                       >
                         {a}-yr
                       </th>
@@ -319,9 +319,9 @@ export default function IDFPage() {
                   {DURATION_LIST.map((dur) => (
                     <tr
                       key={dur}
-                      className="border-b border-gray-100 hover:bg-gray-50"
+                      className="border-b border-stone-100 hover:bg-stone-50"
                     >
-                      <td className="px-3 py-1.5 font-medium text-gray-800">
+                      <td className="px-3 py-1.5 font-medium text-stone-700">
                         {dur}
                       </td>
                       {ARI_LIST.map((a) => {
@@ -329,7 +329,7 @@ export default function IDFPage() {
                         return (
                           <td
                             key={a}
-                            className="px-3 py-1.5 text-right text-gray-700 font-mono"
+                            className="px-3 py-1.5 text-right text-stone-700 font-mono"
                           >
                             {val.toFixed(1)}
                           </td>
@@ -340,7 +340,7 @@ export default function IDFPage() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-gray-400 mt-2">
+            <p className="text-xs text-stone-400 mt-2">
               Station: {preset.label} &nbsp;|&nbsp; λ={constants.lambda}, κ=
               {constants.kappa}, θ={constants.theta}, η={constants.eta}
             </p>

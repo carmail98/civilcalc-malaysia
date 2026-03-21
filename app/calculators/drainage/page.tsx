@@ -51,8 +51,8 @@ export default function DrainagePage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "Rational Method" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}

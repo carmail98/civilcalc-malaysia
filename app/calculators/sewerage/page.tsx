@@ -126,8 +126,8 @@ export default function SewerSizingPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Sewerage" }, { label: "Sewer Pipe Sizing" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -141,25 +141,25 @@ export default function SewerSizingPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-3 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.dwf}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Dry Weather Flow</p>
+            <p className="text-xs text-stone-400 mt-1">Dry Weather Flow</p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.harmon}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Harmon&apos;s Peak Factor
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.pipe}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Manning&apos;s full flow
             </p>
           </div>
@@ -167,7 +167,7 @@ export default function SewerSizingPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Sewage Flow
             </h3>
             <CalcInput
@@ -201,7 +201,7 @@ export default function SewerSizingPage() {
               error={infError}
             />
 
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Pipe Properties
             </h3>
             <CalcInput
@@ -274,47 +274,47 @@ export default function SewerSizingPage() {
             {result !== null && (
               <>
                 {/* Flow breakdown */}
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                <div className="rounded-2xl border border-stone-200 bg-white p-4">
+                  <h4 className="text-sm font-semibold text-stone-700 mb-3">
                     Flow Calculation
                   </h4>
                   <table className="w-full text-sm">
                     <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-600">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-600">
                           Dry Weather Flow (DWF)
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.dwf.toFixed(3)} L/s
                         </td>
                       </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-600">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-600">
                           Peak Factor (Harmon&apos;s)
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.peakFactor.toFixed(2)}
                         </td>
                       </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-600">Peak Flow</td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-600">Peak Flow</td>
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.peakFlow.toFixed(3)} L/s
                         </td>
                       </tr>
                       {result.infiltrationFlow > 0 && (
-                        <tr className="border-b border-gray-100">
-                          <td className="py-1.5 text-gray-600">
+                        <tr className="border-b border-stone-100">
+                          <td className="py-1.5 text-stone-600">
                             Infiltration
                           </td>
-                          <td className="py-1.5 text-right font-medium text-gray-900">
+                          <td className="py-1.5 text-right font-medium text-stone-800">
                             {result.infiltrationFlow.toFixed(3)} L/s
                           </td>
                         </tr>
                       )}
-                      <tr className="bg-blue-50 font-semibold">
-                        <td className="py-2 text-blue-900">Design Flow</td>
-                        <td className="py-2 text-right text-blue-700">
+                      <tr className="bg-amber-50 font-semibold">
+                        <td className="py-2 text-amber-900">Design Flow</td>
+                        <td className="py-2 text-right text-amber-700">
                           {result.designFlow.toFixed(3)} L/s
                         </td>
                       </tr>
@@ -335,21 +335,21 @@ export default function SewerSizingPage() {
                 />
 
                 {/* d/D ratio */}
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                  <p className="text-sm font-medium text-gray-700">
+                <div className="rounded-2xl border border-stone-200 bg-white p-4">
+                  <p className="text-sm font-medium text-stone-700">
                     Flow Ratio (Q_design / Q_full)
                   </p>
-                  <p className="text-2xl font-bold text-gray-900 mt-1">
+                  <p className="text-2xl font-bold text-stone-800 mt-1">
                     {(result.flowRatio * 100).toFixed(1)}%
                   </p>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-stone-500 mt-1">
                     MSIG max 80% full for gravity sewer
                   </p>
                 </div>
 
                 {/* Adequacy check */}
                 <div
-                  className={`rounded-lg border p-3 text-sm ${
+                  className={`rounded-2xl border p-3 text-sm ${
                     result.adequate
                       ? "border-green-200 bg-green-50 text-green-800"
                       : "border-red-200 bg-red-50 text-red-800"
@@ -362,7 +362,7 @@ export default function SewerSizingPage() {
 
                 {/* Self-cleansing check */}
                 <div
-                  className={`rounded-lg border p-3 text-sm ${
+                  className={`rounded-2xl border p-3 text-sm ${
                     result.selfCleansing
                       ? "border-green-200 bg-green-50 text-green-800"
                       : "border-amber-200 bg-amber-50 text-amber-800"
@@ -375,7 +375,7 @@ export default function SewerSizingPage() {
 
                 {/* Velocity cap warning */}
                 {result.fullFlowVelocity > 3.0 && (
-                  <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                     Velocity exceeds 3.0 m/s — risk of pipe erosion, consider
                     reducing slope or adding drop manholes
                   </div>

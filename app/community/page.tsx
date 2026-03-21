@@ -81,15 +81,15 @@ export default function CommunityPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Q&A Forum</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-stone-800">Q&A Forum</h1>
+          <p className="text-sm text-stone-500 mt-1">
             {total} question{total !== 1 ? "s" : ""} from Malaysian civil engineers
           </p>
         </div>
         {session?.user && (
           <Link
             href="/community/ask"
-            className="rounded-lg bg-blue-700 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-800 transition-colors"
+            className="rounded-lg bg-amber-700 px-4 py-2 text-sm font-semibold text-white hover:bg-amber-800 transition-colors"
           >
             Ask a Question
           </Link>
@@ -97,7 +97,7 @@ export default function CommunityPage() {
         {!session?.user && (
           <Link
             href="/login"
-            className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded-lg border border-stone-300 px-4 py-2 text-sm font-medium text-stone-700 hover:bg-stone-50 transition-colors"
           >
             Sign in to ask
           </Link>
@@ -106,7 +106,7 @@ export default function CommunityPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-3 mb-4">
-        <div className="flex rounded-lg border border-gray-200 p-0.5 text-sm">
+        <div className="flex rounded-lg border border-stone-200 p-0.5 text-sm">
           {[
             { key: "newest", label: "Newest" },
             { key: "votes", label: "Top Voted" },
@@ -118,8 +118,8 @@ export default function CommunityPage() {
               onClick={() => { setSort(s.key); setPage(1); }}
               className={`rounded-md px-3 py-1 font-medium transition-colors ${
                 sort === s.key
-                  ? "bg-blue-700 text-white"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-amber-700 text-white"
+                  : "text-stone-500 hover:text-stone-700"
               }`}
             >
               {s.label}
@@ -137,8 +137,8 @@ export default function CommunityPage() {
             onClick={() => { setActiveTag(activeTag === tag ? null : tag); setPage(1); }}
             className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
               activeTag === tag
-                ? "bg-blue-100 text-blue-700 border border-blue-200"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-transparent"
+                ? "bg-amber-100 text-amber-700 border border-amber-200"
+                : "bg-stone-100 text-stone-600 hover:bg-stone-200 border border-transparent"
             }`}
           >
             #{tag}
@@ -148,12 +148,12 @@ export default function CommunityPage() {
 
       {/* Questions List */}
       {loading ? (
-        <div className="text-center py-12 text-sm text-gray-400">Loading questions...</div>
+        <div className="text-center py-12 text-sm text-stone-400">Loading questions...</div>
       ) : questions.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-gray-500 mb-2">No questions yet.</p>
+          <p className="text-stone-500 mb-2">No questions yet.</p>
           {session?.user && (
-            <Link href="/community/ask" className="text-sm text-blue-700 hover:underline">
+            <Link href="/community/ask" className="text-sm text-amber-700 hover:underline">
               Be the first to ask!
             </Link>
           )}
@@ -164,15 +164,15 @@ export default function CommunityPage() {
             <Link
               key={q.id}
               href={`/community/${q.id}`}
-              className="block rounded-lg border border-gray-200 bg-white p-4 hover:border-blue-200 hover:shadow-sm transition-all"
+              className="block rounded-lg border border-stone-200 bg-white p-4 hover:border-amber-200 hover:shadow-sm transition-all"
             >
               <div className="flex gap-4">
                 {/* Stats */}
-                <div className="hidden sm:flex flex-col items-center gap-1 text-xs text-gray-400 min-w-[60px] pt-1">
-                  <div className={`font-semibold text-sm ${q.voteScore > 0 ? "text-blue-700" : q.voteScore < 0 ? "text-red-500" : "text-gray-400"}`}>
+                <div className="hidden sm:flex flex-col items-center gap-1 text-xs text-stone-400 min-w-[60px] pt-1">
+                  <div className={`font-semibold text-sm ${q.voteScore > 0 ? "text-amber-700" : q.voteScore < 0 ? "text-red-500" : "text-stone-400"}`}>
                     {q.voteScore} vote{q.voteScore !== 1 ? "s" : ""}
                   </div>
-                  <div className={`rounded px-2 py-0.5 ${q._count.answers > 0 ? (q.isResolved ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600") : "text-gray-400"}`}>
+                  <div className={`rounded px-2 py-0.5 ${q._count.answers > 0 ? (q.isResolved ? "bg-green-100 text-green-700" : "bg-stone-100 text-stone-600") : "text-stone-400"}`}>
                     {q._count.answers} ans
                   </div>
                   <div>{q.viewCount} views</div>
@@ -180,7 +180,7 @@ export default function CommunityPage() {
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-sm font-semibold text-gray-900 mb-1 leading-snug">
+                  <h2 className="text-sm font-semibold text-stone-800 mb-1 leading-snug">
                     {q.isResolved && (
                       <span className="inline-block mr-1.5 text-green-600" title="Resolved">&#10003;</span>
                     )}
@@ -189,7 +189,7 @@ export default function CommunityPage() {
 
                   <div className="flex flex-wrap items-center gap-2 mt-2">
                     {q.tags.map((tag) => (
-                      <span key={tag} className="rounded-full bg-blue-50 px-2 py-0.5 text-xs text-blue-600">
+                      <span key={tag} className="rounded-full bg-amber-50 px-2 py-0.5 text-xs text-amber-600">
                         #{tag}
                       </span>
                     ))}
@@ -200,10 +200,10 @@ export default function CommunityPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center gap-2 mt-2 text-xs text-gray-400">
-                    <span className="font-medium text-gray-600">{q.author.name}</span>
+                  <div className="flex items-center gap-2 mt-2 text-xs text-stone-400">
+                    <span className="font-medium text-stone-600">{q.author.name}</span>
                     {q.author.bemNumber && (
-                      <span className="text-blue-600 bg-blue-50 rounded px-1.5 py-0.5 text-[10px]">
+                      <span className="text-amber-600 bg-amber-50 rounded px-1.5 py-0.5 text-[10px]">
                         PE
                       </span>
                     )}
@@ -230,18 +230,18 @@ export default function CommunityPage() {
             type="button"
             disabled={page <= 1}
             onClick={() => setPage(page - 1)}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm disabled:opacity-40"
+            className="rounded-lg border border-stone-200 px-3 py-1.5 text-sm disabled:opacity-40"
           >
             Previous
           </button>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-stone-500">
             Page {page} of {pages}
           </span>
           <button
             type="button"
             disabled={page >= pages}
             onClick={() => setPage(page + 1)}
-            className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm disabled:opacity-40"
+            className="rounded-lg border border-stone-200 px-3 py-1.5 text-sm disabled:opacity-40"
           >
             Next
           </button>

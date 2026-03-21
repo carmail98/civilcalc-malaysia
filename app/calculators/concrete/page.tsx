@@ -78,8 +78,8 @@ export default function RCBeamPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Structural", href: "/calculators/concrete" }, { label: "RC Beam Capacity" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -93,18 +93,18 @@ export default function RCBeamPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-3 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.lever_arm}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.K}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.K_limit}
             </p>
           </div>
@@ -145,14 +145,14 @@ export default function RCBeamPage() {
 
             {/* fck dropdown */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 {data.variables.fck.label}{" "}
-                <span className="text-gray-400">({data.variables.fck.unit})</span>
+                <span className="text-stone-400">({data.variables.fck.unit})</span>
               </label>
               <select
                 value={fck}
                 onChange={(e) => setFck(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
               >
                 {fckOptions.map((v) => (
                   <option key={v} value={v}>
@@ -164,17 +164,17 @@ export default function RCBeamPage() {
 
             {/* fyk fixed display */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 {data.variables.fyk.label}{" "}
-                <span className="text-gray-400">({data.variables.fyk.unit})</span>
+                <span className="text-stone-400">({data.variables.fyk.unit})</span>
               </label>
-              <div className="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-600">
+              <div className="w-full rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 text-sm text-stone-600">
                 500 MPa (H-bar, Malaysia standard)
               </div>
             </div>
 
             {/* Optional MEd */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Utilisation Check (Optional)
             </h3>
             <CalcInput
@@ -222,7 +222,7 @@ export default function RCBeamPage() {
               <>
                 <CalcResult label="K value" value={result.K} unit="" />
                 <div
-                  className={`rounded-lg border p-3 text-sm ${
+                  className={`rounded-2xl border p-3 text-sm ${
                     result.singlyReinforced
                       ? "border-green-200 bg-green-50 text-green-800"
                       : "border-red-200 bg-red-50 text-red-800"
@@ -254,7 +254,7 @@ export default function RCBeamPage() {
                       unit=""
                     />
                     <div
-                      className={`rounded-lg border p-4 text-center text-lg font-bold ${
+                      className={`rounded-2xl border p-4 text-center text-lg font-bold ${
                         result.passUtilisation
                           ? "border-green-200 bg-green-50 text-green-800"
                           : "border-red-200 bg-red-50 text-red-800"

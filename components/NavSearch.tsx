@@ -60,14 +60,14 @@ export default function NavSearch() {
       {!open ? (
         <button
           onClick={() => setOpen(true)}
-          className="flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-gray-400 hover:border-gray-300 hover:text-gray-500 transition-colors"
+          className="flex items-center gap-2 rounded-lg border border-stone-200 bg-stone-50 px-3 py-1.5 text-sm text-stone-400 hover:border-stone-300 hover:text-stone-500 transition-colors"
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8" />
             <path d="M21 21l-4.35-4.35" />
           </svg>
           Search...
-          <kbd className="ml-2 rounded border border-gray-200 bg-white px-1.5 py-0.5 text-[10px] font-mono text-gray-400">/</kbd>
+          <kbd className="ml-2 rounded border border-stone-200 bg-white px-1.5 py-0.5 text-[10px] font-mono text-stone-400">/</kbd>
         </button>
       ) : (
         <div className="w-64">
@@ -81,24 +81,24 @@ export default function NavSearch() {
               if (e.key === "Enter" && results.length > 0) navigate(results[0].href);
             }}
             placeholder="Search calculators..."
-            className="w-full rounded-lg border border-blue-400 bg-white py-1.5 pl-3 pr-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-400"
+            className="w-full rounded-lg border border-amber-400 bg-white py-1.5 pl-3 pr-3 text-sm text-stone-800 placeholder:text-stone-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
           />
           {results.length > 0 && (
-            <div className="absolute top-full left-0 right-0 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg z-50 max-h-64 overflow-y-auto">
+            <div className="absolute top-full left-0 right-0 mt-1 rounded-lg border border-stone-200 bg-white shadow-lg z-50 max-h-64 overflow-y-auto">
               {results.map((r) => (
                 <button
                   key={r.href}
                   onClick={() => navigate(r.href)}
-                  className="w-full text-left px-3 py-2.5 text-sm hover:bg-blue-50 transition-colors border-b border-gray-50 last:border-0"
+                  className="w-full text-left px-3 py-2.5 text-sm hover:bg-amber-50 transition-colors border-b border-stone-50 last:border-0"
                 >
-                  <span className="font-medium text-gray-900">{r.name}</span>
-                  <span className="ml-2 text-xs text-gray-400">{r.category}</span>
+                  <span className="font-medium text-stone-800">{r.name}</span>
+                  <span className="ml-2 text-xs text-stone-400">{r.category}</span>
                 </button>
               ))}
             </div>
           )}
           {query.length > 0 && results.length === 0 && (
-            <div className="absolute top-full left-0 right-0 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg z-50 px-3 py-3 text-sm text-gray-400">
+            <div className="absolute top-full left-0 right-0 mt-1 rounded-lg border border-stone-200 bg-white shadow-lg z-50 px-3 py-3 text-sm text-stone-400">
               No calculators found
             </div>
           )}

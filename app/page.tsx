@@ -45,11 +45,11 @@ const featured = [
 ];
 
 const colorMap: Record<string, { bg: string; text: string; border: string }> = {
-  blue: { bg: "bg-blue-100", text: "text-blue-700", border: "border-blue-200" },
-  amber: { bg: "bg-amber-100", text: "text-amber-700", border: "border-amber-200" },
-  gray: { bg: "bg-gray-200", text: "text-gray-700", border: "border-gray-300" },
-  green: { bg: "bg-green-100", text: "text-green-700", border: "border-green-200" },
-  orange: { bg: "bg-orange-100", text: "text-orange-700", border: "border-orange-200" },
+  blue: { bg: "bg-sky-100/70", text: "text-sky-700", border: "border-sky-200/60" },
+  amber: { bg: "bg-amber-100/70", text: "text-amber-700", border: "border-amber-200/60" },
+  gray: { bg: "bg-stone-200/70", text: "text-stone-700", border: "border-stone-300/60" },
+  green: { bg: "bg-emerald-100/70", text: "text-emerald-700", border: "border-emerald-200/60" },
+  orange: { bg: "bg-orange-100/70", text: "text-orange-700", border: "border-orange-200/60" },
 };
 
 /* ── Category cards ── */
@@ -64,10 +64,10 @@ const categoryCards = [
         <path d="M10 2a1 1 0 01.894.553l1.276 2.553a1 1 0 01-.073.992L10 9.5l-2.097-3.402a1 1 0 01-.073-.992l1.276-2.553A1 1 0 0110 2zM6 12a4 4 0 108 0c0 2.5-4 5-4 5s-4-2.5-4-5z" />
       </svg>
     ),
-    bg: "bg-blue-50",
-    text: "text-blue-700",
-    border: "border-blue-200",
-    hoverBorder: "hover:border-blue-400",
+    bg: "bg-sky-50/60",
+    text: "text-sky-700",
+    border: "border-sky-200/60",
+    hoverBorder: "hover:border-sky-400",
   },
   {
     name: "Earthworks",
@@ -95,10 +95,10 @@ const categoryCards = [
         <path fillRule="evenodd" d="M5.05 3.636a1 1 0 011.06.147l.74.656.74-.656a1 1 0 011.06-.147L10 4.5l1.35-.864a1 1 0 011.06.147l.74.656.74-.656A1 1 0 0115.95 4.5V16a1 1 0 01-1.65.76l-.74-.656-.74.656a1 1 0 01-1.06.147L10 16l-1.35.864a1 1 0 01-1.06-.147l-.74-.656-.74.656A1 1 0 014.05 16V4.5a1 1 0 011-1.136z" clipRule="evenodd" />
       </svg>
     ),
-    bg: "bg-gray-100",
-    text: "text-gray-700",
-    border: "border-gray-300",
-    hoverBorder: "hover:border-gray-400",
+    bg: "bg-stone-100/60",
+    text: "text-stone-700",
+    border: "border-stone-300/60",
+    hoverBorder: "hover:border-stone-400",
   },
   {
     name: "Sewerage",
@@ -196,7 +196,7 @@ export default function Home() {
   return (
     <div className="space-y-16">
       {/* ─── Hero Section ─── */}
-      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-blue-700 via-blue-800 to-blue-900 px-6 py-14 sm:px-12 sm:py-20 text-white">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-700 via-amber-800 to-stone-800 px-6 py-14 sm:px-12 sm:py-20 text-white">
         {/* Decorative grid */}
         <div className="pointer-events-none absolute inset-0 opacity-10">
           <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
@@ -240,7 +240,7 @@ export default function Home() {
           <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
             Civil Engineering Calculators for Malaysia
           </h1>
-          <p className="text-blue-100 text-lg leading-relaxed mb-8">
+          <p className="text-amber-100 text-lg leading-relaxed mb-8">
             14 free tools built on MSMA, JKR, and MS EN standards.
             Get instant, code-compliant results for drainage, earthworks, roads,
             sewerage, and structural design.
@@ -248,7 +248,7 @@ export default function Home() {
           <div className="flex flex-wrap gap-3">
             <Link
               href="/calculators"
-              className="inline-flex items-center gap-2 rounded-lg bg-white text-blue-800 px-6 py-3 text-sm font-semibold shadow-lg hover:bg-blue-50 transition-colors"
+              className="inline-flex items-center gap-2 rounded-2xl bg-white text-amber-800 px-6 py-3 text-sm font-semibold shadow-lg hover:bg-amber-50 transition-colors"
             >
               Explore Calculators
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -257,7 +257,7 @@ export default function Home() {
             </Link>
             <Link
               href="/about"
-              className="inline-flex items-center rounded-lg border border-blue-400 text-blue-100 px-6 py-3 text-sm font-medium hover:bg-blue-800 transition-colors"
+              className="inline-flex items-center rounded-2xl border border-amber-400 text-amber-100 px-6 py-3 text-sm font-medium hover:bg-amber-800/50 transition-colors"
             >
               Learn About Our Standards
             </Link>
@@ -267,17 +267,17 @@ export default function Home() {
 
       {/* ─── Standards Trust Bar ─── */}
       <section>
-        <p className="text-xs font-medium text-gray-400 text-center uppercase tracking-wider mb-5">
+        <p className="text-xs font-medium text-stone-400 text-center uppercase tracking-wider mb-5">
           Built on Malaysian Standards
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {standards.map((s) => (
             <div
               key={s.abbr}
-              className="rounded-lg border border-gray-200 bg-white px-4 py-3 text-center"
+              className="rounded-2xl border border-stone-200 bg-white/80 backdrop-blur-sm px-4 py-3 text-center"
             >
-              <p className="text-sm font-bold text-gray-900">{s.abbr}</p>
-              <p className="text-xs text-gray-500 mt-0.5">{s.full}</p>
+              <p className="text-sm font-bold text-stone-800">{s.abbr}</p>
+              <p className="text-xs text-stone-500 mt-0.5">{s.full}</p>
             </div>
           ))}
         </div>
@@ -287,12 +287,12 @@ export default function Home() {
       <section>
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Popular Calculators</h2>
-            <p className="text-sm text-gray-500 mt-1">Most used tools by Malaysian engineers</p>
+            <h2 className="text-2xl font-bold text-stone-800">Popular Calculators</h2>
+            <p className="text-sm text-stone-500 mt-1">Most used tools by Malaysian engineers</p>
           </div>
           <Link
             href="/calculators"
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors hidden sm:inline-flex items-center gap-1"
+            className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors hidden sm:inline-flex items-center gap-1"
           >
             View all 14
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -308,18 +308,18 @@ export default function Home() {
               <Link
                 key={calc.href}
                 href={calc.href}
-                className={`group block rounded-lg border bg-white p-5 transition-all hover:shadow-md hover:-translate-y-0.5 ${c.border}`}
+                className={`group block rounded-2xl border bg-white/80 backdrop-blur-sm p-5 transition-all hover:shadow-md hover:-translate-y-0.5 ${c.border}`}
               >
                 <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium mb-2 ${c.bg} ${c.text}`}>
                   {calc.category}
                 </span>
-                <h3 className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                <h3 className="font-semibold text-stone-800 group-hover:text-amber-700 transition-colors">
                   {calc.name}
                 </h3>
-                <p className="mt-1.5 text-sm text-gray-500 leading-relaxed">
+                <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">
                   {calc.description}
                 </p>
-                <p className="mt-2 text-xs text-gray-400">{calc.standard}</p>
+                <p className="mt-2 text-xs text-stone-400">{calc.standard}</p>
               </Link>
             );
           })}
@@ -328,7 +328,7 @@ export default function Home() {
         <div className="mt-4 text-center sm:hidden">
           <Link
             href="/calculators"
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+            className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors"
           >
             View all 14 calculators &rarr;
           </Link>
@@ -337,7 +337,7 @@ export default function Home() {
 
       {/* ─── Browse by Category ─── */}
       <section>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Browse by Category</h2>
+        <h2 className="text-2xl font-bold text-stone-800 mb-6">Browse by Category</h2>
         <div className="grid gap-4 grid-cols-2 lg:grid-cols-3">
           {categoryCards.map((cat) => (
             <Link
@@ -352,7 +352,7 @@ export default function Home() {
                     {cat.name}
                     <span className="ml-2 text-xs font-normal opacity-70">{cat.count} {cat.count === 1 ? "tool" : "tools"}</span>
                   </h3>
-                  <p className="mt-1 text-sm text-gray-600">{cat.description}</p>
+                  <p className="mt-1 text-sm text-stone-600">{cat.description}</p>
                 </div>
               </div>
             </Link>
@@ -361,38 +361,38 @@ export default function Home() {
           {/* Request a calculator CTA */}
           <Link
             href="/community"
-            className="group rounded-xl border-2 border-dashed border-gray-300 p-5 transition-all hover:border-blue-400 hover:bg-blue-50 flex items-center justify-center"
+            className="group rounded-xl border-2 border-dashed border-stone-300 p-5 transition-all hover:border-amber-400 hover:bg-amber-50 flex items-center justify-center"
           >
             <div className="text-center">
-              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-400 group-hover:bg-blue-100 group-hover:text-blue-600 transition-colors">
+              <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-stone-100 text-stone-400 group-hover:bg-amber-100 group-hover:text-amber-600 transition-colors">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
               </div>
-              <p className="text-sm font-medium text-gray-500 group-hover:text-blue-700 transition-colors">Request a Calculator</p>
-              <p className="text-xs text-gray-400 mt-0.5">Suggest a new tool</p>
+              <p className="text-sm font-medium text-stone-500 group-hover:text-amber-700 transition-colors">Request a Calculator</p>
+              <p className="text-xs text-stone-400 mt-0.5">Suggest a new tool</p>
             </div>
           </Link>
         </div>
       </section>
 
       {/* ─── How It Works ─── */}
-      <section className="rounded-2xl bg-white border border-gray-200 px-6 py-10 sm:px-10">
-        <h2 className="text-2xl font-bold text-gray-900 text-center mb-2">How It Works</h2>
-        <p className="text-sm text-gray-500 text-center mb-10">
+      <section className="rounded-3xl bg-white/80 backdrop-blur-sm border border-stone-200 px-6 py-10 sm:px-10">
+        <h2 className="text-2xl font-bold text-stone-800 text-center mb-2">How It Works</h2>
+        <p className="text-sm text-stone-500 text-center mb-10">
           Three simple steps to code-compliant results
         </p>
         <div className="grid gap-8 sm:grid-cols-3">
           {steps.map((step) => (
             <div key={step.num} className="text-center">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-700">
+              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100/60 text-amber-700">
                 {step.icon}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">
-                <span className="text-blue-600 mr-1">{step.num}.</span>
+              <h3 className="font-semibold text-stone-800 mb-1">
+                <span className="text-amber-600 mr-1">{step.num}.</span>
                 {step.title}
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">{step.description}</p>
+              <p className="text-sm text-stone-500 leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>
@@ -401,10 +401,10 @@ export default function Home() {
       {/* ─── What's New ─── */}
       <section>
         <div className="flex items-end justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">What&apos;s New</h2>
+          <h2 className="text-2xl font-bold text-stone-800">What&apos;s New</h2>
           <Link
             href="/news"
-            className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors"
+            className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors"
           >
             All updates &rarr;
           </Link>
@@ -413,16 +413,16 @@ export default function Home() {
           {updates.map((u) => (
             <div
               key={u.title}
-              className="rounded-lg border border-gray-200 bg-white p-5"
+              className="rounded-lg border border-stone-200 bg-white p-5"
             >
               <div className="flex items-center gap-2 mb-2">
                 <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${u.badgeColor}`}>
                   {u.badge}
                 </span>
-                <span className="text-xs text-gray-400">{u.date}</span>
+                <span className="text-xs text-stone-400">{u.date}</span>
               </div>
-              <h3 className="font-semibold text-gray-900 text-sm">{u.title}</h3>
-              <p className="mt-1 text-sm text-gray-500">{u.description}</p>
+              <h3 className="font-semibold text-stone-800 text-sm">{u.title}</h3>
+              <p className="mt-1 text-sm text-stone-500">{u.description}</p>
             </div>
           ))}
         </div>

@@ -137,8 +137,8 @@ export default function PavementPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Roads", href: "/calculators/roads" }, { label: "Pavement Design" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -152,17 +152,17 @@ export default function PavementPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-2 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.growth_factor}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Growth Factor</p>
+            <p className="text-xs text-stone-400 mt-1">Growth Factor</p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.traffic_category}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Pavement thickness lookup
             </p>
           </div>
@@ -170,7 +170,7 @@ export default function PavementPage() {
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Traffic Data
             </h3>
             <CalcInput
@@ -214,7 +214,7 @@ export default function PavementPage() {
               error={dpError}
             />
 
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Distribution Factors
             </h3>
             <CalcInput
@@ -240,7 +240,7 @@ export default function PavementPage() {
               error={ldfError}
             />
 
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Subgrade
             </h3>
             <CalcInput
@@ -296,78 +296,78 @@ export default function PavementPage() {
                   value={result.growthFactor}
                   unit=""
                 />
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                  <p className="text-sm font-medium text-blue-900">
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-sm font-medium text-amber-900">
                     Cumulative ESAL
                   </p>
-                  <p className="text-2xl font-bold text-blue-700 mt-1">
+                  <p className="text-2xl font-bold text-amber-700 mt-1">
                     {formatESAL(result.cumulativeESAL)}
                   </p>
                 </div>
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                  <p className="text-sm font-medium text-blue-900">
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-sm font-medium text-amber-900">
                     Traffic Category
                   </p>
-                  <p className="text-2xl font-bold text-blue-700 mt-1">
+                  <p className="text-2xl font-bold text-amber-700 mt-1">
                     {result.tc}
                   </p>
-                  <p className="text-xs text-blue-500 mt-1">
+                  <p className="text-xs text-amber-500 mt-1">
                     ESAL range: {result.tcRange}
                   </p>
                 </div>
 
                 {/* Pavement layer table */}
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                <div className="rounded-2xl border border-stone-200 bg-white p-4">
+                  <h4 className="text-sm font-semibold text-stone-700 mb-3">
                     Recommended Pavement Structure
                   </h4>
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200">
-                        <th className="text-left py-1 text-gray-600">Layer</th>
-                        <th className="text-right py-1 text-gray-600">
+                      <tr className="border-b border-stone-200">
+                        <th className="text-left py-1 text-stone-600">Layer</th>
+                        <th className="text-right py-1 text-stone-600">
                           Thickness
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-800">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-700">
                           AC Wearing Course
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.layers.acWearing} mm
                         </td>
                       </tr>
                       {result.layers.acBinder > 0 && (
-                        <tr className="border-b border-gray-100">
-                          <td className="py-1.5 text-gray-800">
+                        <tr className="border-b border-stone-100">
+                          <td className="py-1.5 text-stone-700">
                             AC Binder Course
                           </td>
-                          <td className="py-1.5 text-right font-medium text-gray-900">
+                          <td className="py-1.5 text-right font-medium text-stone-800">
                             {result.layers.acBinder} mm
                           </td>
                         </tr>
                       )}
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-800">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-700">
                           Crushed Aggregate Roadbase
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.layers.roadbase} mm
                         </td>
                       </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-800">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-700">
                           Crusher Run Subbase
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.layers.subbase} mm
                         </td>
                       </tr>
-                      <tr className="bg-gray-50 font-semibold">
-                        <td className="py-2 text-gray-900">Total Pavement</td>
-                        <td className="py-2 text-right text-blue-700">
+                      <tr className="bg-stone-50 font-semibold">
+                        <td className="py-2 text-stone-800">Total Pavement</td>
+                        <td className="py-2 text-right text-amber-700">
                           {result.layers.total} mm
                         </td>
                       </tr>
@@ -377,7 +377,7 @@ export default function PavementPage() {
 
                 {/* CBR advisory */}
                 <div
-                  className={`rounded-lg border p-3 text-sm ${
+                  className={`rounded-2xl border p-3 text-sm ${
                     cbrVal < 3
                       ? "border-amber-200 bg-amber-50 text-amber-800"
                       : "border-green-200 bg-green-50 text-green-800"

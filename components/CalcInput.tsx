@@ -29,9 +29,9 @@ export default function CalcInput({
     <div className="mb-4">
       <label
         htmlFor={name}
-        className="block text-sm font-medium text-gray-700 mb-1"
+        className="block text-sm font-medium text-stone-700 mb-1"
       >
-        {label} {unit && <span className="text-gray-400">({unit})</span>}
+        {label} {unit && <span className="text-stone-400">({unit})</span>}
       </label>
       <input
         id={name}
@@ -47,13 +47,13 @@ export default function CalcInput({
             ? "border-red-400 focus:border-red-500 focus:ring-red-500"
             : warning
             ? "border-amber-400 focus:border-amber-500 focus:ring-amber-500"
-            : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+            : "border-stone-300 focus:border-amber-500 focus:ring-amber-500"
         }`}
         placeholder={hint}
       />
       {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
       {warning && !error && <p className="mt-1 text-xs text-amber-600">{warning}</p>}
-      {hint && !error && !warning && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
+      {hint && !error && !warning && <p className="mt-1 text-xs text-stone-400">{hint}</p>}
     </div>
   );
 }

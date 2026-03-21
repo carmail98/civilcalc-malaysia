@@ -9,10 +9,10 @@ const categoryConfig: Record<
   { bg: string; text: string; border: string; hoverBorder: string; icon: React.ReactNode }
 > = {
   Drainage: {
-    bg: "bg-blue-100",
-    text: "text-blue-700",
-    border: "border-blue-200",
-    hoverBorder: "hover:border-blue-400",
+    bg: "bg-amber-100",
+    text: "text-amber-700",
+    border: "border-amber-200",
+    hoverBorder: "hover:border-amber-400",
     icon: (
       <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
         <path d="M10 2a1 1 0 01.894.553l1.276 2.553a1 1 0 01-.073.992L10 9.5l-2.097-3.402a1 1 0 01-.073-.992l1.276-2.553A1 1 0 0110 2zM6 12a4 4 0 108 0c0 2.5-4 5-4 5s-4-2.5-4-5z" />
@@ -32,10 +32,10 @@ const categoryConfig: Record<
     ),
   },
   Roads: {
-    bg: "bg-gray-200",
-    text: "text-gray-700",
-    border: "border-gray-300",
-    hoverBorder: "hover:border-gray-400",
+    bg: "bg-stone-200",
+    text: "text-stone-700",
+    border: "border-stone-300",
+    hoverBorder: "hover:border-stone-400",
     icon: (
       <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
         <path fillRule="evenodd" d="M5.05 3.636a1 1 0 011.06.147l.74.656.74-.656a1 1 0 011.06-.147L10 4.5l1.35-.864a1 1 0 011.06.147l.74.656.74-.656A1 1 0 0115.95 4.5V16a1 1 0 01-1.65.76l-.74-.656-.74.656a1 1 0 01-1.06.147L10 16l-1.35.864a1 1 0 01-1.06-.147l-.74-.656-.74.656A1 1 0 014.05 16V4.5a1 1 0 011-1.136z" clipRule="evenodd" />
@@ -235,10 +235,10 @@ export default function CalculatorsPage() {
     <div>
       {/* Header */}
       <section className="mb-10">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-stone-800 mb-2">
           All Calculators
         </h1>
-        <p className="text-gray-600 max-w-2xl mb-4">
+        <p className="text-stone-600 max-w-2xl mb-4">
           Browse all {calculators.length} civil engineering calculators across {categories.length - 1} categories.
           Each tool follows Malaysian standards for compliance-ready results.
         </p>
@@ -246,7 +246,7 @@ export default function CalculatorsPage() {
         {/* Search bar */}
         <div className="relative max-w-md">
           <svg
-            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
@@ -260,7 +260,7 @@ export default function CalculatorsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search calculators..."
-            className="w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-10 pr-4 text-sm text-gray-900 placeholder:text-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400 transition-colors"
+            className="w-full rounded-2xl border border-stone-200 bg-white py-2.5 pl-10 pr-4 text-sm text-stone-800 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400 transition-colors"
           />
         </div>
       </section>
@@ -280,8 +280,8 @@ export default function CalculatorsPage() {
                   isActive
                     ? config
                       ? `${config.bg} ${config.text}`
-                      : "bg-gray-900 text-white"
-                    : "bg-white text-gray-500 border border-gray-200 hover:border-gray-300 hover:text-gray-700"
+                      : "bg-stone-900 text-white"
+                    : "bg-white text-stone-500 border border-stone-200 hover:border-stone-300 hover:text-stone-700"
                 }`}
               >
                 {cat}
@@ -303,10 +303,10 @@ export default function CalculatorsPage() {
               <Link
                 key={calc.href}
                 href={calc.href}
-                className={`group block rounded-lg border bg-white p-5 transition-all hover:shadow-md hover:-translate-y-0.5 ${config.border} ${config.hoverBorder}`}
+                className={`group block rounded-2xl border bg-white p-5 transition-all hover:shadow-md hover:-translate-y-0.5 ${config.border} ${config.hoverBorder}`}
               >
                 <div className="flex items-start gap-3">
-                  <div className={`mt-0.5 shrink-0 rounded-lg p-2 ${config.bg} ${config.text}`}>
+                  <div className={`mt-0.5 shrink-0 rounded-2xl p-2 ${config.bg} ${config.text}`}>
                     {config.icon}
                   </div>
                   <div className="min-w-0">
@@ -315,13 +315,13 @@ export default function CalculatorsPage() {
                     >
                       {calc.category}
                     </span>
-                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-700 transition-colors">
+                    <h3 className="font-semibold text-stone-800 group-hover:text-amber-700 transition-colors">
                       {calc.name}
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500 leading-relaxed">
+                    <p className="mt-1 text-sm text-stone-500 leading-relaxed">
                       {calc.description}
                     </p>
-                    <p className="mt-2 text-xs text-gray-400">{calc.standard}</p>
+                    <p className="mt-2 text-xs text-stone-400">{calc.standard}</p>
                   </div>
                 </div>
               </Link>
@@ -330,7 +330,7 @@ export default function CalculatorsPage() {
         </div>
 
         {filtered.length === 0 && (
-          <div className="text-center py-12 text-gray-400 text-sm">
+          <div className="text-center py-12 text-stone-400 text-sm">
             No calculators found. Try a different search or filter.
           </div>
         )}

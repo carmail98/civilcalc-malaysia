@@ -102,8 +102,8 @@ export default function TcPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "Time of Concentration" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -117,26 +117,26 @@ export default function TcPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-2 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.to}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Friend&apos;s Formula — Overland flow
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.td}
             </p>
-            <p className="text-xs text-gray-400 mt-1">Drain/channel flow</p>
+            <p className="text-xs text-stone-400 mt-1">Drain/channel flow</p>
           </div>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             {/* Overland flow inputs */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Overland Flow (to)
             </h3>
             <CalcInput
@@ -174,7 +174,7 @@ export default function TcPage() {
             />
 
             {/* Drain flow inputs */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Drain Flow (td)
             </h3>
             <CalcInput
@@ -246,7 +246,7 @@ export default function TcPage() {
               unit={data.result.tc.unit}
             />
             {tcClamped && (
-              <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+              <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
                 Minimum tc = 5 min applied (MSMA Ch 2, Clause 2.4.3)
               </div>
             )}

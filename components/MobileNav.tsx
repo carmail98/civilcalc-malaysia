@@ -19,7 +19,7 @@ export default function MobileNav() {
     <div className="md:hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="p-2 text-gray-600 hover:text-blue-700 transition-colors"
+        className="p-2 text-stone-600 hover:text-amber-700 transition-colors"
         aria-label={open ? "Close menu" : "Open menu"}
       >
         {open ? (
@@ -34,27 +34,27 @@ export default function MobileNav() {
       </button>
 
       {open && (
-        <div className="absolute left-0 right-0 top-full z-50 border-b border-gray-200 bg-white shadow-lg">
+        <div className="absolute left-0 right-0 top-full z-50 border-b border-stone-200 bg-white shadow-lg">
           <nav className="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
               >
                 {link.label}
               </a>
             ))}
 
             {/* Auth links */}
-            <div className="border-t border-gray-100 mt-1 pt-1">
+            <div className="border-t border-stone-100 mt-1 pt-1">
               {session ? (
                 <>
                   <a
                     href="/profile"
                     onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
                   >
                     My Profile
                   </a>
@@ -64,7 +64,7 @@ export default function MobileNav() {
                       setOpen(false);
                       signOut({ callbackUrl: "/" });
                     }}
-                    className="block w-full text-left rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                    className="block w-full text-left rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
                   >
                     Sign Out
                   </button>
@@ -74,14 +74,14 @@ export default function MobileNav() {
                   <a
                     href="/login"
                     onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-50 transition-colors"
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-50 transition-colors"
                   >
                     Sign In
                   </a>
                   <a
                     href="/register"
                     onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
+                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
                   >
                     Create Account
                   </a>

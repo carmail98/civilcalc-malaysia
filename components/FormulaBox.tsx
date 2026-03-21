@@ -5,11 +5,11 @@ interface FormulaBoxProps {
 
 export default function FormulaBox({ formula, reference }: FormulaBoxProps) {
   return (
-    <div className="rounded-lg bg-gray-100 border border-gray-200 p-4 mb-6">
-      <p className="text-lg font-mono font-semibold text-gray-800">
+    <div className="rounded-lg bg-stone-100 border border-stone-200 p-4 mb-6">
+      <p className="text-lg font-mono font-semibold text-stone-700">
         {formula}
       </p>
-      <p className="mt-1 text-xs text-gray-500">Ref: {reference}</p>
+      <p className="mt-1 text-xs text-stone-500">Ref: {reference}</p>
     </div>
   );
 }

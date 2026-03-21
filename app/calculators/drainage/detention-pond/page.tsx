@@ -125,8 +125,8 @@ export default function DetentionPondPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "Detention Pond" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -140,33 +140,33 @@ export default function DetentionPondPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-2 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.q_pre}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Pre-development peak flow
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.q_post}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Post-development peak flow
             </p>
           </div>
         </div>
 
         {/* Tip box */}
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-sm text-blue-800 mb-6">
+        <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 mb-6">
           Try several storm durations to find the <strong>critical duration</strong> that
           gives the maximum required storage volume.
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Catchment Data
             </h3>
             <CalcInput
@@ -204,7 +204,7 @@ export default function DetentionPondPage() {
               warning={cWarning}
             />
 
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Storm Parameters
             </h3>
             <CalcInput
@@ -228,7 +228,7 @@ export default function DetentionPondPage() {
               error={durError}
             />
 
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 mt-6 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 mt-6 uppercase tracking-wide">
               Outflow Control (Optional)
             </h3>
             <CalcInput
@@ -274,47 +274,47 @@ export default function DetentionPondPage() {
             {result !== null && (
               <>
                 {/* Flow comparison table */}
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                  <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                <div className="rounded-2xl border border-stone-200 bg-white p-4">
+                  <h4 className="text-sm font-semibold text-stone-700 mb-3">
                     Flow Comparison
                   </h4>
                   <table className="w-full text-sm">
                     <tbody>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-600">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-600">
                           Pre-Dev Peak Flow (Q_pre)
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.qPre.toFixed(4)} m³/s
                         </td>
                       </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-600">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-600">
                           Post-Dev Peak Flow (Q_post)
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.qPost.toFixed(4)} m³/s
                         </td>
                       </tr>
-                      <tr className="border-b border-gray-100">
-                        <td className="py-1.5 text-gray-600">
+                      <tr className="border-b border-stone-100">
+                        <td className="py-1.5 text-stone-600">
                           Flow Increase
                         </td>
                         <td className="py-1.5 text-right font-medium text-amber-700">
                           +{(result.qPost - result.qPre).toFixed(4)} m³/s
                         </td>
                       </tr>
-                      <tr className="bg-gray-50">
-                        <td className="py-1.5 text-gray-600">
+                      <tr className="bg-stone-50">
+                        <td className="py-1.5 text-stone-600">
                           PSD (Allowable Outflow)
                         </td>
-                        <td className="py-1.5 text-right font-medium text-gray-900">
+                        <td className="py-1.5 text-right font-medium text-stone-800">
                           {result.psd.toFixed(4)} m³/s
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <p className="text-xs text-gray-400 mt-2">
+                  <p className="text-xs text-stone-400 mt-2">
                     PSD source: {result.psdSource}
                   </p>
                 </div>
@@ -327,21 +327,21 @@ export default function DetentionPondPage() {
                 />
 
                 {/* Main result */}
-                <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
-                  <p className="text-sm font-medium text-blue-900">
+                <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4">
+                  <p className="text-sm font-medium text-amber-900">
                     {data.result.V.label}
                   </p>
-                  <p className="text-2xl font-bold text-blue-700 mt-1">
+                  <p className="text-2xl font-bold text-amber-700 mt-1">
                     {result.storageVolume.toFixed(1)} m³
                   </p>
-                  <p className="text-xs text-blue-500 mt-1">
+                  <p className="text-xs text-amber-500 mt-1">
                     For {result.storageDuration} min storm duration
                   </p>
                 </div>
 
                 {/* No storage needed */}
                 {result.storageVolume === 0 && (
-                  <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-sm text-green-800">
+                  <div className="rounded-2xl border border-green-200 bg-green-50 p-3 text-sm text-green-800">
                     No detention storage required — post-dev flow does not
                     exceed PSD for this storm duration.
                   </div>
@@ -349,20 +349,20 @@ export default function DetentionPondPage() {
 
                 {/* Storage volume context */}
                 {result.storageVolume > 0 && (
-                  <div className="rounded-lg border border-gray-200 bg-white p-4">
-                    <h4 className="text-sm font-semibold text-gray-700 mb-2">
+                  <div className="rounded-2xl border border-stone-200 bg-white p-4">
+                    <h4 className="text-sm font-semibold text-stone-700 mb-2">
                       Equivalent Dimensions (approximate)
                     </h4>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-stone-600">
                       If pond depth = 1.5m:{" "}
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-stone-800">
                         {(result.storageVolume / 1.5).toFixed(0)} m²
                       </span>{" "}
                       surface area
                     </p>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-stone-600 mt-1">
                       If pond depth = 2.0m:{" "}
-                      <span className="font-medium text-gray-900">
+                      <span className="font-medium text-stone-800">
                         {(result.storageVolume / 2.0).toFixed(0)} m²
                       </span>{" "}
                       surface area

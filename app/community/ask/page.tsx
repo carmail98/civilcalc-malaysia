@@ -23,14 +23,14 @@ export default function AskQuestionPage() {
   const [loading, setLoading] = useState(false);
 
   if (status === "loading") {
-    return <div className="text-center py-12 text-sm text-gray-400">Loading...</div>;
+    return <div className="text-center py-12 text-sm text-stone-400">Loading...</div>;
   }
 
   if (!session?.user) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-xl font-bold text-gray-900 mb-3">Sign in to ask a question</h1>
-        <Link href="/login" className="text-sm text-blue-700 hover:underline">
+        <h1 className="text-xl font-bold text-stone-800 mb-3">Sign in to ask a question</h1>
+        <Link href="/login" className="text-sm text-amber-700 hover:underline">
           Go to sign in
         </Link>
       </div>
@@ -83,8 +83,8 @@ export default function AskQuestionPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">Ask a Question</h1>
-      <p className="text-sm text-gray-500 mb-6">
+      <h1 className="text-2xl font-bold text-stone-800 mb-1">Ask a Question</h1>
+      <p className="text-sm text-stone-500 mb-6">
         Get help from Malaysian civil engineers. Be specific and include relevant standards.
       </p>
 
@@ -97,7 +97,7 @@ export default function AskQuestionPage() {
 
         {/* Title */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-stone-700 mb-1">
             Title <span className="text-red-500">*</span>
           </label>
           <input
@@ -105,15 +105,15 @@ export default function AskQuestionPage() {
             required
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             placeholder="e.g. How to size a detention pond for 100-year ARI using MSMA?"
           />
-          <p className="mt-1 text-xs text-gray-400">Minimum 10 characters. Be specific.</p>
+          <p className="mt-1 text-xs text-stone-400">Minimum 10 characters. Be specific.</p>
         </div>
 
         {/* Body */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-stone-700 mb-1">
             Details <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -121,36 +121,36 @@ export default function AskQuestionPage() {
             rows={8}
             value={bodyText}
             onChange={(e) => setBodyText(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-y"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-y"
             placeholder="Describe your question in detail. Include site conditions, design parameters, and what you've already tried..."
           />
-          <p className="mt-1 text-xs text-gray-400">Minimum 20 characters.</p>
+          <p className="mt-1 text-xs text-stone-400">Minimum 20 characters.</p>
         </div>
 
         {/* Standard Reference */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Standard Reference <span className="text-gray-400 font-normal">(optional)</span>
+          <label className="block text-sm font-medium text-stone-700 mb-1">
+            Standard Reference <span className="text-stone-400 font-normal">(optional)</span>
           </label>
           <input
             type="text"
             value={standardRef}
             onChange={(e) => setStandardRef(e.target.value)}
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
             placeholder="e.g. MSMA 2nd Ed, Section 4.3"
           />
         </div>
 
         {/* Tags */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            Tags <span className="text-gray-400 font-normal">(up to 5)</span>
+          <label className="block text-sm font-medium text-stone-700 mb-1">
+            Tags <span className="text-stone-400 font-normal">(up to 5)</span>
           </label>
-          <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-2 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-500">
+          <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-stone-300 px-3 py-2 focus-within:border-amber-500 focus-within:ring-1 focus-within:ring-amber-500">
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-700"
+                className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700"
               >
                 #{tag}
                 <button type="button" onClick={() => removeTag(tag)} className="hover:text-red-500">
@@ -175,7 +175,7 @@ export default function AskQuestionPage() {
                 key={tag}
                 type="button"
                 onClick={() => addTag(tag)}
-                className="rounded-full bg-gray-100 px-2 py-0.5 text-xs text-gray-500 hover:bg-gray-200 transition-colors"
+                className="rounded-full bg-stone-100 px-2 py-0.5 text-xs text-stone-500 hover:bg-stone-200 transition-colors"
               >
                 +{tag}
               </button>
@@ -187,11 +187,11 @@ export default function AskQuestionPage() {
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-blue-700 px-6 py-2.5 text-sm font-semibold text-white hover:bg-blue-800 disabled:opacity-50 transition-colors"
+            className="rounded-lg bg-amber-700 px-6 py-2.5 text-sm font-semibold text-white hover:bg-amber-800 disabled:opacity-50 transition-colors"
           >
             {loading ? "Posting..." : "Post Question"}
           </button>
-          <Link href="/community" className="text-sm text-gray-500 hover:text-gray-700">
+          <Link href="/community" className="text-sm text-stone-500 hover:text-stone-700">
             Cancel
           </Link>
         </div>

@@ -73,8 +73,8 @@ export default function CutFillPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Earthworks", href: "/calculators/earthworks" }, { label: "Cut & Fill Volume" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -90,7 +90,7 @@ export default function CutFillPage() {
           <div>
             {/* Method selector */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Calculation Method
               </label>
               <select
@@ -98,7 +98,7 @@ export default function CutFillPage() {
                 onChange={(e) =>
                   setMethod(e.target.value as "average" | "prismoidal")
                 }
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
               >
                 <option value="average">Average End Area</option>
                 <option value="prismoidal">Prismoidal</option>
@@ -107,13 +107,13 @@ export default function CutFillPage() {
 
             {/* Type selector */}
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-stone-700 mb-1">
                 Earthworks Type
               </label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value as "Cut" | "Fill")}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
               >
                 <option value="Cut">Cut</option>
                 <option value="Fill">Fill</option>
@@ -186,7 +186,7 @@ export default function CutFillPage() {
               unit={data.result.V.unit}
             />
             {result !== null && (
-              <p className="mt-2 text-sm text-gray-500">
+              <p className="mt-2 text-sm text-stone-500">
                 Method: {method === "prismoidal" ? "Prismoidal" : "Average End Area"} | Type: {type}
               </p>
             )}

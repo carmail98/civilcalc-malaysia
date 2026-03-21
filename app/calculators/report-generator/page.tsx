@@ -159,15 +159,15 @@ export default function ReportGeneratorPage() {
           { label: "Report Generator" },
         ]}
       />
-      <h1 className="text-2xl font-bold text-gray-900 mb-1">
+      <h1 className="text-2xl font-bold text-stone-800 mb-1">
         Calculation Report Generator
       </h1>
-      <p className="text-sm text-gray-500 mb-6">
+      <p className="text-sm text-stone-500 mb-6">
         Ref: PBT / JKR submission — aggregates saved calculation sheets into a single PDF
       </p>
 
-      <div className="rounded-lg bg-blue-50 border border-blue-200 p-3 mb-6">
-        <p className="text-sm text-blue-800">
+      <div className="rounded-2xl bg-amber-50 border border-amber-200 p-3 mb-6">
+        <p className="text-sm text-amber-800">
           <strong>How to use:</strong> Save individual calculations from each calculator page first (using the Save button), then return here to select and compile them into a submission-ready PDF report.
         </p>
       </div>
@@ -175,58 +175,58 @@ export default function ReportGeneratorPage() {
       <div className="grid gap-8 lg:grid-cols-2">
         {/* Left column: project info + sheet selection */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide">
+          <h2 className="text-sm font-semibold text-stone-700 mb-3 uppercase tracking-wide">
             Project Details
           </h2>
           <div className="space-y-3 mb-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Project Name</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">Project Name</label>
               <input
                 type="text"
                 value={projectName}
                 onChange={(e) => setProjectName(e.target.value)}
                 placeholder="e.g. Taman Seri Indah Phase 2"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Project / Reference No.</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">Project / Reference No.</label>
               <input
                 type="text"
                 value={projectNo}
                 onChange={(e) => setProjectNo(e.target.value)}
                 placeholder="e.g. JKR/KL/2024/001"
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
               />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Prepared By (P.E.)</label>
+                <label className="block text-sm font-medium text-stone-700 mb-1">Prepared By (P.E.)</label>
                 <input
                   type="text"
                   value={engineerName}
                   onChange={(e) => setEngineerName(e.target.value)}
                   placeholder="Ir. Ahmad bin Ismail"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">BEM P.E. No.</label>
+                <label className="block text-sm font-medium text-stone-700 mb-1">BEM P.E. No.</label>
                 <input
                   type="text"
                   value={peNo}
                   onChange={(e) => setPeNo(e.target.value)}
                   placeholder="e.g. 12345"
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Submitting Authority</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">Submitting Authority</label>
               <select
                 value={authority}
                 onChange={(e) => setAuthority(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
               >
                 <option value="JKR">JKR (Jabatan Kerja Raya)</option>
                 <option value="PBT">PBT (Pihak Berkuasa Tempatan)</option>
@@ -241,28 +241,28 @@ export default function ReportGeneratorPage() {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Notes / Remarks</label>
+              <label className="block text-sm font-medium text-stone-700 mb-1">Notes / Remarks</label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 rows={3}
                 placeholder="e.g. Design basis, revision notes, assumptions..."
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"
+                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"
               />
             </div>
           </div>
 
           {/* Calculation sheets */}
-          <h2 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide">
+          <h2 className="text-sm font-semibold text-stone-700 mb-3 uppercase tracking-wide">
             Saved Calculations
           </h2>
 
           {!loaded ? (
-            <p className="text-sm text-gray-400">Loading...</p>
+            <p className="text-sm text-stone-400">Loading...</p>
           ) : sheets.length === 0 ? (
-            <div className="rounded-lg border border-dashed border-gray-300 p-6 text-center">
-              <p className="text-sm text-gray-500">No saved calculations found.</p>
-              <p className="text-xs text-gray-400 mt-1">
+            <div className="rounded-2xl border border-dashed border-stone-300 p-6 text-center">
+              <p className="text-sm text-stone-500">No saved calculations found.</p>
+              <p className="text-xs text-stone-400 mt-1">
                 Use the Save button on any calculator page to save a calculation, then return here.
               </p>
             </div>
@@ -275,38 +275,38 @@ export default function ReportGeneratorPage() {
                 if (catSheets.length === 0) return null;
                 return (
                   <div key={cat}>
-                    <h3 className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
+                    <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-400 mb-2">
                       {cat}
                     </h3>
                     <div className="space-y-1">
                       {catSheets.map(({ _idx, calcName, savedCalc, selected }) => (
                         <div
                           key={_idx}
-                          className={`flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
+                          className={`flex items-center gap-2 rounded-2xl border px-3 py-2 text-sm ${
                             selected
-                              ? "border-blue-200 bg-blue-50"
-                              : "border-gray-200 bg-white"
+                              ? "border-amber-200 bg-amber-50"
+                              : "border-stone-200 bg-white"
                           }`}
                         >
                           <input
                             type="checkbox"
                             checked={selected}
                             onChange={() => toggleSelect(_idx)}
-                            className="h-4 w-4 rounded border-gray-300 text-blue-600"
+                            className="h-4 w-4 rounded border-stone-300 text-amber-600"
                           />
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-gray-800 truncate">{savedCalc.name}</p>
-                            <p className="text-xs text-gray-400 truncate">{calcName}</p>
+                            <p className="font-medium text-stone-700 truncate">{savedCalc.name}</p>
+                            <p className="text-xs text-stone-400 truncate">{calcName}</p>
                           </div>
                           <div className="flex flex-col gap-0.5">
                             <button
                               onClick={() => moveUp(_idx)}
-                              className="text-gray-400 hover:text-gray-600 text-xs leading-none"
+                              className="text-stone-400 hover:text-stone-600 text-xs leading-none"
                               title="Move up"
                             >▲</button>
                             <button
                               onClick={() => moveDown(_idx)}
-                              className="text-gray-400 hover:text-gray-600 text-xs leading-none"
+                              className="text-stone-400 hover:text-stone-600 text-xs leading-none"
                               title="Move down"
                             >▼</button>
                           </div>
@@ -322,19 +322,19 @@ export default function ReportGeneratorPage() {
 
         {/* Right column: preview + generate */}
         <div>
-          <h2 className="text-sm font-semibold text-gray-800 mb-3 uppercase tracking-wide">
+          <h2 className="text-sm font-semibold text-stone-700 mb-3 uppercase tracking-wide">
             Report Preview
           </h2>
 
-          <div className="rounded-lg border border-gray-200 bg-white p-4 mb-4">
+          <div className="rounded-2xl border border-stone-200 bg-white p-4 mb-4">
             <div className="flex items-start justify-between mb-3">
               <div>
-                <p className="text-base font-bold text-blue-700">
-                  CivilCalc<span className="text-gray-400">.my</span>
+                <p className="text-base font-bold text-amber-700">
+                  CivilCalc<span className="text-stone-400">.my</span>
                 </p>
-                <p className="text-xs text-gray-500">Calculation Report</p>
+                <p className="text-xs text-stone-500">Calculation Report</p>
               </div>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-stone-400">
                 {new Date().toLocaleDateString("en-MY", {
                   year: "numeric",
                   month: "short",
@@ -342,26 +342,26 @@ export default function ReportGeneratorPage() {
                 })}
               </p>
             </div>
-            <div className="border-t border-gray-100 pt-3 space-y-1">
-              <p className="text-sm font-medium text-gray-800">{projectName || <span className="text-gray-300">Project Name</span>}</p>
-              <p className="text-xs text-gray-500">Ref: {projectNo || "—"}</p>
-              <p className="text-xs text-gray-500">Engineer: {engineerName || "—"} {peNo ? `(P.E. ${peNo})` : ""}</p>
-              <p className="text-xs text-gray-500">Authority: {authority}</p>
+            <div className="border-t border-stone-100 pt-3 space-y-1">
+              <p className="text-sm font-medium text-stone-700">{projectName || <span className="text-stone-300">Project Name</span>}</p>
+              <p className="text-xs text-stone-500">Ref: {projectNo || "—"}</p>
+              <p className="text-xs text-stone-500">Engineer: {engineerName || "—"} {peNo ? `(P.E. ${peNo})` : ""}</p>
+              <p className="text-xs text-stone-500">Authority: {authority}</p>
             </div>
-            <div className="border-t border-gray-100 mt-3 pt-3">
-              <p className="text-xs font-semibold text-gray-600 mb-2">
+            <div className="border-t border-stone-100 mt-3 pt-3">
+              <p className="text-xs font-semibold text-stone-600 mb-2">
                 Calculation Sheets ({selectedSheets.length})
               </p>
               {selectedSheets.length === 0 ? (
-                <p className="text-xs text-gray-400">No sheets selected</p>
+                <p className="text-xs text-stone-400">No sheets selected</p>
               ) : (
                 <ol className="space-y-1">
                   {selectedSheets.map((s, i) => (
-                    <li key={i} className="text-xs text-gray-600 flex gap-2">
-                      <span className="text-gray-400 w-4 shrink-0">{i + 1}.</span>
+                    <li key={i} className="text-xs text-stone-600 flex gap-2">
+                      <span className="text-stone-400 w-4 shrink-0">{i + 1}.</span>
                       <span>
                         <span className="font-medium">{s.savedCalc.name}</span>
-                        <span className="text-gray-400"> — {s.calcName}</span>
+                        <span className="text-stone-400"> — {s.calcName}</span>
                       </span>
                     </li>
                   ))}
@@ -370,7 +370,7 @@ export default function ReportGeneratorPage() {
             </div>
           </div>
 
-          <div className="rounded-lg bg-amber-50 border border-amber-200 p-3 mb-4">
+          <div className="rounded-2xl bg-amber-50 border border-amber-200 p-3 mb-4">
             <p className="text-xs text-amber-800">
               <strong>PE Endorsement Required:</strong> This report is a calculation aid only. All designs submitted to PBT/JKR must be endorsed by a BEM-registered Professional Engineer under the Registration of Engineers Act 1967.
             </p>
@@ -379,7 +379,7 @@ export default function ReportGeneratorPage() {
           <button
             onClick={handleGenerate}
             disabled={generating || selectedSheets.length === 0}
-            className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full inline-flex items-center justify-center gap-2 rounded-2xl bg-amber-600 px-4 py-3 text-sm font-semibold text-white hover:bg-amber-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {generating ? (
               <>
@@ -400,15 +400,15 @@ export default function ReportGeneratorPage() {
           </button>
 
           {selectedSheets.length === 0 && loaded && sheets.length > 0 && (
-            <p className="text-xs text-center text-gray-400 mt-2">
+            <p className="text-xs text-center text-stone-400 mt-2">
               Select at least one calculation sheet above.
             </p>
           )}
         </div>
       </div>
 
-      <div className="mt-8 rounded-lg bg-gray-50 border border-gray-200 p-3">
-        <p className="text-xs text-gray-500">{DISCLAIMER_TEXT}</p>
+      <div className="mt-8 rounded-2xl bg-stone-50 border border-stone-200 p-3">
+        <p className="text-xs text-stone-500">{DISCLAIMER_TEXT}</p>
       </div>
     </div>
   );

@@ -109,8 +109,8 @@ export default function DrainSizingPage() {
       {/* Screen view */}
       <div className="print:hidden">
         <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "Drain Sizing" }]} />
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">{data.name}</h1>
-        <p className="text-sm text-gray-500 mb-6">Ref: {data.reference}</p>
+        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
+        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
         <SaveLoadBar
           savedList={savedList}
@@ -124,19 +124,19 @@ export default function DrainSizingPage() {
 
         {/* Sub-formulas */}
         <div className="grid gap-2 md:grid-cols-2 mb-6">
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.rectangular}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Rectangular channel
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3">
-            <p className="text-sm font-mono text-gray-700">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
+            <p className="text-sm font-mono text-stone-700">
               {data.sub_formulas.trapezoidal}
             </p>
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-stone-400 mt-1">
               Trapezoidal channel
             </p>
           </div>
@@ -145,7 +145,7 @@ export default function DrainSizingPage() {
         <div className="grid gap-6 md:grid-cols-2">
           <div>
             {/* Channel shape selector */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Channel Shape
             </h3>
             <div className="flex gap-2 mb-4">
@@ -153,8 +153,8 @@ export default function DrainSizingPage() {
                 onClick={() => setShape("rectangular")}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   shape === "rectangular"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-amber-600 text-white"
+                    : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                 }`}
               >
                 Rectangular
@@ -163,8 +163,8 @@ export default function DrainSizingPage() {
                 onClick={() => setShape("trapezoidal")}
                 className={`rounded-lg px-4 py-2 text-sm font-medium transition-all ${
                   shape === "trapezoidal"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                    ? "bg-amber-600 text-white"
+                    : "bg-stone-100 text-stone-600 hover:bg-stone-200"
                 }`}
               >
                 Trapezoidal
@@ -172,7 +172,7 @@ export default function DrainSizingPage() {
             </div>
 
             {/* Inputs */}
-            <h3 className="text-sm font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-stone-600 mb-2 uppercase tracking-wide">
               Channel Properties
             </h3>
             <CalcInput
@@ -294,7 +294,7 @@ export default function DrainSizingPage() {
 
             {velocityWarning && (
               <div
-                className={`rounded-lg border p-3 text-sm ${
+                className={`rounded-2xl border p-3 text-sm ${
                   result && result.velocity > 4.0
                     ? "border-red-200 bg-red-50 text-red-800"
                     : "border-amber-200 bg-amber-50 text-amber-800"
