@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.rc_beam_shear;
 
@@ -100,6 +102,8 @@ export default function BeamShearPage() {
             Critical section at d from face of support. VRd,c checked first; if VEd &gt; VRd,c, shear links are required.
           </p>
         </div>
+
+        <KeyTerms terms={keyTerms["beam-shear"].terms} standard={keyTerms["beam-shear"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

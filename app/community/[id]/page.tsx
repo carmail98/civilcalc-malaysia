@@ -30,6 +30,7 @@ interface AnswerData {
 
 interface QuestionData {
   id: string;
+  postType: "QUESTION" | "FACT" | "TERM";
   title: string;
   body: string;
   tags: string[];
@@ -42,6 +43,12 @@ interface QuestionData {
   answers: AnswerData[];
   votes: VoteData[];
 }
+
+const POST_TYPE_LABEL: Record<string, { label: string; className: string }> = {
+  QUESTION: { label: "Question", className: "bg-blue-50 text-blue-600 border-blue-200" },
+  FACT: { label: "Did You Know?", className: "bg-emerald-50 text-emerald-600 border-emerald-200" },
+  TERM: { label: "Engineering Term", className: "bg-violet-50 text-violet-600 border-violet-200" },
+};
 
 function VoteButton({
   score,
@@ -121,7 +128,7 @@ export default function QuestionDetailPage() {
   const fetchQuestion = useCallback(async () => {
     const res = await fetch(`/api/questions/${questionId}`);
     if (!res.ok) {
-      setError("Question not found.");
+      setError("Post not found.");
       setLoading(false);
       return;
     }
@@ -181,7 +188,7 @@ export default function QuestionDetailPage() {
     setAnswerLoading(false);
 
     if (!res.ok) {
-      setAnswerError(data.error || "Failed to post answer.");
+      setAnswerError(data.error || "Failed to post.");
       return;
     }
 
@@ -190,32 +197,49 @@ export default function QuestionDetailPage() {
   }
 
   if (loading) {
-    return <div className="text-center py-12 text-sm text-stone-400">Loading question...</div>;
+    return <div className="text-center py-12 text-sm text-stone-400">Loading...</div>;
   }
 
   if (error || !question) {
     return (
       <div className="text-center py-12">
-        <p className="text-stone-500 mb-2">{error || "Question not found."}</p>
+        <p className="text-stone-500 mb-2">{error || "Post not found."}</p>
         <Link href="/community" className="text-sm text-amber-700 hover:underline">
-          Back to Q&A
+          Back to Community
         </Link>
       </div>
     );
   }
 
   const isAuthor = session?.user?.id === question.author.id;
+  const isFact = question.postType === "FACT";
+  const isTerm = question.postType === "TERM";
+  const isQuestion = question.postType === "QUESTION";
+  const postLabel = POST_TYPE_LABEL[question.postType] || POST_TYPE_LABEL.QUESTION;
+
+  // Dynamic labels for comment section
+  const commentLabel = isQuestion ? "Answer" : "Comment";
+  const commentPlural = isQuestion ? "Answers" : "Comments";
 
   return (
     <div className="max-w-3xl mx-auto">
       {/* Breadcrumb */}
       <div className="text-sm text-stone-400 mb-4">
-        <Link href="/community" className="hover:text-amber-600">Q&A</Link>
+        <Link href="/community" className="hover:text-amber-600">Community</Link>
         <span className="mx-2">/</span>
-        <span className="text-stone-600">Question</span>
+        <span className="text-stone-600">
+          {isFact ? "Fact" : isTerm ? "Term" : "Question"}
+        </span>
       </div>
 
-      {/* Question */}
+      {/* Post type badge */}
+      <div className="mb-3">
+        <span className={`inline-block rounded px-2 py-0.5 text-xs font-semibold border ${postLabel.className}`}>
+          {postLabel.label}
+        </span>
+      </div>
+
+      {/* Main content */}
       <div className="flex gap-4">
         <div className="hidden sm:block pt-1">
           <VoteButton
@@ -227,8 +251,10 @@ export default function QuestionDetailPage() {
         </div>
 
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-stone-800 mb-2 leading-snug">
-            {question.isResolved && (
+          <h1 className={`text-xl font-bold text-stone-800 mb-2 leading-snug ${
+            isTerm ? "text-violet-900" : isFact ? "text-emerald-900" : ""
+          }`}>
+            {isQuestion && question.isResolved && (
               <span className="text-green-600 mr-2" title="Resolved">&#10003;</span>
             )}
             {question.title}
@@ -242,7 +268,7 @@ export default function QuestionDetailPage() {
               </span>
             )}
             <span>&middot;</span>
-            <span>Asked {timeAgo(question.createdAt)}</span>
+            <span>{isFact ? "Shared" : isTerm ? "Added" : "Asked"} {timeAgo(question.createdAt)}</span>
             <span>&middot;</span>
             <span>{question.viewCount} views</span>
 
@@ -269,21 +295,39 @@ export default function QuestionDetailPage() {
             )}
           </div>
 
-          {/* Body */}
-          <div className="prose prose-sm max-w-none text-stone-700 whitespace-pre-wrap mb-6">
-            {question.body}
-          </div>
+          {/* Body — with special styling for terms */}
+          {isTerm ? (
+            <div className="rounded-lg border border-violet-200 bg-violet-50 p-4 mb-6">
+              <div className="prose prose-sm max-w-none text-stone-700 whitespace-pre-wrap">
+                {question.body}
+              </div>
+            </div>
+          ) : isFact ? (
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 mb-6">
+              <div className="prose prose-sm max-w-none text-stone-700 whitespace-pre-wrap">
+                {question.body}
+              </div>
+            </div>
+          ) : (
+            <div className="prose prose-sm max-w-none text-stone-700 whitespace-pre-wrap mb-6">
+              {question.body}
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Answers section */}
+      {/* Answers/Comments section */}
       <div className="border-t border-stone-200 pt-6 mt-2">
         <h2 className="text-lg font-semibold text-stone-800 mb-4">
-          {question.answers.length} Answer{question.answers.length !== 1 ? "s" : ""}
+          {question.answers.length} {question.answers.length !== 1 ? commentPlural : commentLabel}
         </h2>
 
         {question.answers.length === 0 && (
-          <p className="text-sm text-stone-400 mb-6">No answers yet. Be the first to help!</p>
+          <p className="text-sm text-stone-400 mb-6">
+            {isQuestion
+              ? "No answers yet. Be the first to help!"
+              : "No comments yet. Share your thoughts!"}
+          </p>
         )}
 
         <div className="space-y-6">
@@ -310,7 +354,7 @@ export default function QuestionDetailPage() {
                       </svg>
                     </span>
                   )}
-                  {isAuthor && !answer.isAccepted && (
+                  {isAuthor && !answer.isAccepted && isQuestion && (
                     <button
                       type="button"
                       onClick={() => handleAccept(answer.id)}
@@ -348,7 +392,7 @@ export default function QuestionDetailPage() {
                     {/* Mobile vote & accept */}
                     <span className="sm:hidden">&middot;</span>
                     <span className="sm:hidden">{answer.voteScore} votes</span>
-                    {isAuthor && !answer.isAccepted && (
+                    {isAuthor && !answer.isAccepted && isQuestion && (
                       <button
                         type="button"
                         onClick={() => handleAccept(answer.id)}
@@ -365,13 +409,15 @@ export default function QuestionDetailPage() {
         </div>
       </div>
 
-      {/* Post answer form */}
+      {/* Post answer/comment form */}
       <div className="border-t border-stone-200 pt-6 mt-6">
-        <h3 className="text-base font-semibold text-stone-800 mb-3">Your Answer</h3>
+        <h3 className="text-base font-semibold text-stone-800 mb-3">
+          Your {commentLabel}
+        </h3>
 
         {!session?.user ? (
           <p className="text-sm text-stone-500">
-            <Link href="/login" className="text-amber-700 hover:underline">Sign in</Link> to post an answer.
+            <Link href="/login" className="text-amber-700 hover:underline">Sign in</Link> to post {isQuestion ? "an answer" : "a comment"}.
           </p>
         ) : (
           <form onSubmit={handleSubmitAnswer} className="space-y-3">
@@ -386,7 +432,9 @@ export default function QuestionDetailPage() {
               value={answerBody}
               onChange={(e) => setAnswerBody(e.target.value)}
               className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-y"
-              placeholder="Share your knowledge. Reference standards where applicable..."
+              placeholder={isQuestion
+                ? "Share your knowledge. Reference standards where applicable..."
+                : "Add your thoughts, corrections, or additional context..."}
             />
             <div className="flex items-center gap-3">
               <button
@@ -394,10 +442,12 @@ export default function QuestionDetailPage() {
                 disabled={answerLoading}
                 className="rounded-lg bg-amber-700 px-5 py-2 text-sm font-semibold text-white hover:bg-amber-800 disabled:opacity-50 transition-colors"
               >
-                {answerLoading ? "Posting..." : "Post Answer"}
+                {answerLoading ? "Posting..." : `Post ${commentLabel}`}
               </button>
               <p className="text-xs text-stone-400">
-                Answers from PE-registered engineers are highlighted.
+                {isQuestion
+                  ? "Answers from PE-registered engineers are highlighted."
+                  : "Comments from PE-registered engineers are highlighted."}
               </p>
             </div>
           </form>

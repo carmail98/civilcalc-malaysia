@@ -81,8 +81,15 @@ model VerificationToken {
 
 // ─── Q&A Forum ───────────────────────────────────────────────
 
+enum PostType {
+  QUESTION      // Standard Q&A question
+  FACT          // "Did You Know?" engineering fact
+  TERM          // Engineering term / glossary entry
+}
+
 model Question {
   id          String   @id @default(cuid())
+  postType    PostType @default(QUESTION)
   title       String
   body        String
   tags        String[]           // e.g. ["MSMA", "drainage", "retaining-wall"]

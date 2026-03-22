@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.pad_footing;
 
@@ -130,6 +132,8 @@ export default function PadFootingPage() {
             <strong>Three-check design:</strong> (1) Bearing pressure (SLS) against allowable, (2) Flexure (ULS) — cantilever from column face, (3) Punching shear (ULS) at 2d perimeter. Footing self-weight included in bearing check.
           </p>
         </div>
+
+        <KeyTerms terms={keyTerms["pad-footing"].terms} standard={keyTerms["pad-footing"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

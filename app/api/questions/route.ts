@@ -8,12 +8,16 @@ export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url);
     const tag = searchParams.get("tag");
     const sort = searchParams.get("sort") || "newest";
+    const postType = searchParams.get("postType"); // QUESTION, FACT, TERM
     const page = Math.max(1, Number(searchParams.get("page")) || 1);
     const limit = 20;
 
     // Build where clause
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const where: any = {};
+    if (postType && ["QUESTION", "FACT", "TERM"].includes(postType)) {
+      where.postType = postType;
+    }
     if (tag) {
       where.tags = { has: tag };
     }
@@ -64,13 +68,21 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { title, bodyText, tags, standardRef } = body;
+  const { title, bodyText, tags, standardRef, postType } = body;
 
-  if (!title || typeof title !== "string" || title.trim().length < 10) {
-    return NextResponse.json({ error: "Title must be at least 10 characters." }, { status: 400 });
+  // Validate postType
+  const validPostTypes = ["QUESTION", "FACT", "TERM"];
+  const resolvedPostType = postType && validPostTypes.includes(postType) ? postType : "QUESTION";
+
+  // Adjust validation based on post type
+  const minTitle = resolvedPostType === "TERM" ? 3 : 10;
+  const minBody = resolvedPostType === "TERM" ? 10 : 20;
+
+  if (!title || typeof title !== "string" || title.trim().length < minTitle) {
+    return NextResponse.json({ error: `Title must be at least ${minTitle} characters.` }, { status: 400 });
   }
-  if (!bodyText || typeof bodyText !== "string" || bodyText.trim().length < 20) {
-    return NextResponse.json({ error: "Question body must be at least 20 characters." }, { status: 400 });
+  if (!bodyText || typeof bodyText !== "string" || bodyText.trim().length < minBody) {
+    return NextResponse.json({ error: `Body must be at least ${minBody} characters.` }, { status: 400 });
   }
 
   const cleanTags = Array.isArray(tags)
@@ -79,6 +91,7 @@ export async function POST(req: NextRequest) {
 
   const question = await prisma.question.create({
     data: {
+      postType: resolvedPostType,
       title: title.trim(),
       body: bodyText.trim(),
       tags: cleanTags,

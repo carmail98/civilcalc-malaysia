@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.flexible_pavement;
 
@@ -167,6 +169,8 @@ export default function PavementPage() {
             </p>
           </div>
         </div>
+
+        <KeyTerms terms={keyTerms["pavement-design"].terms} standard={keyTerms["pavement-design"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.drain_sizing;
 
@@ -141,6 +143,8 @@ export default function DrainSizingPage() {
             </p>
           </div>
         </div>
+
+        <KeyTerms terms={keyTerms["drain-sizing"].terms} standard={keyTerms["drain-sizing"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

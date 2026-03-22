@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.culvert_design;
 
@@ -164,6 +166,8 @@ export default function CulvertPage() {
             <p className="text-xs text-stone-400 mt-1">Pipe culvert (RCP)</p>
           </div>
         </div>
+
+        <KeyTerms terms={keyTerms["culvert-design"].terms} standard={keyTerms["culvert-design"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

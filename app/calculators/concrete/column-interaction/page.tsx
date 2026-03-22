@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.rc_column_interaction;
 
@@ -133,6 +135,8 @@ export default function ColumnInteractionPage() {
             γc = 1.5, γs = 1.15, αcc = 0.85. Symmetric reinforcement (2 faces).
           </p>
         </div>
+
+        <KeyTerms terms={keyTerms["column-interaction"].terms} standard={keyTerms["column-interaction"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

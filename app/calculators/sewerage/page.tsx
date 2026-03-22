@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.sewer_sizing;
 
@@ -164,6 +166,8 @@ export default function SewerSizingPage() {
             </p>
           </div>
         </div>
+
+        <KeyTerms terms={keyTerms["sewer-sizing"].terms} standard={keyTerms["sewer-sizing"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

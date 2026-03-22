@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.crack_width;
 
@@ -111,6 +113,8 @@ export default function CrackWidthPage() {
             wmax = 0.3 mm for most Malaysian exposures (XC2–XS3).
           </p>
         </div>
+
+        <KeyTerms terms={keyTerms["crack-width"].terms} standard={keyTerms["crack-width"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

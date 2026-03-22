@@ -17,6 +17,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.idf_curve;
 
@@ -133,6 +135,7 @@ export default function IDFPage() {
         />
 
         <FormulaBox formula={data.formula} reference={data.reference} />
+        <KeyTerms terms={keyTerms["idf-curve"].terms} standard={keyTerms["idf-curve"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

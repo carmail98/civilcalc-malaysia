@@ -16,6 +16,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.time_of_concentration;
 
@@ -132,6 +134,8 @@ export default function TcPage() {
             <p className="text-xs text-stone-400 mt-1">Drain/channel flow</p>
           </div>
         </div>
+
+        <KeyTerms terms={keyTerms["time-of-concentration"].terms} standard={keyTerms["time-of-concentration"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

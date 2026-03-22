@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 const SUGGESTED_TAGS = [
@@ -11,9 +11,62 @@ const SUGGESTED_TAGS = [
   "foundation", "soil", "concrete", "steel", "earthworks",
 ];
 
+const POST_TYPES = [
+  {
+    key: "QUESTION",
+    label: "Question",
+    description: "Ask the community for help",
+    icon: "?",
+    iconBg: "bg-blue-100 text-blue-600",
+    titlePlaceholder: "e.g. How to size a detention pond for 100-year ARI using MSMA?",
+    bodyPlaceholder: "Describe your question in detail. Include site conditions, design parameters, and what you've already tried...",
+    titleLabel: "Title",
+    bodyLabel: "Details",
+  },
+  {
+    key: "FACT",
+    label: "Did You Know?",
+    description: "Share an engineering fact or insight",
+    icon: "!",
+    iconBg: "bg-emerald-100 text-emerald-600",
+    titlePlaceholder: "e.g. Malaysian laterite soil has a typical CBR of 15-30% after soaking",
+    bodyPlaceholder: "Explain the fact in detail. Include the source, why it matters, and how it applies in Malaysian civil engineering practice...",
+    titleLabel: "Fact Title",
+    bodyLabel: "Explanation",
+  },
+  {
+    key: "TERM",
+    label: "Key Term",
+    description: "Define an engineering term",
+    icon: "A",
+    iconBg: "bg-violet-100 text-violet-600",
+    titlePlaceholder: "e.g. Freeboard",
+    bodyPlaceholder: "Define this term clearly. Include its significance in Malaysian engineering practice, typical values, and which standards reference it...",
+    titleLabel: "Term",
+    bodyLabel: "Definition",
+  },
+] as const;
+
 export default function AskQuestionPage() {
+  return (
+    <Suspense fallback={<div className="text-center py-12 text-sm text-stone-400">Loading...</div>}>
+      <AskQuestionForm />
+    </Suspense>
+  );
+}
+
+function AskQuestionForm() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get initial post type from URL query
+  const initialType = searchParams.get("type");
+  const validInitialType = initialType && ["QUESTION", "FACT", "TERM"].includes(initialType)
+    ? initialType
+    : "QUESTION";
+
+  const [postType, setPostType] = useState(validInitialType);
   const [title, setTitle] = useState("");
   const [bodyText, setBodyText] = useState("");
   const [tagInput, setTagInput] = useState("");
@@ -22,6 +75,8 @@ export default function AskQuestionPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const typeConfig = POST_TYPES.find((t) => t.key === postType) || POST_TYPES[0];
+
   if (status === "loading") {
     return <div className="text-center py-12 text-sm text-stone-400">Loading...</div>;
   }
@@ -29,7 +84,7 @@ export default function AskQuestionPage() {
   if (!session?.user) {
     return (
       <div className="text-center py-16">
-        <h1 className="text-xl font-bold text-stone-800 mb-3">Sign in to ask a question</h1>
+        <h1 className="text-xl font-bold text-stone-800 mb-3">Sign in to contribute</h1>
         <Link href="/login" className="text-sm text-amber-700 hover:underline">
           Go to sign in
         </Link>
@@ -67,14 +122,20 @@ export default function AskQuestionPage() {
     const res = await fetch("/api/questions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, bodyText, tags, standardRef: standardRef || undefined }),
+      body: JSON.stringify({
+        title,
+        bodyText,
+        tags,
+        standardRef: standardRef || undefined,
+        postType,
+      }),
     });
 
     const data = await res.json();
     setLoading(false);
 
     if (!res.ok) {
-      setError(data.error || "Failed to post question.");
+      setError(data.error || "Failed to post.");
       return;
     }
 
@@ -83,9 +144,15 @@ export default function AskQuestionPage() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold text-stone-800 mb-1">Ask a Question</h1>
+      <h1 className="text-2xl font-bold text-stone-800 mb-1">
+        {postType === "FACT" ? "Share a Fact" : postType === "TERM" ? "Add a Term" : "Ask a Question"}
+      </h1>
       <p className="text-sm text-stone-500 mb-6">
-        Get help from Malaysian civil engineers. Be specific and include relevant standards.
+        {postType === "FACT"
+          ? "Share engineering knowledge with the Malaysian civil engineering community."
+          : postType === "TERM"
+          ? "Help build a glossary of civil engineering terms for Malaysian practice."
+          : "Get help from Malaysian civil engineers. Be specific and include relevant standards."}
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -95,10 +162,37 @@ export default function AskQuestionPage() {
           </div>
         )}
 
+        {/* Post Type Selector */}
+        <div>
+          <label className="block text-sm font-medium text-stone-700 mb-2">
+            Post Type
+          </label>
+          <div className="flex gap-2">
+            {POST_TYPES.map((type) => (
+              <button
+                key={type.key}
+                type="button"
+                onClick={() => setPostType(type.key)}
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all border ${
+                  postType === type.key
+                    ? "border-amber-300 bg-amber-50 text-amber-800"
+                    : "border-stone-200 bg-white text-stone-600 hover:bg-stone-50"
+                }`}
+              >
+                <span className={`w-6 h-6 rounded-full text-xs font-bold flex items-center justify-center ${type.iconBg}`}>
+                  {type.icon}
+                </span>
+                <span className="hidden sm:inline">{type.label}</span>
+              </button>
+            ))}
+          </div>
+          <p className="mt-1.5 text-xs text-stone-400">{typeConfig.description}</p>
+        </div>
+
         {/* Title */}
         <div>
           <label className="block text-sm font-medium text-stone-700 mb-1">
-            Title <span className="text-red-500">*</span>
+            {typeConfig.titleLabel} <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -106,25 +200,29 @@ export default function AskQuestionPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
-            placeholder="e.g. How to size a detention pond for 100-year ARI using MSMA?"
+            placeholder={typeConfig.titlePlaceholder}
           />
-          <p className="mt-1 text-xs text-stone-400">Minimum 10 characters. Be specific.</p>
+          <p className="mt-1 text-xs text-stone-400">
+            {postType === "TERM" ? "Minimum 3 characters." : "Minimum 10 characters. Be specific."}
+          </p>
         </div>
 
         {/* Body */}
         <div>
           <label className="block text-sm font-medium text-stone-700 mb-1">
-            Details <span className="text-red-500">*</span>
+            {typeConfig.bodyLabel} <span className="text-red-500">*</span>
           </label>
           <textarea
             required
-            rows={8}
+            rows={postType === "TERM" ? 5 : 8}
             value={bodyText}
             onChange={(e) => setBodyText(e.target.value)}
             className="w-full rounded-lg border border-stone-300 px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-y"
-            placeholder="Describe your question in detail. Include site conditions, design parameters, and what you've already tried..."
+            placeholder={typeConfig.bodyPlaceholder}
           />
-          <p className="mt-1 text-xs text-stone-400">Minimum 20 characters.</p>
+          <p className="mt-1 text-xs text-stone-400">
+            {postType === "TERM" ? "Minimum 10 characters." : "Minimum 20 characters."}
+          </p>
         </div>
 
         {/* Standard Reference */}
@@ -189,7 +287,13 @@ export default function AskQuestionPage() {
             disabled={loading}
             className="rounded-lg bg-amber-700 px-6 py-2.5 text-sm font-semibold text-white hover:bg-amber-800 disabled:opacity-50 transition-colors"
           >
-            {loading ? "Posting..." : "Post Question"}
+            {loading
+              ? "Posting..."
+              : postType === "FACT"
+              ? "Share Fact"
+              : postType === "TERM"
+              ? "Add Term"
+              : "Post Question"}
           </button>
           <Link href="/community" className="text-sm text-stone-500 hover:text-stone-700">
             Cancel

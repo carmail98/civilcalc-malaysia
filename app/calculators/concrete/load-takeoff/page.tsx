@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.load_takeoff;
 
@@ -110,6 +112,8 @@ export default function LoadTakeOffPage() {
             Slab self-weight = 24 kN/m³ × thickness (RC unit weight per EC1)
           </p>
         </div>
+
+        <KeyTerms terms={keyTerms["load-takeoff"].terms} standard={keyTerms["load-takeoff"].standard} />
 
         <div className="grid gap-6 md:grid-cols-2">
           <div>

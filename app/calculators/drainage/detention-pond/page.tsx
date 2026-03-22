@@ -12,6 +12,8 @@ import PdfExportButton from "@/components/PdfExportButton";
 import { useCalcStorage } from "@/lib/useCalcStorage";
 import SaveLoadBar from "@/components/SaveLoadBar";
 import Breadcrumbs from "@/components/Breadcrumbs";
+import KeyTerms from "@/components/KeyTerms";
+import { keyTerms } from "@/data/key-terms";
 
 const data = formulaData.detention_pond;
 
@@ -157,6 +159,8 @@ export default function DetentionPondPage() {
             </p>
           </div>
         </div>
+
+        <KeyTerms terms={keyTerms["detention-pond"].terms} standard={keyTerms["detention-pond"].standard} />
 
         {/* Tip box */}
         <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 mb-6">
