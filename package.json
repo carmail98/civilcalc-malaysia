@@ -14,12 +14,15 @@
     "@prisma/client": "^7.5.0",
     "@react-pdf/renderer": "^4.3.2",
     "bcryptjs": "^3.0.3",
+    "framer-motion": "^12.38.0",
+    "katex": "^0.16.40",
     "next": "16.1.6",
     "next-auth": "^5.0.0-beta.30",
     "pg": "^8.20.0",
     "prisma": "^7.5.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-katex": "^3.1.0",
     "resend": "^6.9.3"
   },
   "devDependencies": {
@@ -28,6 +31,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/react-katex": "^3.0.4",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
