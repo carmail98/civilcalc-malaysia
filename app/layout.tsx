@@ -5,7 +5,7 @@ import NavSearch from "@/components/NavSearch";
 import UserMenu from "@/components/UserMenu";
 import SessionProvider from "@/components/SessionProvider";
 import FeedbackButton from "@/components/FeedbackButton";
-import { Analytics } from "@vercel/analytics/react";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const geistSans = Geist({
