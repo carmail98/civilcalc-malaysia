@@ -9,20 +9,34 @@ import { motion, useInView } from "framer-motion";
 
 const updates = [
   {
-    date: "23 Mar 2026",
-    title: "Project kick-off",
+    date: "15 Apr 2026",
+    title: "Major Update — 17 new calculators deployed (36 total)",
     items: [
-      "Defined core calculator list (drainage, RC beams, pavement thickness, and more).",
-      "Started implementing shared input/output layout for all tools.",
-      "Preparing documentation for MS/JKR reference clauses to display in each calculator.",
+      "New Geotechnical category: Bearing Capacity (Terzaghi/Meyerhof), Settlement Calculation, Slope Stability (FOS), Pile Capacity — all per MS EN 1997-1 and JKR guidelines.",
+      "New QS/Costing category: Preliminary Cost Estimate (PCE), Build-up of Rates, Variation Order (VO), Tender Evaluation, Interim Payment Certificate (IPC), Final Account Summary — per BQSM, JKR SMM2, PWD 203A, and MOF procurement guidelines.",
+      "New Environmental category: Water Demand Calculation (SPAN guidelines) and EIA Screening Checklist (DOE EIA Order 2015).",
+      "New Structural tools: RC Slab Design (one-way & two-way per EC2) and Deflection Check (span/depth ratio per EC2 Cl. 7.4.2).",
+      "New Roads tools: Sight Distance Calculator (SSD & OSD), Road Gradient & Curve Design, Traffic Volume (PCU) & LOS — per JKR ATJ 8/86 and REAM.",
+      "Updated homepage, category pages, footer navigation, and standards trust bar to reflect all 36 calculators across 9 categories.",
+    ],
+  },
+  {
+    date: "23 Mar 2026",
+    title: "Project kick-off — 19 initial calculators launched",
+    items: [
+      "Launched 19 calculators covering drainage (MSMA 2nd Ed), earthworks (JKR), roads (ATJ 5/85), sewerage (MSIG/SPAN), and structural (MS EN 1992-1-1).",
+      "Implemented shared input/output layout with save/load, PDF export, and cloud sync.",
+      "All calculators include Malaysian standard references, key terms, and PE disclaimer per BEM requirements.",
     ],
   },
 ];
 
 const comingNext = [
-  "First public demo calculators (read-only results).",
-  "Feedback form for engineers and students.",
-  "Changelog with versioned updates for each calculator group.",
+  "Retaining wall design calculator (MS EN 1997 / BS 8002).",
+  "Staircase design calculator (EC2 slab method).",
+  "Bill of Quantities (BQ) generator from calculator results.",
+  "Community-contributed calculators with PE review workflow.",
+  "Mobile-responsive improvements and offline mode (PWA).",
 ];
 
 /* ═══════════════════════════════════════════════
@@ -94,17 +108,16 @@ export default function NewsPage() {
                     clipRule="evenodd"
                   />
                 </svg>
-                Status: Private Beta (2026)
+                Status: Public Beta (2026)
               </p>
               <p className="text-xs text-amber-600">
-                Last updated: 23 Mar 2026
+                Last updated: 15 Apr 2026
               </p>
             </div>
             <p className="mt-2 text-sm text-amber-700 leading-relaxed">
-              We are currently building and testing the first batch of
-              Malaysian-focused civil engineering calculators. Access is limited
-              while formulas and references are being validated against Malaysian
-              standards.
+              CivilCalc.online now features 36 free calculators across 9
+              categories, all built on Malaysian standards. We are actively
+              testing and refining — your feedback helps us improve!
             </p>
           </div>
         </section>

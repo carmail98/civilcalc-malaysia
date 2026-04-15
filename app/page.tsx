@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/* ── Featured calculators (top 5 most useful) ── */
+/* ── Featured calculators (top 6 most useful) ── */
 const featured = [
   {
     name: "Rational Method — Peak Flow",
@@ -11,12 +11,28 @@ const featured = [
     color: "blue",
   },
   {
-    name: "Manning's Drain Sizing",
-    description: "Size open channel drains with Manning's equation & MSMA velocity checks.",
-    href: "/calculators/drainage/drain-sizing",
-    standard: "MSMA 2nd Ed",
-    category: "Drainage",
-    color: "blue",
+    name: "RC Slab Design (One-Way & Two-Way)",
+    description: "Design slabs with moment coefficients, steel area, and deflection check per EC2.",
+    href: "/calculators/concrete/slab-design",
+    standard: "MS EN 1992-1-1",
+    category: "Structural",
+    color: "orange",
+  },
+  {
+    name: "Bearing Capacity Calculator",
+    description: "Terzaghi & Meyerhof bearing capacity with shape and depth factors.",
+    href: "/calculators/geotechnical/bearing-capacity",
+    standard: "MS EN 1997-1",
+    category: "Geotechnical",
+    color: "amber",
+  },
+  {
+    name: "Preliminary Cost Estimate (PCE)",
+    description: "Building cost from GFA with location, storey, and inflation adjustments.",
+    href: "/calculators/costing/pce",
+    standard: "JKR / BQSM / CIDB",
+    category: "Costing",
+    color: "green",
   },
   {
     name: "Flexible Pavement Design",
@@ -27,19 +43,11 @@ const featured = [
     color: "gray",
   },
   {
-    name: "RC Beam Moment Capacity",
-    description: "Beam moment capacity and utilisation check per EC2 Malaysia NA.",
-    href: "/calculators/concrete/beam-moment",
-    standard: "MS EN 1992-1-1",
-    category: "Structural",
-    color: "orange",
-  },
-  {
-    name: "Sewer Pipe Sizing",
-    description: "DWF, Harmon's peak factor, design flow, and pipe capacity per MSIG.",
-    href: "/calculators/sewerage/sewer-sizing",
-    standard: "MSIG / SPAN",
-    category: "Sewerage",
+    name: "Water Demand Calculation",
+    description: "Domestic, commercial & industrial demand with NRW and peak factors per SPAN.",
+    href: "/calculators/environmental/water-demand",
+    standard: "SPAN Guidelines",
+    category: "Environmental",
     color: "green",
   },
 ];
@@ -87,8 +95,8 @@ const categoryCards = [
   },
   {
     name: "Roads",
-    count: 2,
-    description: "Pavement design, carriageway width compliance",
+    count: 5,
+    description: "Pavement design, sight distance, gradient & curve, traffic volume (PCU)",
     href: "/calculators?cat=Roads",
     icon: (
       <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
@@ -117,8 +125,8 @@ const categoryCards = [
   },
   {
     name: "Structural",
-    count: 6,
-    description: "RC beam, shear, column interaction, crack width, pad footing, load take-off (Eurocode)",
+    count: 8,
+    description: "Slab, beam, column, footing, shear, deflection, crack width (Eurocode)",
     href: "/calculators?cat=Structural",
     icon: (
       <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
@@ -130,14 +138,62 @@ const categoryCards = [
     border: "border-orange-200",
     hoverBorder: "hover:border-orange-400",
   },
+  {
+    name: "Geotechnical",
+    count: 4,
+    description: "Bearing capacity, settlement, slope stability, pile capacity",
+    href: "/calculators?cat=Geotechnical",
+    icon: (
+      <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z" clipRule="evenodd" />
+      </svg>
+    ),
+    bg: "bg-yellow-50",
+    text: "text-yellow-700",
+    border: "border-yellow-200",
+    hoverBorder: "hover:border-yellow-400",
+  },
+  {
+    name: "QS / Costing",
+    count: 6,
+    description: "Cost estimates, build-up rates, VO, tender evaluation, IPC, final account",
+    href: "/calculators?cat=Costing",
+    icon: (
+      <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+        <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+      </svg>
+    ),
+    bg: "bg-teal-50",
+    text: "text-teal-700",
+    border: "border-teal-200",
+    hoverBorder: "hover:border-teal-400",
+  },
+  {
+    name: "Environmental",
+    count: 2,
+    description: "Water demand (SPAN) and EIA screening (DOE)",
+    href: "/calculators?cat=Environmental",
+    icon: (
+      <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M10 2a1 1 0 01.894.553l1.276 2.553a1 1 0 01-.073.992L10 9.5l-2.097-3.402a1 1 0 01-.073-.992l1.276-2.553A1 1 0 0110 2zM6 12a4 4 0 108 0c0 2.5-4 5-4 5s-4-2.5-4-5z" clipRule="evenodd" />
+      </svg>
+    ),
+    bg: "bg-emerald-50",
+    text: "text-emerald-700",
+    border: "border-emerald-200",
+    hoverBorder: "hover:border-emerald-400",
+  },
 ];
 
 /* ── Standards trust bar ── */
 const standards = [
   { abbr: "MSMA", full: "Manual Saliran Mesra Alam", org: "DID Malaysia" },
   { abbr: "JKR", full: "Jabatan Kerja Raya", org: "Public Works Dept" },
-  { abbr: "MS EN", full: "Malaysian Eurocode", org: "Dept of Standards" },
-  { abbr: "SPAN", full: "Suruhanjaya Perkhidmatan Air Negara", org: "Water Commission" },
+  { abbr: "MS EN", full: "Malaysian Eurocode (EC2/EC7)", org: "Dept of Standards" },
+  { abbr: "SPAN", full: "Water & Sewerage Commission", org: "SPAN / MSIG" },
+  { abbr: "DOE", full: "Dept of Environment", org: "EIA Order 2015" },
+  { abbr: "BQSM", full: "Board of Quantity Surveyors", org: "PWD 203A / SMM2" },
 ];
 
 /* ── How it works steps ── */
@@ -145,7 +201,7 @@ const steps = [
   {
     num: "1",
     title: "Choose a Calculator",
-    description: "Pick from 19 tools covering drainage, earthworks, roads, sewerage, and structural design.",
+    description: "Pick from 36 tools covering drainage, earthworks, roads, structural, geotechnical, costing, and environmental.",
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -177,17 +233,17 @@ const steps = [
 /* ── What's New ── */
 const updates = [
   {
-    date: "Mar 2026",
-    title: "RC Beam Moment Capacity calculator added",
-    description: "New structural calculator for beam moment capacity per MS EN 1992-1-1 (EC2 Malaysia NA).",
-    badge: "New",
-    badgeColor: "bg-green-100 text-green-700",
+    date: "Apr 2026",
+    title: "17 new calculators deployed across 3 new categories",
+    description: "Geotechnical (bearing capacity, settlement, slope stability, pile capacity), QS/Costing (PCE, build-up rates, VO, tender evaluation, IPC, final account), Environmental (water demand, EIA screening), plus slab design, deflection check, sight distance, road curves, and traffic PCU.",
+    badge: "Major Update",
+    badgeColor: "bg-amber-100 text-amber-700",
   },
   {
     date: "Mar 2026",
-    title: "Detention Pond Volume calculator launched",
-    description: "Size detention storage using MSMA simplified rational method with pre/post-development flow comparison.",
-    badge: "New",
+    title: "19 initial calculators launched",
+    description: "First release covering drainage (MSMA), earthworks (JKR), roads (ATJ 5/85), sewerage (MSIG/SPAN), and structural (MS EN 1992) calculators.",
+    badge: "Launch",
     badgeColor: "bg-green-100 text-green-700",
   },
 ];
@@ -241,9 +297,9 @@ export default function Home() {
             Civil Engineering Calculators for Malaysia
           </h1>
           <p className="text-amber-100 text-lg leading-relaxed mb-8">
-            19 free tools built on MSMA, JKR, and MS EN standards.
-            Get instant, code-compliant results for drainage, earthworks, roads,
-            sewerage, and structural design.
+            36 free tools built on MSMA, JKR, MS EN, SPAN, DOE, and BQSM standards.
+            Get instant, code-compliant results across 9 categories — drainage,
+            earthworks, roads, structural, geotechnical, costing, and more.
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -270,7 +326,7 @@ export default function Home() {
         <p className="text-xs font-medium text-stone-400 text-center uppercase tracking-wider mb-5">
           Built on Malaysian Standards
         </p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {standards.map((s) => (
             <div
               key={s.abbr}
@@ -294,7 +350,7 @@ export default function Home() {
             href="/calculators"
             className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors hidden sm:inline-flex items-center gap-1"
           >
-            View all 19
+            View all 36
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
@@ -330,7 +386,7 @@ export default function Home() {
             href="/calculators"
             className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors"
           >
-            View all 19 calculators &rarr;
+            View all 36 tools &rarr;
           </Link>
         </div>
       </section>
