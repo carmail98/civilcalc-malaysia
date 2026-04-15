@@ -34,6 +34,12 @@ export default function MobileNav() {
       </button>
 
       {open && (
+        <>
+        {/* Backdrop overlay */}
+        <div
+          className="fixed inset-0 top-0 z-40 bg-black/20"
+          onClick={() => setOpen(false)}
+        />
         <div className="absolute left-0 right-0 top-full z-50 border-b border-stone-200 bg-white shadow-lg">
           <nav className="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-1">
             {navLinks.map((link) => (
@@ -90,6 +96,7 @@ export default function MobileNav() {
             </div>
           </nav>
         </div>
+        </>
       )}
     </div>
   );
