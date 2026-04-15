@@ -32,7 +32,7 @@ export default function CompactionPage() {
   const mddVal = parseFloat(MDD);
   const reqVal = parseFloat(requirement);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("compaction-check");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("compaction-check");
 
   // Validation
   const wmError =
@@ -101,6 +101,10 @@ export default function CompactionPage() {
           onSave={(name) => save(name, { wetMass, mouldMass, mouldVol, moisture, MDD, requirement })}
           onLoad={(v) => { setWetMass(v.wetMass ?? ""); setMouldMass(v.mouldMass ?? ""); setMouldVol(v.mouldVol ?? "944"); setMoisture(v.moisture ?? ""); setMDD(v.MDD ?? ""); setRequirement(v.requirement ?? "95"); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

@@ -26,7 +26,7 @@ export default function CutFillPage() {
   const a2Val = parseFloat(A2);
   const lVal = parseFloat(L);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("cut-fill-volume");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("cut-fill-volume");
 
   // Validation
   const a1Error =
@@ -81,6 +81,10 @@ export default function CutFillPage() {
           onSave={(name) => save(name, { A1, A2, L, method, type })}
           onLoad={(v) => { setA1(v.A1 ?? ""); setA2(v.A2 ?? ""); setL(v.L ?? ""); setMethod((v.method as "average" | "prismoidal") ?? "average"); setType((v.type as "Cut" | "Fill") ?? "Cut"); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

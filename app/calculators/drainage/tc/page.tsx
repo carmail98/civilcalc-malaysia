@@ -34,7 +34,7 @@ export default function TcPage() {
   const ldVal = parseFloat(Ld);
   const vVal = parseFloat(V);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("time-of-concentration");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("time-of-concentration");
 
   // Validation
   const nError =
@@ -112,6 +112,10 @@ export default function TcPage() {
           onSave={(name) => save(name, { n, L, S, Ld, V })}
           onLoad={(v) => { setN(v.n ?? ""); setL(v.L ?? ""); setS(v.S ?? ""); setLd(v.Ld ?? ""); setV(v.V ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

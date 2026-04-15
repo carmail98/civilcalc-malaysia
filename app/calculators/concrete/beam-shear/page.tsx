@@ -39,7 +39,7 @@ export default function BeamShearPage() {
   const AswVal = parseFloat(AswProvided);
   const sVal = parseFloat(sProvided);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("beam-shear");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("beam-shear");
 
   const allValid =
     !isNaN(bwVal) && bwVal > 0 &&
@@ -87,6 +87,10 @@ export default function BeamShearPage() {
             setSProvided(v.sProvided ?? "");
           }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

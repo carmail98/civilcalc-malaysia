@@ -33,7 +33,7 @@ export default function DrainSizingPage() {
   const sVal = parseFloat(S);
   const zVal = parseFloat(z);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("drain-sizing");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("drain-sizing");
 
   // Validation
   const nError =
@@ -119,6 +119,10 @@ export default function DrainSizingPage() {
           onSave={(name) => save(name, { shape, n, b, y, S, z })}
           onLoad={(v) => { setShape((v.shape as "rectangular" | "trapezoidal") ?? "rectangular"); setN(v.n ?? ""); setB(v.b ?? ""); setY(v.y ?? ""); setS(v.S ?? ""); setZ(v.z ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

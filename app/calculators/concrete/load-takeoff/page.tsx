@@ -42,7 +42,7 @@ export default function LoadTakeOffPage() {
   const iVal = parseFloat(imposed);
   const twVal = parseFloat(tribWidth);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("load-takeoff");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("load-takeoff");
 
   // Validation
   const tError =
@@ -98,6 +98,10 @@ export default function LoadTakeOffPage() {
           onSave={(name) => save(name, { thickness, finishes, imposed, imposedPreset, tribWidth })}
           onLoad={(v) => { setThickness(v.thickness ?? ""); setFinishes(v.finishes ?? "1.2"); setImposed(v.imposed ?? "1.5"); setImposedPreset(v.imposedPreset ?? "1.5"); setTribWidth(v.tribWidth ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

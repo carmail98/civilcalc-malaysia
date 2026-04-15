@@ -24,7 +24,7 @@ export default function SlopePage() {
   const vVal = parseFloat(vertical);
   const hVal = parseFloat(horizontal);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("slope-gradient");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("slope-gradient");
 
   const vError =
     vertical !== "" && !isNaN(vVal) && vVal < 0.01
@@ -65,6 +65,10 @@ export default function SlopePage() {
           onSave={(name) => save(name, { vertical, horizontal })}
           onLoad={(v) => { setVertical(v.vertical ?? ""); setHorizontal(v.horizontal ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

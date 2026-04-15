@@ -54,7 +54,7 @@ export default function CrackWidthPage() {
   const ktVal = parseFloat(kt);
   const wkLimitVal = parseFloat(wkLimit);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("crack-width");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("crack-width");
 
   const allValid =
     !isNaN(bVal) && bVal > 0 &&
@@ -101,6 +101,10 @@ export default function CrackWidthPage() {
             setWkLimit(v.wkLimit ?? "0.3");
           }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

@@ -41,7 +41,7 @@ export default function ColumnInteractionPage() {
   const NEdVal = parseFloat(NEd);
   const MEdVal = parseFloat(MEd);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("column-interaction");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("column-interaction");
 
   const sectionValid =
     !isNaN(bVal) && bVal > 0 &&
@@ -124,6 +124,10 @@ export default function ColumnInteractionPage() {
             setMEd(v.MEd ?? "");
           }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

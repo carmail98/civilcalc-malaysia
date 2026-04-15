@@ -50,7 +50,7 @@ export default function IDFPage() {
   const ariVal = parseFloat(ari);
   const durVal = parseFloat(duration);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("idf-curve");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("idf-curve");
 
   // Validation
   const ariError =
@@ -131,6 +131,10 @@ export default function IDFPage() {
           onSave={(name) => save(name, { station, lambda, kappa, theta, eta, ari, duration })}
           onLoad={(v) => { setStation(v.station ?? "kl"); setLambda(v.lambda ?? ""); setKappa(v.kappa ?? ""); setTheta(v.theta ?? ""); setEta(v.eta ?? ""); setAri(v.ari ?? ""); setDuration(v.duration ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

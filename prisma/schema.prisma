@@ -43,6 +43,7 @@ model User {
   answers       Answer[]   @relation("UserAnswers")
   votes         Vote[]     @relation("UserVotes")
   feedbacks     Feedback[] @relation("UserFeedback")
+  savedCalcs    SavedCalc[] @relation("UserSavedCalcs")
 }
 
 model Account {
@@ -176,4 +177,20 @@ model Feedback {
 
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
+}
+
+// ─── Saved Calculations ─────────────────────────────────────
+
+model SavedCalc {
+  id         String   @id @default(cuid())
+  calcId     String              // Calculator key (e.g. "drain-sizing", "rational-method")
+  name       String              // User-given name for the calculation
+  values     Json                // Input values as JSON object
+  savedAt    DateTime @default(now())
+
+  userId     String
+  user       User     @relation("UserSavedCalcs", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, calcId, name])
+  @@index([userId, calcId])
 }

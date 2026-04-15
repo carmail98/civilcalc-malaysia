@@ -26,7 +26,7 @@ export default function DrainagePage() {
   const iVal = parseFloat(i);
   const aVal = parseFloat(A);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("rational-method");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("rational-method");
 
   // Validation
   const cError = C !== "" && !isNaN(cVal)
@@ -61,6 +61,10 @@ export default function DrainagePage() {
           onSave={(name) => save(name, { C, i, A })}
           onLoad={(v) => { setC(v.C ?? ""); setI(v.i ?? ""); setA(v.A ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

@@ -32,7 +32,7 @@ export default function DetentionPondPage() {
   const durVal = parseFloat(duration);
   const psdVal = parseFloat(psd);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("detention-pond");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("detention-pond");
 
   // Validation
   const areaError =
@@ -135,6 +135,10 @@ export default function DetentionPondPage() {
           onSave={(name) => save(name, { area, cPre, cPost, intensity, duration, psd })}
           onLoad={(v) => { setArea(v.area ?? ""); setCPre(v.cPre ?? ""); setCPost(v.cPost ?? ""); setIntensity(v.intensity ?? ""); setDuration(v.duration ?? ""); setPsd(v.psd ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

@@ -32,7 +32,7 @@ export default function RCBeamPage() {
   const fckVal = parseFloat(fck);
   const medVal = parseFloat(MEd);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("rc-beam-moment");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("rc-beam-moment");
 
   // Validation
   const bError =
@@ -86,6 +86,10 @@ export default function RCBeamPage() {
           onSave={(name) => save(name, { b, d, As, fck, MEd })}
           onLoad={(v) => { setB(v.b ?? ""); setD(v.d ?? ""); setAs(v.As ?? ""); setFck(v.fck ?? "30"); setMEd(v.MEd ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

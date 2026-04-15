@@ -53,7 +53,7 @@ export default function PadFootingPage() {
   const MslsVal = parseFloat(Msls) || 0;
   const MulsVal = parseFloat(Muls) || 0;
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("pad-footing");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("pad-footing");
 
   const allValid =
     !isNaN(colWidthVal) && colWidthVal > 0 &&
@@ -126,6 +126,10 @@ export default function PadFootingPage() {
             setMuls(v.Muls ?? "");
           }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

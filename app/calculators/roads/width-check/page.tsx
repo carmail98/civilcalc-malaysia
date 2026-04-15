@@ -49,7 +49,7 @@ export default function RoadWidthPage() {
   const nlVal = parseInt(numLanes);
   const pwVal = parseFloat(proposedWidth);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("road-width");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("road-width");
 
   const nlError =
     numLanes !== "" && !isNaN(nlVal) && (nlVal < 1 || nlVal > 8)
@@ -111,6 +111,10 @@ export default function RoadWidthPage() {
           onSave={(name) => save(name, { roadType, roadClass, terrain, numLanes, proposedWidth })}
           onLoad={(v) => { setRoadType((v.roadType as "rural" | "urban") ?? "rural"); setRoadClass(v.roadClass ?? "R4"); setTerrain(v.terrain ?? "flat"); setNumLanes(v.numLanes ?? "2"); setProposedWidth(v.proposedWidth ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

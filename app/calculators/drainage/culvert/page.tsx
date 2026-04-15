@@ -35,7 +35,7 @@ export default function CulvertPage() {
   const pipeDVal = parseFloat(pipeD);
   const QdVal = parseFloat(Qdesign);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("culvert-design");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("culvert-design");
 
   // Validation
   const nError =
@@ -146,6 +146,10 @@ export default function CulvertPage() {
           onSave={(name) => save(name, { culvertType, n, slope, numBarrels, boxB, boxD, pipeD, Qdesign })}
           onLoad={(v) => { setCulvertType((v.culvertType as "box" | "pipe") ?? "box"); setN(v.n ?? "0.013"); setSlope(v.slope ?? ""); setNumBarrels(v.numBarrels ?? "1"); setBoxB(v.boxB ?? ""); setBoxD(v.boxD ?? ""); setPipeD(v.pipeD ?? ""); setQdesign(v.Qdesign ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

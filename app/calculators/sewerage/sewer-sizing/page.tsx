@@ -32,7 +32,7 @@ export default function SewerSizingPage() {
   const nVal = parseFloat(n);
   const infVal = parseFloat(inf);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("sewer-pipe-sizing");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("sewer-pipe-sizing");
 
   // Validation
   const peError =
@@ -136,6 +136,10 @@ export default function SewerSizingPage() {
           onSave={(name) => save(name, { pe, pcf, dia, slope, n, inf })}
           onLoad={(v) => { setPe(v.pe ?? ""); setPcf(v.pcf ?? "225"); setDia(v.dia ?? ""); setSlope(v.slope ?? ""); setN(v.n ?? "0.011"); setInf(v.inf ?? "0"); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 

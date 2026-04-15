@@ -34,7 +34,7 @@ export default function PavementPage() {
   const ldfVal = parseFloat(ldf);
   const cbrVal = parseFloat(cbr);
 
-  const { savedList, save, remove, clearAll } = useCalcStorage("flexible-pavement");
+  const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("flexible-pavement");
 
   // Validation
   const adtError =
@@ -147,6 +147,10 @@ export default function PavementPage() {
           onSave={(name) => save(name, { adtCV, tf, gr, dp, dd, ldf, cbr })}
           onLoad={(v) => { setAdtCV(v.adtCV ?? ""); setTf(v.tf ?? ""); setGr(v.gr ?? ""); setDp(v.dp ?? ""); setDd(v.dd ?? "0.5"); setLdf(v.ldf ?? "1.0"); setCbr(v.cbr ?? ""); }}
           onRemove={remove}
+          onExport={exportCalcs}
+          onImport={importCalcs}
+          isLoggedIn={isLoggedIn}
+          syncing={syncing}
           onClearAll={clearAll}
         />
 
