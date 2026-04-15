@@ -2,6 +2,18 @@ import Link from "next/link";
 
 const calculators = [
   {
+    name: "Load Take-Off (Slab to Beam)",
+    description: "Calculate ULS design load and line load on beam per EC1 Malaysia NA.",
+    href: "/calculators/concrete/load-takeoff",
+    standard: "MS EN 1991-1-1",
+  },
+  {
+    name: "RC Slab Design (One-Way & Two-Way)",
+    description: "Design one-way or two-way slabs with moment coefficients, steel area, and deflection check.",
+    href: "/calculators/concrete/slab-design",
+    standard: "MS EN 1992-1-1",
+  },
+  {
     name: "RC Beam Moment Capacity",
     description: "Beam moment capacity and utilisation check per EC2 Malaysia NA.",
     href: "/calculators/concrete/beam-moment",
@@ -12,6 +24,12 @@ const calculators = [
     description: "Variable angle truss model shear design with VRd,c, VRd,max, and required Asw/s.",
     href: "/calculators/concrete/beam-shear",
     standard: "MS EN 1992-1-1, Cl. 6.2.3",
+  },
+  {
+    name: "Deflection Check — Span/Depth Ratio",
+    description: "Verify span-to-depth ratio against EC2 Cl. 7.4.2 limits with modification factors.",
+    href: "/calculators/concrete/deflection-check",
+    standard: "MS EN 1992-1-1, Cl. 7.4.2",
   },
   {
     name: "RC Column N-M Interaction",
@@ -30,12 +48,6 @@ const calculators = [
     description: "Three-check design: bearing pressure (SLS), flexure (ULS), and punching shear at 2d perimeter.",
     href: "/calculators/concrete/pad-footing",
     standard: "MS EN 1992-1-1 Cl. 6.4 & EN 1997-1",
-  },
-  {
-    name: "Load Take-Off (Slab to Beam)",
-    description: "Calculate ULS design load and line load on beam per EC1 Malaysia NA.",
-    href: "/calculators/concrete/load-takeoff",
-    standard: "MS EN 1991-1-1",
   },
 ];
 

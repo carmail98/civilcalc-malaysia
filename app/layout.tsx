@@ -53,6 +53,8 @@ const footerCalcCategories = [
     category: "Roads",
     items: [
       { href: "/calculators/roads/pavement", label: "Pavement Design" },
+      { href: "/calculators/roads/sight-distance", label: "Sight Distance" },
+      { href: "/calculators/roads/traffic-volume", label: "Traffic PCU" },
     ],
   },
   {
@@ -64,11 +66,33 @@ const footerCalcCategories = [
   {
     category: "Concrete",
     items: [
+      { href: "/calculators/concrete/slab-design", label: "Slab Design" },
       { href: "/calculators/concrete/beam-moment", label: "RC Beam Capacity" },
-      { href: "/calculators/concrete/beam-shear", label: "Beam Shear" },
-      { href: "/calculators/concrete/column-interaction", label: "Column N-M" },
       { href: "/calculators/concrete/pad-footing", label: "Pad Footing" },
-      { href: "/calculators/concrete/crack-width", label: "Crack Width" },
+      { href: "/calculators/concrete/deflection-check", label: "Deflection Check" },
+    ],
+  },
+  {
+    category: "Geotechnical",
+    items: [
+      { href: "/calculators/geotechnical/bearing-capacity", label: "Bearing Capacity" },
+      { href: "/calculators/geotechnical/settlement", label: "Settlement" },
+      { href: "/calculators/geotechnical/pile-capacity", label: "Pile Capacity" },
+    ],
+  },
+  {
+    category: "Costing",
+    items: [
+      { href: "/calculators/costing/pce", label: "Cost Estimate" },
+      { href: "/calculators/costing/ipc", label: "Payment Cert" },
+      { href: "/calculators/costing/final-account", label: "Final Account" },
+    ],
+  },
+  {
+    category: "Environmental",
+    items: [
+      { href: "/calculators/environmental/water-demand", label: "Water Demand" },
+      { href: "/calculators/environmental/eia-screening", label: "EIA Screening" },
     ],
   },
 ];
@@ -78,6 +102,8 @@ const footerStandards = [
   { label: "JKR Standards", href: "https://www.jkr.gov.my" },
   { label: "MS EN (Eurocode)", href: "https://www.jsm.gov.my" },
   { label: "SPAN / MSIG", href: "https://www.span.gov.my" },
+  { label: "DOE / EIA Order", href: "https://www.doe.gov.my" },
+  { label: "BQSM / SMM2", href: "https://www.bqsm.gov.my" },
 ];
 
 export default function RootLayout({

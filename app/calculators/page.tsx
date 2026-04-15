@@ -64,6 +64,40 @@ const categoryConfig: Record<
       </svg>
     ),
   },
+  Geotechnical: {
+    bg: "bg-yellow-100",
+    text: "text-yellow-700",
+    border: "border-yellow-200",
+    hoverBorder: "hover:border-yellow-400",
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2zm0 6a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1v-2z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
+  Costing: {
+    bg: "bg-teal-100",
+    text: "text-teal-700",
+    border: "border-teal-200",
+    hoverBorder: "hover:border-teal-400",
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />
+        <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
+  Environmental: {
+    bg: "bg-emerald-100",
+    text: "text-emerald-700",
+    border: "border-emerald-200",
+    hoverBorder: "hover:border-emerald-400",
+    icon: (
+      <svg className="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fillRule="evenodd" d="M5.05 3.636a1 1 0 011.06.147l.74.656.74-.656a1 1 0 011.06-.147L10 4.5V10a4 4 0 01-8 0V4.5l1.35-.864zM10 12a6 6 0 0012 0c0-3-6-8-6-8s-6 5-6 8z" clipRule="evenodd" />
+      </svg>
+    ),
+  },
   Tools: {
     bg: "bg-violet-100",
     text: "text-violet-700",
@@ -78,6 +112,7 @@ const categoryConfig: Record<
 };
 
 const calculators = [
+  // Drainage
   {
     name: "Rational Method — Peak Flow",
     description: "Calculate peak stormwater flow using MSMA 2nd Edition rational method (Q = CiA/360).",
@@ -120,6 +155,7 @@ const calculators = [
     standard: "MSMA 2nd Ed, Ch 5",
     category: "Drainage",
   },
+  // Earthworks
   {
     name: "Earthworks Cut & Fill Volume",
     description: "Calculate earthworks volume using Average End Area or Prismoidal method.",
@@ -141,6 +177,7 @@ const calculators = [
     standard: "JKR Spec S/4",
     category: "Earthworks",
   },
+  // Roads
   {
     name: "Flexible Pavement Design (JKR)",
     description: "Calculate ESAL, determine traffic category, and get recommended pavement layer thicknesses per JKR ATJ 5/85.",
@@ -156,17 +193,47 @@ const calculators = [
     category: "Roads",
   },
   {
+    name: "Sight Distance Calculator (SSD & OSD)",
+    description: "Calculate stopping and overtaking sight distances with vertical curve K values per JKR/REAM.",
+    href: "/calculators/roads/sight-distance",
+    standard: "JKR ATJ 8/86 / REAM",
+    category: "Roads",
+  },
+  {
+    name: "Road Gradient & Curve Design",
+    description: "Minimum horizontal radius, vertical curve K values, and gradient compliance checks.",
+    href: "/calculators/roads/gradient-curve",
+    standard: "JKR ATJ 8/86 / REAM",
+    category: "Roads",
+  },
+  {
+    name: "Traffic Volume (PCU) & LOS",
+    description: "Convert vehicle counts to PCU, calculate V/C ratio, and determine Level of Service.",
+    href: "/calculators/roads/traffic-volume",
+    standard: "JKR / HPU / HCM",
+    category: "Roads",
+  },
+  // Sewerage
+  {
     name: "Sewer Pipe Sizing (MSIG/SPAN)",
     description: "Calculate DWF, Harmon's peak factor, design flow, and check pipe capacity per MSIG guidelines.",
     href: "/calculators/sewerage/sewer-sizing",
     standard: "MSIG / SPAN UTG",
     category: "Sewerage",
   },
+  // Structural
   {
     name: "Load Take-Off (Slab to Beam)",
     description: "Calculate ULS design load and line load on beam per EC1 Malaysia NA.",
     href: "/calculators/concrete/load-takeoff",
     standard: "MS EN 1991-1-1",
+    category: "Structural",
+  },
+  {
+    name: "RC Slab Design (One-Way & Two-Way)",
+    description: "Design one-way or two-way slabs with moment coefficients, steel area, and deflection check.",
+    href: "/calculators/concrete/slab-design",
+    standard: "MS EN 1992-1-1",
     category: "Structural",
   },
   {
@@ -181,6 +248,13 @@ const calculators = [
     description: "Variable angle truss model shear design with VRd,c, VRd,max, and required Asw/s per EC2 Cl. 6.2.3.",
     href: "/calculators/concrete/beam-shear",
     standard: "MS EN 1992-1-1, Cl. 6.2.3",
+    category: "Structural",
+  },
+  {
+    name: "Deflection Check — Span/Depth Ratio",
+    description: "Verify span-to-depth ratio against EC2 Cl. 7.4.2 limits with modification factors.",
+    href: "/calculators/concrete/deflection-check",
+    standard: "MS EN 1992-1-1, Cl. 7.4.2",
     category: "Structural",
   },
   {
@@ -204,6 +278,94 @@ const calculators = [
     standard: "MS EN 1992-1-1, Cl. 7.3.4",
     category: "Structural",
   },
+  // Geotechnical
+  {
+    name: "Bearing Capacity Calculator",
+    description: "Calculate ultimate and allowable bearing capacity using Terzaghi or Meyerhof methods.",
+    href: "/calculators/geotechnical/bearing-capacity",
+    standard: "MS EN 1997-1 (EC7)",
+    category: "Geotechnical",
+  },
+  {
+    name: "Settlement Calculation",
+    description: "1D consolidation settlement for normally and over-consolidated soils with time estimates.",
+    href: "/calculators/geotechnical/settlement",
+    standard: "MS EN 1997-1, Terzaghi Theory",
+    category: "Geotechnical",
+  },
+  {
+    name: "Slope Stability (FOS)",
+    description: "Infinite slope factor of safety with optional water table effect per JKR guidelines.",
+    href: "/calculators/geotechnical/slope-stability",
+    standard: "MS EN 1997-1 / JKR Guidelines",
+    category: "Geotechnical",
+  },
+  {
+    name: "Pile Capacity",
+    description: "Friction plus end-bearing capacity for bored and driven piles in cohesive or granular soils.",
+    href: "/calculators/geotechnical/pile-capacity",
+    standard: "MS EN 1997-1 / JKR Piling",
+    category: "Geotechnical",
+  },
+  // QS / Costing
+  {
+    name: "Preliminary Cost Estimate (PCE)",
+    description: "Estimate building cost from GFA and rate per m² with location, storey, and inflation adjustments.",
+    href: "/calculators/costing/pce",
+    standard: "JKR / BQSM / CIDB",
+    category: "Costing",
+  },
+  {
+    name: "Build-up of Rates",
+    description: "Compose all-in rate from labour, material, plant, overhead, and profit components.",
+    href: "/calculators/costing/buildup-rates",
+    standard: "BQSM / JKR SMM2",
+    category: "Costing",
+  },
+  {
+    name: "Variation Order (VO) Calculator",
+    description: "Calculate net VO value with additions, omissions, and daywork against the 30% JKR limit.",
+    href: "/calculators/costing/variation-order",
+    standard: "PWD Form 203A",
+    category: "Costing",
+  },
+  {
+    name: "Tender Evaluation",
+    description: "Weighted scoring method combining technical merit and price competitiveness per MOF guidelines.",
+    href: "/calculators/costing/tender-evaluation",
+    standard: "MOF Procurement Guidelines",
+    category: "Costing",
+  },
+  {
+    name: "Interim Payment Certificate (IPC)",
+    description: "Calculate amount due with retention, advance recovery, and materials on site per PWD 203A.",
+    href: "/calculators/costing/ipc",
+    standard: "PWD Form 203A",
+    category: "Costing",
+  },
+  {
+    name: "Final Account Summary",
+    description: "Compile final account with VO, PS/PC adjustments, claims, and LAD deductions.",
+    href: "/calculators/costing/final-account",
+    standard: "PWD Form 203A",
+    category: "Costing",
+  },
+  // Environmental
+  {
+    name: "Water Demand Calculation",
+    description: "Calculate domestic, commercial, and industrial water demand with NRW allowance and peak factors.",
+    href: "/calculators/environmental/water-demand",
+    standard: "SPAN Guidelines",
+    category: "Environmental",
+  },
+  {
+    name: "EIA Screening Checklist",
+    description: "Check project against EIA Order 2015 thresholds to determine if PEIA or DEIA is required.",
+    href: "/calculators/environmental/eia-screening",
+    standard: "DOE EIA Order 2015",
+    category: "Environmental",
+  },
+  // Tools
   {
     name: "Calculation Report Generator",
     description: "Compile saved calculations into a multi-page PDF report for PBT/JKR submission with PE endorsement block.",
@@ -213,7 +375,7 @@ const calculators = [
   },
 ];
 
-const categories = ["All", "Drainage", "Earthworks", "Roads", "Sewerage", "Structural", "Tools"];
+const categories = ["All", "Drainage", "Earthworks", "Roads", "Sewerage", "Structural", "Geotechnical", "Costing", "Environmental", "Tools"];
 
 export default function CalculatorsPage() {
   const [activeFilter, setActiveFilter] = useState("All");

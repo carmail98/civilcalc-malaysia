@@ -483,4 +483,486 @@ export const keyTerms: Record<string, { standard?: string; terms: KeyTerm[] }> =
       },
     ],
   },
+
+  "slab-design": {
+    standard: "MS EN 1992-1-1 (EC2)",
+    terms: [
+      {
+        term: "One-Way Slab",
+        definition:
+          "A slab where ly/lx > 2, meaning the slab spans predominantly in one direction. Only short-span reinforcement is designed for bending; long-span gets minimum steel.",
+      },
+      {
+        term: "Two-Way Slab",
+        definition:
+          "A slab where ly/lx ≤ 2, spanning in both directions. Moment coefficients βsx and βsy are used to distribute load between the two spans.",
+        msContext:
+          "Malaysian practice commonly uses BS 8110 Table 3.14/3.15 coefficients alongside EC2 for two-way slab design.",
+      },
+      {
+        term: "Moment Coefficients (βsx, βsy)",
+        definition:
+          "Coefficients that convert the total ULS load into design bending moments per unit width. They depend on support conditions and span ratio.",
+      },
+      {
+        term: "Support Condition",
+        definition:
+          "How the slab edges are restrained — simply supported, continuous, or a combination. Continuous edges attract more moment (hogging) and reduce midspan (sagging) moments.",
+      },
+    ],
+  },
+
+  "deflection-check": {
+    standard: "MS EN 1992-1-1 (EC2)",
+    terms: [
+      {
+        term: "Span-to-Depth Ratio (l/d)",
+        definition:
+          "The ratio of span length to effective depth. EC2 uses this as a simplified method to verify deflection without detailed calculation.",
+      },
+      {
+        term: "K Factor (EC2 Table 7.4N)",
+        definition:
+          "A structural system factor: 1.0 for simply supported, 1.3 for end span continuous, 1.5 for interior span continuous, 0.4 for cantilever.",
+      },
+      {
+        term: "Reference Reinforcement Ratio (ρ₀)",
+        definition:
+          "ρ₀ = √fck / 1000. Used to determine which deflection formula applies based on whether the actual ratio ρ is above or below this threshold.",
+      },
+      {
+        term: "As,prov / As,req Factor",
+        definition:
+          "Providing more steel than required improves deflection. The l/d limit is multiplied by As,prov/As,req (capped at 1.5) to account for this.",
+        msContext:
+          "This is a commonly used approach in Malaysian practice to optimise slab thickness while meeting deflection limits.",
+      },
+    ],
+  },
+
+  "bearing-capacity": {
+    standard: "MS EN 1997-1 (Eurocode 7)",
+    terms: [
+      {
+        term: "Ultimate Bearing Capacity (qu)",
+        definition:
+          "The maximum pressure the soil can support before shear failure occurs. Calculated using bearing capacity factors Nc, Nq, and Nγ.",
+      },
+      {
+        term: "Bearing Capacity Factors (Nc, Nq, Nγ)",
+        definition:
+          "Dimensionless factors that depend on the soil friction angle φ'. They account for cohesion, surcharge, and self-weight contributions to bearing capacity.",
+      },
+      {
+        term: "Factor of Safety (FOS)",
+        definition:
+          "Ratio of ultimate to allowable bearing capacity. Typical values: 2.5–3.0 for permanent structures.",
+        msContext:
+          "Malaysian geotechnical practice follows EC7 with partial factors, but FOS-based design is still widely used in practice and for preliminary design.",
+      },
+      {
+        term: "Terzaghi vs Meyerhof",
+        definition:
+          "Terzaghi's equation is simpler (strip footing, no inclination). Meyerhof adds shape, depth, and inclination factors for more realistic rectangular footings.",
+      },
+    ],
+  },
+
+  "settlement-calc": {
+    standard: "MS EN 1997-1",
+    terms: [
+      {
+        term: "Compression Index (Cc)",
+        definition:
+          "The slope of the virgin compression line on an e-log σ' plot. Indicates how compressible the soil is. Higher Cc means more settlement.",
+        msContext:
+          "Malaysian marine clay (Kuala Lumpur, Penang coastal) typically has Cc = 0.3–1.0. Always determine from oedometer tests.",
+      },
+      {
+        term: "Preconsolidation Pressure (σp')",
+        definition:
+          "The maximum past effective stress the soil has experienced. Determines whether the soil is normally consolidated (NC) or over-consolidated (OC).",
+      },
+      {
+        term: "Coefficient of Consolidation (Cv)",
+        definition:
+          "Controls the rate of consolidation. Higher Cv means faster settlement. Typical clay: 1–10 m²/year.",
+      },
+      {
+        term: "Over-Consolidation Ratio (OCR)",
+        definition:
+          "OCR = σp'/σ0'. OCR > 1 means soil is over-consolidated (stiffer, less settlement on recompression curve).",
+      },
+    ],
+  },
+
+  "slope-stability": {
+    standard: "MS EN 1997-1 / JKR Guidelines",
+    terms: [
+      {
+        term: "Factor of Safety (FOS)",
+        definition:
+          "Ratio of resisting forces to driving forces along a potential slip surface. FOS > 1.0 = stable, FOS < 1.0 = failure.",
+        msContext:
+          "JKR requires FOS ≥ 1.4 for permanent slopes, FOS ≥ 1.2 for temporary works. Slopes above roads/buildings may require ≥ 1.5.",
+      },
+      {
+        term: "Infinite Slope Method",
+        definition:
+          "A simplified slope stability method for long, uniform slopes where the failure plane is parallel to the ground surface. Suitable for shallow failures.",
+      },
+      {
+        term: "Effective Stress Parameters (c', φ')",
+        definition:
+          "Soil shear strength parameters from drained tests. Used for long-term stability analysis of slopes.",
+      },
+      {
+        term: "Water Table Effect",
+        definition:
+          "Groundwater reduces effective stress and hence the frictional resistance of soil. Submerged unit weight (γ - γw) is used below the water table.",
+      },
+    ],
+  },
+
+  "pile-capacity": {
+    standard: "MS EN 1997-1 / JKR Piling",
+    terms: [
+      {
+        term: "End Bearing (Qb)",
+        definition:
+          "The resistance developed at the pile toe from soil below the pile tip. For cohesive soil: Qb = Nc × cu × Ab (Nc ≈ 9 for deep piles).",
+      },
+      {
+        term: "Shaft Friction (Qs)",
+        definition:
+          "The resistance developed along the pile shaft from skin friction between the pile and surrounding soil.",
+        msContext:
+          "Malaysian bored piles in KL limestone/Kenny Hill formation often rely heavily on shaft friction. α values for bored piles typically 0.35–0.6.",
+      },
+      {
+        term: "Alpha Method (α)",
+        definition:
+          "For cohesive soils: shaft friction = α × cu. α depends on pile type and cu value. Driven piles: α ≈ 1.0, bored piles: α ≈ 0.45.",
+      },
+      {
+        term: "Critical Depth",
+        definition:
+          "In granular soils, effective stress used for shaft friction and end bearing is capped at the critical depth (typically 15–20 × pile diameter).",
+      },
+    ],
+  },
+
+  "sight-distance": {
+    standard: "JKR ATJ 8/86 / REAM",
+    terms: [
+      {
+        term: "Stopping Sight Distance (SSD)",
+        definition:
+          "The minimum distance a driver needs to see ahead to safely stop before hitting an obstacle. Comprises reaction distance and braking distance.",
+        msContext:
+          "JKR/REAM specifies SSD values for each design speed class. Eye height = 1.05m, object height = 0.15m.",
+      },
+      {
+        term: "Overtaking Sight Distance (OSD)",
+        definition:
+          "The distance required for a vehicle to safely overtake a slower vehicle on a two-lane road and return to its lane.",
+      },
+      {
+        term: "Perception-Reaction Time",
+        definition:
+          "The time from when a driver first sees a hazard to when braking begins. Standard design value: 2.5 seconds.",
+      },
+      {
+        term: "K Value (Vertical Curve)",
+        definition:
+          "K = L/A where L is curve length and A is algebraic grade difference. Used to design crest and sag vertical curves that provide adequate sight distance.",
+      },
+    ],
+  },
+
+  "road-gradient-curve": {
+    standard: "JKR ATJ 8/86 / REAM",
+    terms: [
+      {
+        term: "Minimum Horizontal Radius (Rmin)",
+        definition:
+          "The tightest curve a vehicle can safely negotiate at design speed, based on superelevation and side friction: R = V²/(127×(e+f)).",
+      },
+      {
+        term: "Superelevation (e)",
+        definition:
+          "The cross-slope given to a road on a horizontal curve to counteract centrifugal force. Expressed as a percentage.",
+        msContext:
+          "JKR maximum superelevation: 6% (urban) to 10% (rural). Transition from normal camber to full super over the spiral length.",
+      },
+      {
+        term: "Crest Vertical Curve",
+        definition:
+          "A convex curve at a hilltop. Design is governed by sight distance — the driver must see over the crest.",
+      },
+      {
+        term: "Sag Vertical Curve",
+        definition:
+          "A concave curve at a valley. Design is governed by headlight illumination distance at night.",
+      },
+    ],
+  },
+
+  "traffic-volume": {
+    standard: "JKR / HPU Traffic Guidelines",
+    terms: [
+      {
+        term: "Passenger Car Unit (PCU)",
+        definition:
+          "A standardised unit for comparing different vehicle types. A car = 1.0 PCU; larger/slower vehicles have higher PCU equivalents.",
+        msContext:
+          "Malaysian PCU factors: Car 1.0, Motorcycle 0.33, Bus 1.75, Heavy vehicle 2.25, Medium lorry 1.75.",
+      },
+      {
+        term: "Level of Service (LOS)",
+        definition:
+          "A qualitative measure of traffic operating conditions from A (free flow) to F (forced flow/breakdown). Based on V/C ratio.",
+      },
+      {
+        term: "V/C Ratio",
+        definition:
+          "Volume-to-Capacity ratio. The key measure for determining LOS. V/C ≤ 1.0 means the road is within capacity.",
+      },
+      {
+        term: "Peak Hour Factor (PHF)",
+        definition:
+          "Ratio of total hourly volume to peak 15-minute flow rate × 4. Accounts for flow variation within the peak hour. Typical: 0.85–0.95.",
+      },
+    ],
+  },
+
+  "preliminary-cost": {
+    standard: "JKR / BQSM / CIDB",
+    terms: [
+      {
+        term: "Gross Floor Area (GFA)",
+        definition:
+          "The total floor area of all storeys, measured to the outside face of external walls. Includes common areas, corridors, and service areas.",
+      },
+      {
+        term: "Building Cost Rate (RM/m²)",
+        definition:
+          "The average construction cost per unit area. Varies by building type, location, and specification level.",
+        msContext:
+          "CIDB publishes Malaysian construction cost data quarterly. Typical residential: RM1,500–2,500/m², commercial: RM2,000–3,000/m².",
+      },
+      {
+        term: "Contingency",
+        definition:
+          "An allowance for unforeseen costs, design changes, and pricing uncertainty. Typically 10% for preliminary estimates.",
+      },
+      {
+        term: "Professional Fees",
+        definition:
+          "Fees for architects, engineers, QS, and other consultants. Typically 8–12% of construction cost depending on project complexity.",
+      },
+    ],
+  },
+
+  "buildup-rates": {
+    standard: "BQSM / JKR SMM2",
+    terms: [
+      {
+        term: "Build-up Rate",
+        definition:
+          "A detailed cost composition of a single work item broken down into labour, material, plant, overhead, and profit components.",
+      },
+      {
+        term: "Labour Productivity",
+        definition:
+          "The output a worker can achieve per unit time (e.g., m² of formwork per day). Affects the labour cost per unit of work.",
+        msContext:
+          "Malaysian productivity rates vary by trade. CIDB publishes productivity norms for common construction activities.",
+      },
+      {
+        term: "Material Wastage",
+        definition:
+          "The percentage of material lost due to cutting, spillage, breakage, and overordering. Typical: 5% (steel) to 15% (bricks).",
+      },
+      {
+        term: "Overhead & Profit (OH&P)",
+        definition:
+          "Overhead covers site and head office costs (supervision, insurance, temp works). Profit is the contractor's margin. Combined typically 15–25%.",
+      },
+    ],
+  },
+
+  "variation-order": {
+    standard: "PWD Form 203A",
+    terms: [
+      {
+        term: "Variation Order (VO)",
+        definition:
+          "A formal instruction to change the scope of work under a construction contract. Can include additions, omissions, or changes in specification.",
+      },
+      {
+        term: "Additions & Omissions",
+        definition:
+          "Additions: new work added to the contract. Omissions: work removed. Net VO = Additions − Omissions.",
+      },
+      {
+        term: "Daywork",
+        definition:
+          "Work paid on a time-and-material basis when the VO cannot be valued using contract rates. Includes labour, material, and plant at agreed rates.",
+        msContext:
+          "JKR contracts require daywork to be authorised and records signed daily by the SO's representative.",
+      },
+      {
+        term: "VO Limit (30%)",
+        definition:
+          "JKR guideline: cumulative VOs should not exceed 30% of the original contract sum. Beyond this, Treasury approval may be required.",
+      },
+    ],
+  },
+
+  "tender-evaluation": {
+    standard: "MOF Procurement Guidelines",
+    terms: [
+      {
+        term: "Weighted Scoring Method",
+        definition:
+          "An evaluation method combining technical merit and price competitiveness using predetermined weights. Total = technical score × TW + price score × PW.",
+        msContext:
+          "Malaysian government procurement typically uses 70:30 or 60:40 (technical:price) weighting for consultancy and complex works.",
+      },
+      {
+        term: "Price Score",
+        definition:
+          "Calculated as (lowest price ÷ evaluated price) × 100. The lowest tenderer automatically scores 100.",
+      },
+      {
+        term: "Technical Score",
+        definition:
+          "Assessed based on criteria such as methodology, experience, qualifications, and past performance. Minimum qualifying score often 70–80%.",
+      },
+      {
+        term: "Recommended Tenderer",
+        definition:
+          "The tenderer with the highest combined score. Must also meet all mandatory requirements and minimum technical threshold.",
+      },
+    ],
+  },
+
+  "interim-payment": {
+    standard: "PWD Form 203A",
+    terms: [
+      {
+        term: "Interim Payment Certificate (IPC)",
+        definition:
+          "A periodic payment document issued by the SO certifying the value of work done and amount due to the contractor.",
+        msContext:
+          "JKR typically issues IPCs monthly. The SO has 14 days to certify, and the Government has 30 days to pay.",
+      },
+      {
+        term: "Retention",
+        definition:
+          "A percentage withheld from each payment as security for defects. Released in two moieties: half at practical completion, half after defects liability period.",
+        msContext:
+          "PWD 203A: 5% retention capped at 5% of contract sum. Half released at CPC, balance at CMGD.",
+      },
+      {
+        term: "Materials on Site",
+        definition:
+          "Unfixed materials delivered to site that may be included in interim valuations, subject to proper storage and insurance.",
+      },
+      {
+        term: "Advance Payment Recovery",
+        definition:
+          "If advance payment was issued, it is recovered proportionally from each IPC based on the ratio of work done to contract sum.",
+      },
+    ],
+  },
+
+  "final-account": {
+    standard: "PWD Form 203A",
+    terms: [
+      {
+        term: "Final Account",
+        definition:
+          "The agreed total value of all work done under a contract, including the original contract sum, variations, provisional sum adjustments, and claims.",
+      },
+      {
+        term: "Provisional Sum (PS)",
+        definition:
+          "An allowance in the contract for work that cannot be fully defined at tender stage. Adjusted to actual expenditure in the final account.",
+      },
+      {
+        term: "Prime Cost (PC)",
+        definition:
+          "An amount in the BQ for specialist items to be supplied by nominated sub-contractors or suppliers. Adjusted to actual cost plus contractor's profit.",
+      },
+      {
+        term: "Liquidated Ascertained Damages (LAD)",
+        definition:
+          "Pre-agreed damages payable by the contractor for late completion. Deducted from the final account for each day of delay beyond the completion date.",
+        msContext:
+          "LAD rate is stated in the contract. For government projects, it is typically 0.05–0.1% of contract sum per day, subject to a maximum cap.",
+      },
+    ],
+  },
+
+  "water-demand": {
+    standard: "SPAN Guidelines",
+    terms: [
+      {
+        term: "Per Capita Demand",
+        definition:
+          "The average daily water consumption per person. Used as the basis for domestic water demand calculation.",
+        msContext:
+          "SPAN recommends 200–250 L/person/day for domestic use. Peninsular Malaysia average is approximately 230 L/person/day.",
+      },
+      {
+        term: "Non-Revenue Water (NRW)",
+        definition:
+          "Water that is produced but not billed to customers — includes physical losses (leaks) and commercial losses (theft, metering errors).",
+        msContext:
+          "Malaysia's national NRW target is <25%. Current national average is approximately 35%. Add NRW allowance to calculate production demand.",
+      },
+      {
+        term: "Peak Day / Peak Hour Factor",
+        definition:
+          "Multipliers applied to average demand to size infrastructure for peak usage periods. Peak day: 1.2–1.5, peak hour: 1.5–2.5.",
+      },
+      {
+        term: "Fire Flow",
+        definition:
+          "Additional water demand for firefighting. Required by BOMBA (Fire Department) and UBBL. Added to peak hour demand for pipe/pump sizing.",
+      },
+    ],
+  },
+
+  "eia-screening": {
+    standard: "DOE Malaysia / EIA Order 2015",
+    terms: [
+      {
+        term: "Environmental Impact Assessment (EIA)",
+        definition:
+          "A systematic process to identify, predict, and evaluate environmental impacts of a proposed project before development approval is granted.",
+        msContext:
+          "In Malaysia, EIA is mandated under the Environmental Quality Act 1974 (Section 34A) and the EIA Order 2015.",
+      },
+      {
+        term: "Preliminary EIA (PEIA)",
+        definition:
+          "A first-level assessment for projects in the First Schedule of the EIA Order. Simpler scope, shorter timeframe than Detailed EIA.",
+      },
+      {
+        term: "Detailed EIA (DEIA)",
+        definition:
+          "A comprehensive assessment required for projects in the Second Schedule. Requires public display, detailed baseline studies, and DOE technical review.",
+      },
+      {
+        term: "EIA Order 2015 Thresholds",
+        definition:
+          "Prescribed activities and their trigger thresholds (area, units, length) that determine whether an EIA is required and at what level.",
+        msContext:
+          "Housing: ≥50 ha or ≥500 units (PEIA), ≥500 ha or ≥5000 units (DEIA). Industrial: ≥20 ha (heavy), ≥50 ha (light).",
+      },
+    ],
+  },
 };

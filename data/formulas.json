@@ -357,5 +357,362 @@
       "Mu": { "label": "Moment Capacity", "unit": "kN·m" }
     },
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "slab_design": {
+    "name": "RC Slab Design (One-Way & Two-Way)",
+    "reference": "MS EN 1992-1-1:2010, Malaysia NA — Moment Coefficients per Table 3.14/3.15",
+    "formula": "Msx = βsx × n × lx²  |  Msy = βsy × n × lx²",
+    "sub_formulas": {
+      "uls_load": "n = 1.35Gk + 1.5Qk",
+      "span_ratio": "ly/lx > 2 → one-way  |  ly/lx ≤ 2 �� two-way",
+      "steel_area": "As = M / (0.87·fyk·z)  per m width"
+    },
+    "variables": {
+      "lx": { "label": "Short Span (lx)", "unit": "m", "hint": "Clear span in shorter direction" },
+      "ly": { "label": "Long Span (ly)", "unit": "m", "hint": "Clear span in longer direction" },
+      "h": { "label": "Slab Thickness", "unit": "mm", "hint": "Typical 125–250 mm" },
+      "cover": { "label": "Concrete Cover", "unit": "mm", "hint": "Typical 25 mm (XC1 indoor)" },
+      "barDia": { "label": "Bar Diameter", "unit": "mm", "hint": "Typical 10 or 12 mm" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "25, 30, or 35 MPa" },
+      "fyk": { "label": "Steel Yield Strength", "unit": "MPa", "hint": "500 MPa (H-bar, Malaysia)" },
+      "Gk": { "label": "Dead Load (incl. self-weight)", "unit": "kN/m²", "hint": "Self-weight + finishes" },
+      "Qk": { "label": "Imposed Load", "unit": "kN/m²", "hint": "Residential 1.5, Office 2.5" }
+    },
+    "result": {
+      "AsxReq": { "label": "Steel Required (Short Span)", "unit": "mm²/m" },
+      "AsyReq": { "label": "Steel Required (Long Span)", "unit": "mm²/m" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "deflection_check": {
+    "name": "Deflection Check — Span/Depth Ratio (EC2)",
+    "reference": "MS EN 1992-1-1:2010, Clause 7.4.2, Malaysia NA",
+    "formula": "Actual l/d ≤ Limiting l/d",
+    "sub_formulas": {
+      "limiting": "Limiting l/d = K × [11 + 1.5√fck·ρ₀/ρ + 3.2√fck·(ρ₀/ρ − 1)^1.5]  if ρ ≤ ρ₀",
+      "as_factor": "Multiply by As,prov / As,req (≤ 1.5)"
+    },
+    "variables": {
+      "lSpan": { "label": "Span Length", "unit": "mm", "hint": "Clear span of member" },
+      "dEff": { "label": "Effective Depth", "unit": "mm", "hint": "h − cover − bar radius" },
+      "b": { "label": "Section Width", "unit": "mm", "hint": "Beam width or 1000mm for slab" },
+      "AsReq": { "label": "Steel Area Required", "unit": "mm²", "hint": "From flexural design" },
+      "AsProv": { "label": "Steel Area Provided", "unit": "mm²", "hint": "Actual bars provided" },
+      "fck": { "label": "Concrete Strength", "unit": "MPa", "hint": "25, 30, 35, or 40 MPa" },
+      "fyk": { "label": "Steel Yield Strength", "unit": "MPa", "hint": "500 MPa (H-bar, Malaysia)" }
+    },
+    "result": {
+      "limitingRatio": { "label": "Limiting l/d Ratio", "unit": "" },
+      "actualRatio": { "label": "Actual l/d Ratio", "unit": "" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "bearing_capacity": {
+    "name": "Bearing Capacity Calculator",
+    "reference": "MS EN 1997-1 (Eurocode 7), Terzaghi & Meyerhof Methods",
+    "formula": "qu = c·Nc + q·Nq + 0.5·γ·B·Nγ",
+    "sub_formulas": {
+      "terzaghi": "qu = c·Nc + γ·Df·Nq + 0.5·γ·B��Nγ (strip footing)",
+      "meyerhof": "qu = c·Nc·sc·dc + γ·Df·Nq·sq·dq + 0.5·γ·B·Nγ·sγ·dγ (with shape & depth factors)"
+    },
+    "variables": {
+      "phi": { "label": "Friction Angle (φ')", "unit": "°", "hint": "Effective friction angle from triaxial test" },
+      "c": { "label": "Cohesion (c')", "unit": "kPa", "hint": "Effective cohesion. Clay: 10–75 kPa" },
+      "gamma": { "label": "Unit Weight (γ)", "unit": "kN/m³", "hint": "Typical 16–20 kN/m³" },
+      "Df": { "label": "Foundation Depth", "unit": "m", "hint": "Depth below ground level" },
+      "B": { "label": "Footing Width", "unit": "m", "hint": "Width of strip/pad footing" },
+      "L": { "label": "Footing Length", "unit": "m", "hint": "Length (for shape factor). 0 = strip" },
+      "FOS": { "label": "Factor of Safety", "unit": "", "hint": "Typical 2.5–3.0" }
+    },
+    "result": {
+      "qu": { "label": "Ultimate Bearing Capacity", "unit": "kPa" },
+      "qAllowable": { "label": "Allowable Bearing Capacity", "unit": "kPa" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "settlement_calc": {
+    "name": "Settlement Calculation (Consolidation)",
+    "reference": "MS EN 1997-1, Terzaghi 1D Consolidation Theory",
+    "formula": "Sc = (Cc·H)/(1+e₀) × log₁₀((σ₀'+Δσ)/σ₀')",
+    "sub_formulas": {
+      "oc_soil": "Sc = (Cs·H)/(1+e₀)·log(σp'/σ₀') + (Cc·H)/(1+e₀)·log(σf'/σp')",
+      "time": "t = Tv·Hdr²/Cv  (Tv₅₀ = 0.197, Tv₉₀ = 0.848)"
+    },
+    "variables": {
+      "Cc": { "label": "Compression Index (Cc)", "unit": "", "hint": "From oedometer test. Typical: 0.1–1.0" },
+      "Cs": { "label": "Swelling Index (Cs)", "unit": "", "hint": "≈ Cc/5 to Cc/10" },
+      "e0": { "label": "Initial Void Ratio (e₀)", "unit": "", "hint": "Typical 0.5–2.0" },
+      "H": { "label": "Layer Thickness", "unit": "m", "hint": "Compressible layer thickness" },
+      "sigma0": { "label": "Initial Effective Stress (σ₀')", "unit": "kPa", "hint": "At mid-layer" },
+      "deltaSigma": { "label": "Stress Increase (Δσ)", "unit": "kPa", "hint": "From foundation load" },
+      "sigmaP": { "label": "Preconsolidation Pressure (σp')", "unit": "kPa", "hint": "From oedometer Casagrande" },
+      "Cv": { "label": "Coefficient of Consolidation", "unit": "m²/year", "hint": "From oedometer test" },
+      "drainagePath": { "label": "Drainage Path Length", "unit": "m", "hint": "H/2 for double drainage, H for single" }
+    },
+    "result": {
+      "Sc": { "label": "Total Settlement", "unit": "mm" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "slope_stability": {
+    "name": "Slope Stability — Factor of Safety",
+    "reference": "MS EN 1997-1, JKR Slope Stability Guidelines",
+    "formula": "FOS = (c' + γ·z·cos²β·tanφ') / (γ·z·sinβ·cosβ)",
+    "sub_formulas": {
+      "with_water": "FOS = (c' + (γ−γw)·z·cos²β·tanφ') / (��·z·sinβ·cosβ)"
+    },
+    "variables": {
+      "c": { "label": "Effective Cohesion (c')", "unit": "kPa", "hint": "From shear strength test" },
+      "phi": { "label": "Friction Angle (φ')", "unit": "°", "hint": "Effective friction angle" },
+      "gamma": { "label": "Soil Unit Weight (γ)", "unit": "kN/m³", "hint": "Typical 16–20 kN/m³" },
+      "z": { "label": "Depth of Failure Surface", "unit": "m", "hint": "Depth to potential slip plane" },
+      "beta": { "label": "Slope Angle (β)", "unit": "°", "hint": "Slope inclination from horizontal" }
+    },
+    "result": {
+      "FOS": { "label": "Factor of Safety", "unit": "" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "pile_capacity": {
+    "name": "Pile Capacity — Friction + End-Bearing",
+    "reference": "MS EN 1997-1, Malaysian PWD/JKR Piling Practice",
+    "formula": "Qult = Qb + Qs",
+    "sub_formulas": {
+      "cohesive": "Qb = Nc·cu·Ab  |  Qs = Σ(α·cu·As)",
+      "granular": "Qb = Nq·σv'·Ab  |  Qs = Σ(K·σv'·tanδ·As)"
+    },
+    "variables": {
+      "pileDia": { "label": "Pile Diameter", "unit": "m", "hint": "Bored: 0.6–1.5m, Driven: 0.2–0.6m" },
+      "pileLength": { "label": "Pile Length", "unit": "m", "hint": "Embedded length below ground" },
+      "cu": { "label": "Undrained Shear Strength (cu)", "unit": "kPa", "hint": "Cohesive soil: 25–200 kPa" },
+      "phi": { "label": "Friction Angle (φ')", "unit": "°", "hint": "Granular soil: 25–40°" },
+      "gamma": { "label": "Soil Unit Weight (γ)", "unit": "kN/m³", "hint": "Typical 16–20 kN/m³" },
+      "FOS": { "label": "Factor of Safety", "unit": "", "hint": "Typical 2.0–3.0 (static)" }
+    },
+    "result": {
+      "Qult": { "label": "Ultimate Pile Capacity", "unit": "kN" },
+      "Qallowable": { "label": "Allowable Pile Capacity", "unit": "kN" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "sight_distance": {
+    "name": "Sight Distance Calculator (SSD & OSD)",
+    "reference": "JKR ATJ 8/86, REAM Road Geometric Design Guide",
+    "formula": "SSD = 0.278·V·t + V²/(254·(f±g))",
+    "sub_formulas": {
+      "reaction": "d₁ = 0.278·V·t (reaction distance)",
+      "braking": "d₂ = V²/(254·(f±g)) (braking distance)"
+    },
+    "variables": {
+      "designSpeed": { "label": "Design Speed", "unit": "km/h", "hint": "30–120 km/h per road class" },
+      "reactionTime": { "label": "Perception-Reaction Time", "unit": "s", "hint": "Standard: 2.5 s" },
+      "friction": { "label": "Longitudinal Friction (f)", "unit": "", "hint": "Wet surface: 0.29–0.44 (speed dependent)" },
+      "gradient": { "label": "Grade (%)", "unit": "%", "hint": "Positive = uphill, negative = downhill" },
+      "objectHeight": { "label": "Object Height", "unit": "mm", "hint": "Standard 150 mm" },
+      "eyeHeight": { "label": "Eye Height", "unit": "mm", "hint": "Standard 1050 mm" }
+    },
+    "result": {
+      "SSD": { "label": "Stopping Sight Distance", "unit": "m" },
+      "OSD": { "label": "Overtaking Sight Distance", "unit": "m" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "road_gradient_curve": {
+    "name": "Road Gradient & Curve Design",
+    "reference": "JKR ATJ 8/86, REAM Road Geometric Design Guide",
+    "formula": "R_min = V² / (127 × (e + f))",
+    "sub_formulas": {
+      "vertical_crest": "K_crest = S² / (200 × (√h₁ + √h₂)²)",
+      "vertical_sag": "K_sag = S² / (200 × (H + S·tan α))"
+    },
+    "variables": {
+      "designSpeed": { "label": "Design Speed", "unit": "km/h", "hint": "30–120 km/h" },
+      "superelevation": { "label": "Superelevation (e)", "unit": "%", "hint": "Max 6–10% per JKR" },
+      "sideFriction": { "label": "Side Friction (f)", "unit": "", "hint": "0.12–0.17 (speed dependent)" },
+      "grade1": { "label": "Grade 1 (approach)", "unit": "%", "hint": "Gradient before curve" },
+      "grade2": { "label": "Grade 2 (departure)", "unit": "%", "hint": "Gradient after curve" },
+      "SSD": { "label": "Stopping Sight Distance", "unit": "m", "hint": "From SSD calculator" }
+    },
+    "result": {
+      "Rmin": { "label": "Minimum Horizontal Radius", "unit": "m" },
+      "Kcrest": { "label": "K Value (Crest)", "unit": "" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "traffic_volume": {
+    "name": "Traffic Volume (PCU) & LOS Calculator",
+    "reference": "JKR / HPU Traffic Guidelines, Highway Capacity Manual (Malaysia adapted)",
+    "formula": "Total PCU = Σ(vehicle_count × PCU_factor)",
+    "sub_formulas": {
+      "pcu_factors": "Car: 1.0 | Motorcycle: 0.33 | Bus: 1.75 | Heavy: 2.25 | Medium: 1.75",
+      "vc_ratio": "V/C = Design Volume / (Lane Capacity × No. Lanes)"
+    },
+    "variables": {
+      "cars": { "label": "Cars / Light Vehicles", "unit": "veh/hr", "hint": "Peak hour count" },
+      "motorcycles": { "label": "Motorcycles", "unit": "veh/hr", "hint": "Peak hour count" },
+      "buses": { "label": "Buses", "unit": "veh/hr", "hint": "Peak hour count" },
+      "heavyVehicles": { "label": "Heavy Vehicles (>10t)", "unit": "veh/hr", "hint": "Lorry, trailer, tanker" },
+      "mediumLorries": { "label": "Medium Lorries (3.5–10t)", "unit": "veh/hr", "hint": "Medium goods vehicles" },
+      "peakHourFactor": { "label": "Peak Hour Factor (PHF)", "unit": "", "hint": "Typical 0.85–0.95" },
+      "laneCapacity": { "label": "Lane Capacity", "unit": "PCU/hr/lane", "hint": "Urban: 1200–1800, Rural: 1500–2000" },
+      "numLanes": { "label": "Number of Lanes", "unit": "", "hint": "Per direction" }
+    },
+    "result": {
+      "totalPCU": { "label": "Total PCU", "unit": "PCU/hr" },
+      "LOS": { "label": "Level of Service", "unit": "" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "preliminary_cost": {
+    "name": "Preliminary Cost Estimate (PCE)",
+    "reference": "JKR / BQSM / CIDB Malaysia Cost Data",
+    "formula": "Cost = GFA × Adjusted Rate per m²",
+    "sub_formulas": {
+      "adjusted_rate": "Rate = Base Rate × Location Factor × Storey Factor × Inflation",
+      "total": "Total = Building Cost + 10% Contingency + 8% Professional Fees"
+    },
+    "variables": {
+      "GFA": { "label": "Gross Floor Area", "unit": "m²", "hint": "Total built-up area including all floors" },
+      "storey": { "label": "Number of Storeys", "unit": "", "hint": "Total floors above ground" },
+      "year": { "label": "Target Year", "unit": "", "hint": "For inflation adjustment (base: 2024)" }
+    },
+    "result": {
+      "estimatedCost": { "label": "Building Cost Estimate", "unit": "RM" },
+      "totalProjectCost": { "label": "Total Project Cost", "unit": "RM" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. Actual costs may vary significantly based on site conditions, market rates, and design complexity. Consult a registered Quantity Surveyor (BQSM) for detailed estimates."
+  },
+  "buildup_rates": {
+    "name": "Build-up of Rates",
+    "reference": "BQSM / JKR Standard Method of Measurement (SMM2)",
+    "formula": "All-in Rate = (Labour + Material + Plant) × (1 + OH%) × (1 + P%)",
+    "variables": {
+      "labourCost": { "label": "Labour Cost", "unit": "RM/day", "hint": "Daily wage (skilled/unskilled)" },
+      "labourProductivity": { "label": "Labour Output", "unit": "unit/day", "hint": "Productivity rate per day" },
+      "materialCost": { "label": "Material Cost", "unit": "RM/unit", "hint": "Material cost per unit quantity" },
+      "materialWastage": { "label": "Material Wastage", "unit": "%", "hint": "Typical 5–15%" },
+      "plantCost": { "label": "Plant/Equipment Cost", "unit": "RM/day", "hint": "Daily hire rate" },
+      "plantProductivity": { "label": "Plant Output", "unit": "unit/day", "hint": "Plant productivity rate" },
+      "overheadPercent": { "label": "Overhead (%)", "unit": "%", "hint": "Typical 10–15%" },
+      "profitPercent": { "label": "Profit (%)", "unit": "%", "hint": "Typical 5–10%" }
+    },
+    "result": {
+      "allInRate": { "label": "All-in Rate", "unit": "RM/unit" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only. Actual rates may vary based on market conditions, location, and project complexity. Consult BQSM/JKR for official rate references."
+  },
+  "variation_order": {
+    "name": "Variation Order (VO) Calculator",
+    "reference": "PWD Form 203A, JKR Contract Practice",
+    "formula": "Net VO = Additions − Omissions + Daywork",
+    "variables": {
+      "originalContract": { "label": "Original Contract Sum", "unit": "RM", "hint": "Accepted tender sum" },
+      "dayworkLabour": { "label": "Daywork — Labour", "unit": "RM", "hint": "Labour daywork cost" },
+      "dayworkMaterial": { "label": "Daywork — Material", "unit": "RM", "hint": "Material daywork cost" },
+      "dayworkPlant": { "label": "Daywork — Plant", "unit": "RM", "hint": "Plant daywork cost" },
+      "eot": { "label": "Extension of Time (EOT)", "unit": "days", "hint": "Days claimed due to VO" }
+    },
+    "result": {
+      "totalVOValue": { "label": "Total VO Value", "unit": "RM" },
+      "revisedContract": { "label": "Revised Contract Sum", "unit": "RM" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only. All variation orders must be issued and approved in accordance with the contract conditions (PWD Form 203A or equivalent). Seek professional QS advice."
+  },
+  "tender_evaluation": {
+    "name": "Tender Evaluation — Weighted Scoring",
+    "reference": "Malaysian Government Procurement — MOF Guidelines",
+    "formula": "Total Score = (Technical/100 × TW) + (Price Score/100 × PW)",
+    "sub_formulas": {
+      "price_score": "Price Score = (Lowest Price / Tender Price) × 100"
+    },
+    "variables": {
+      "priceWeight": { "label": "Price Weight", "unit": "%", "hint": "Typically 30–40%" },
+      "technicalWeight": { "label": "Technical Weight", "unit": "%", "hint": "Typically 60–70%" }
+    },
+    "result": {
+      "recommendedIndex": { "label": "Recommended Tenderer", "unit": "" }
+    },
+    "disclaimer": "This output is a calculation aid for tender evaluation. Official procurement must follow MOF/Treasury guidelines and approval procedures."
+  },
+  "interim_payment": {
+    "name": "Interim Payment Certificate (IPC)",
+    "reference": "PWD Form 203A, JKR Contract Conditions",
+    "formula": "Amount Due = Gross Valuation − Retention − Advance Recovery − Previous Certified",
+    "variables": {
+      "workDone": { "label": "Cumulative Work Done", "unit": "RM", "hint": "Value of completed works to date" },
+      "variations": { "label": "Variations (Approved)", "unit": "RM", "hint": "Cumulative approved VOs" },
+      "materialsOnSite": { "label": "Materials on Site", "unit": "RM", "hint": "Approved unfixed materials" },
+      "advancePayment": { "label": "Advance Payment", "unit": "RM", "hint": "Total advance issued (if any)" },
+      "retentionPercent": { "label": "Retention Rate", "unit": "%", "hint": "Typical 5% (PWD 203A)" },
+      "retentionLimit": { "label": "Retention Limit", "unit": "%", "hint": "Typical 5% of contract sum" },
+      "contractSum": { "label": "Contract Sum", "unit": "RM", "hint": "Accepted contract value" },
+      "previousCertified": { "label": "Previous Certified Amount", "unit": "RM", "hint": "Total previously paid (net)" },
+      "previousRetention": { "label": "Previous Retention Held", "unit": "RM", "hint": "Cumulative retention from prior certs" }
+    },
+    "result": {
+      "amountDue": { "label": "Amount Due This Certificate", "unit": "RM" }
+    },
+    "disclaimer": "This output is a calculation aid only. Interim certificates must be issued by the Superintending Officer (SO) in accordance with contract conditions."
+  },
+  "final_account": {
+    "name": "Final Account Summary",
+    "reference": "PWD Form 203A, JKR Final Account Practice",
+    "formula": "Final Account = Original + VO + PS Adj + PC Adj + Claims − LAD",
+    "sub_formulas": {
+      "lad": "LAD = LAD Rate × Number of Days Late"
+    },
+    "variables": {
+      "originalContract": { "label": "Original Contract Sum", "unit": "RM", "hint": "Accepted tender sum" },
+      "totalVO": { "label": "Net Variation Orders", "unit": "RM", "hint": "Total approved net VOs" },
+      "provisionalSumAllowed": { "label": "Provisional Sum (Allowed)", "unit": "RM", "hint": "PS in contract" },
+      "provisionalSumExpended": { "label": "Provisional Sum (Expended)", "unit": "RM", "hint": "Actual PS spent" },
+      "primeCostAllowed": { "label": "Prime Cost (Allowed)", "unit": "RM", "hint": "PC in contract" },
+      "primeCostExpended": { "label": "Prime Cost (Expended)", "unit": "RM", "hint": "Actual PC spent" },
+      "claimsApproved": { "label": "Approved Claims", "unit": "RM", "hint": "EOT costs, loss & expense" },
+      "ladDays": { "label": "LAD Days", "unit": "days", "hint": "Days beyond completion date" },
+      "ladRate": { "label": "LAD Rate", "unit": "RM/day", "hint": "As stated in contract" }
+    },
+    "result": {
+      "finalAccountValue": { "label": "Final Account Value", "unit": "RM" }
+    },
+    "disclaimer": "This output is a calculation aid only. Final accounts must be agreed between the parties and certified by the Superintending Officer in accordance with contract conditions."
+  },
+  "water_demand": {
+    "name": "Water Demand Calculation",
+    "reference": "SPAN (Suruhanjaya Perkhidmatan Air Negara) Guidelines",
+    "formula": "Production Demand = (Pop × Per Capita + Comm + Ind) × (1 + NRW%)",
+    "sub_formulas": {
+      "peak_day": "Peak Day = Production × Peak Day Factor",
+      "peak_hour": "Peak Hour = Production × Peak Hour Factor"
+    },
+    "variables": {
+      "population": { "label": "Design Population", "unit": "persons", "hint": "Projected population for design horizon" },
+      "perCapitaDemand": { "label": "Per Capita Demand", "unit": "L/person/day", "hint": "SPAN: 200–250 L/person/day" },
+      "nonRevenueFactor": { "label": "Non-Revenue Water (NRW)", "unit": "%", "hint": "National target <25%. Current avg ~35%" },
+      "peakDayFactor": { "label": "Peak Day Factor", "unit": "", "hint": "Typical 1.2–1.5" },
+      "peakHourFactor": { "label": "Peak Hour Factor", "unit": "", "hint": "Typical 1.5–2.5" },
+      "fireFlow": { "label": "Fire Flow Requirement", "unit": "m³/hr", "hint": "Per BOMBA/UBBL requirements" },
+      "commercialDemand": { "label": "Commercial Demand", "unit": "m³/day", "hint": "Non-domestic commercial usage" },
+      "industrialDemand": { "label": "Industrial Demand", "unit": "m³/day", "hint": "Industrial process water" }
+    },
+    "result": {
+      "productionDemand": { "label": "Average Daily Production", "unit": "m³/day" },
+      "peakHourDemand": { "label": "Peak Hour Demand", "unit": "m³/day" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only. Water supply designs must comply with SPAN UTG and be endorsed by a registered PE. Contact local water operator for final approval."
+  },
+  "eia_screening": {
+    "name": "EIA Screening Checklist",
+    "reference": "Environmental Quality (Prescribed Activities) (EIA) Order 2015, DOE Malaysia",
+    "formula": "Project parameters checked against EIA Order 2015 thresholds",
+    "variables": {
+      "siteArea": { "label": "Site/Project Area", "unit": "ha", "hint": "Total development area" },
+      "units": { "label": "Number of Units/Beds", "unit": "", "hint": "Housing units or hospital beds" },
+      "roadLength": { "label": "Road Length", "unit": "km", "hint": "For infrastructure projects" }
+    },
+    "result": {
+      "eiaType": { "label": "EIA Requirement", "unit": "" }
+    },
+    "disclaimer": "This screening is indicative only based on EIA Order 2015 thresholds. Always consult DOE (Department of Environment) and a registered EIA consultant for final determination. State-level EPU requirements may also apply."
   }
 }

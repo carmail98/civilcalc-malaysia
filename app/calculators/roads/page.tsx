@@ -13,6 +13,24 @@ const calculators = [
     href: "/calculators/roads/width-check",
     standard: "ATJ 8/86",
   },
+  {
+    name: "Sight Distance Calculator (SSD & OSD)",
+    description: "Calculate stopping and overtaking sight distances with vertical curve K values per JKR/REAM.",
+    href: "/calculators/roads/sight-distance",
+    standard: "JKR ATJ 8/86 / REAM",
+  },
+  {
+    name: "Road Gradient & Curve Design",
+    description: "Minimum horizontal radius, vertical curve K values, and gradient compliance checks.",
+    href: "/calculators/roads/gradient-curve",
+    standard: "JKR ATJ 8/86 / REAM",
+  },
+  {
+    name: "Traffic Volume (PCU) & LOS",
+    description: "Convert vehicle counts to PCU, calculate V/C ratio, and determine Level of Service.",
+    href: "/calculators/roads/traffic-volume",
+    standard: "JKR / HPU / HCM",
+  },
 ];
 
 export default function RoadsCategoryPage() {

@@ -1129,3 +1129,1068 @@ export function crackWidthEC2(
     utilisation,
   };
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   NEW CALCULATORS — 17 additional tools
+   ═══════════════════════════════════════════════════════════════════ */
+
+/**
+ * RC Slab Design — One-Way & Two-Way (EC2)
+ * One-way: ly/lx > 2 → spans one direction
+ * Two-way: ly/lx ≤ 2 → spans both directions, moment coefficients per Table 3.14/3.15 BS 8110 / EC2 approach
+ * Reference: MS EN 1992-1-1:2010, Malaysia NA
+ */
+export function rcSlabDesign(
+  lx: number,
+  ly: number,
+  h: number,
+  cover: number,
+  barDia: number,
+  fck: number,
+  fyk: number,
+  Gk: number,
+  Qk: number,
+  supportCondition: "simply_supported" | "one_long_edge" | "two_adjacent" | "two_short" | "two_long" | "three_edges" | "four_edges" | "cantilever"
+): {
+  ratio: number;
+  spanType: "one-way" | "two-way";
+  dEff: number;
+  nUls: number;
+  bsx: number;
+  bsy: number;
+  Msx: number;
+  Msy: number;
+  AsxReq: number;
+  AsyReq: number;
+  AsMin: number;
+  spanToDepthActual: number;
+  spanToDepthLimit: number;
+  deflectionOk: boolean;
+} {
+  const ratio = ly / lx;
+  const spanType = ratio > 2 ? "one-way" : "two-way";
+
+  // Effective depth (short span direction)
+  const dEff = h - cover - barDia / 2;
+
+  // ULS load per unit area
+  const nUls = 1.35 * Gk + 1.5 * Qk;
+
+  // Bending moment coefficients (simplified per BS 8110 Table 3.14)
+  // Using commonly adopted coefficients for Malaysian practice
+  const coeffTable: Record<string, [number, number]> = {
+    simply_supported: [0.086, 0.056],
+    one_long_edge: [0.078, 0.045],
+    two_adjacent: [0.060, 0.034],
+    two_short: [0.046, 0.034],
+    two_long: [0.058, 0.029],
+    three_edges: [0.042, 0.028],
+    four_edges: [0.032, 0.024],
+    cantilever: [0.125, 0.0],
+  };
+
+  const [bsx, bsy] = coeffTable[supportCondition] ?? [0.086, 0.056];
+
+  // Design moments
+  const Msx = bsx * nUls * lx * lx; // kN.m per m width (lx in m)
+  const Msy = spanType === "two-way" ? bsy * nUls * lx * lx : 0;
+
+  // Required steel (per m width = 1000mm)
+  const calcAs = (M: number): number => {
+    if (M <= 0) return 0;
+    const K = (M * 1e6) / (1000 * dEff * dEff * fck);
+    const zCalc = dEff * Math.min(0.5 + Math.sqrt(0.25 - K / 1.134), 0.95);
+    return (M * 1e6) / (0.87 * fyk * zCalc);
+  };
+
+  const AsxReq = calcAs(Msx);
+  const AsyReq = calcAs(Msy);
+
+  // Minimum reinforcement (EC2 Cl. 9.2.1.1)
+  const fctm = 0.3 * Math.pow(fck, 2 / 3);
+  const AsMin = Math.max(0.26 * (fctm / fyk) * 1000 * dEff, 0.0013 * 1000 * dEff);
+
+  // Span-to-depth check (EC2 Cl. 7.4.2)
+  const spanToDepthActual = (lx * 1000) / dEff;
+  const baseRatio = supportCondition === "cantilever" ? 8 : supportCondition === "simply_supported" ? 20 : 26;
+  const rhoReq = AsxReq / (1000 * dEff);
+  const rho0 = Math.sqrt(fck) / 1000;
+  const modFactor = rhoReq <= rho0
+    ? 1.0 + (1.5 * Math.sqrt(fck) * rho0) / rhoReq
+    : 1.0;
+  const spanToDepthLimit = baseRatio * Math.min(modFactor, 2.0);
+  const deflectionOk = spanToDepthActual <= spanToDepthLimit;
+
+  return {
+    ratio,
+    spanType,
+    dEff,
+    nUls,
+    bsx,
+    bsy,
+    Msx,
+    Msy,
+    AsxReq: Math.max(AsxReq, AsMin),
+    AsyReq: spanType === "two-way" ? Math.max(AsyReq, AsMin) : 0,
+    AsMin,
+    spanToDepthActual,
+    spanToDepthLimit,
+    deflectionOk,
+  };
+}
+
+/**
+ * RC Beam/Slab Deflection Check (EC2 Cl. 7.4.2)
+ * Span/depth ratio method per MS EN 1992-1-1
+ * Reference: MS EN 1992-1-1:2010, Clause 7.4.2, Malaysia NA
+ */
+export function deflectionCheckEC2(
+  lSpan: number,
+  dEff: number,
+  b: number,
+  AsReq: number,
+  AsProv: number,
+  fck: number,
+  fyk: number,
+  supportType: "simply_supported" | "continuous_end" | "continuous_interior" | "cantilever",
+  isFlange: boolean = false
+): {
+  rho: number;
+  rho0: number;
+  rhoPrime: number;
+  basicRatio: number;
+  K: number;
+  modFactor: number;
+  asProvFactor: number;
+  limitingRatio: number;
+  actualRatio: number;
+  pass: boolean;
+  utilisation: number;
+} {
+  // K factor per EC2 Table 7.4N
+  const kTable: Record<string, number> = {
+    simply_supported: 1.0,
+    continuous_end: 1.3,
+    continuous_interior: 1.5,
+    cantilever: 0.4,
+  };
+  const K = kTable[supportType] ?? 1.0;
+
+  // Basic l/d ratio per EC2 Table 7.4N
+  const basicTable: Record<string, number> = {
+    simply_supported: 20,
+    continuous_end: 26,
+    continuous_interior: 26,
+    cantilever: 8,
+  };
+  const basicRatio = basicTable[supportType] ?? 20;
+
+  // Reference reinforcement ratio
+  const rho0 = Math.sqrt(fck) / 1000;
+
+  // Reinforcement ratios
+  const rho = AsReq / (b * dEff);
+  const rhoPrime = 0; // assume no compression reinforcement for simplification
+
+  // Modification factor for reinforcement ratio (EC2 Eq. 7.16a/b)
+  let modFactor: number;
+  if (rho <= rho0) {
+    modFactor = K * (11 + 1.5 * Math.sqrt(fck) * rho0 / rho + 3.2 * Math.sqrt(fck) * Math.pow(rho0 / rho - 1, 1.5));
+  } else {
+    modFactor = K * (11 + 1.5 * Math.sqrt(fck) * rho0 / (rho - rhoPrime) + (1 / 12) * Math.sqrt(fck) * Math.sqrt(rhoPrime / rho0));
+  }
+
+  // As,prov / As,req factor (EC2 Cl. 7.4.2(2))
+  const asProvFactor = Math.min(AsProv / AsReq, 1.5);
+
+  // Flange factor
+  const flangeFactor = isFlange ? 0.8 : 1.0;
+
+  // Limiting l/d ratio
+  const limitingRatio = modFactor * asProvFactor * flangeFactor;
+
+  // Actual l/d ratio
+  const actualRatio = lSpan / dEff;
+
+  const utilisation = actualRatio / limitingRatio;
+  const pass = actualRatio <= limitingRatio;
+
+  return {
+    rho,
+    rho0,
+    rhoPrime,
+    basicRatio,
+    K,
+    modFactor,
+    asProvFactor,
+    limitingRatio,
+    actualRatio,
+    pass,
+    utilisation,
+  };
+}
+
+/**
+ * Bearing Capacity — Terzaghi & Meyerhof
+ * Terzaghi: qu = c·Nc + q·Nq + 0.5·γ·B·Nγ
+ * Meyerhof: qu = c·Nc·sc·dc·ic + q·Nq·sq·dq·iq + 0.5·γ·B·Nγ·sγ·dγ·iγ
+ * Reference: MS EN 1997-1 (Eurocode 7), Malaysian Geotechnical Practice
+ */
+export function bearingCapacity(
+  method: "terzaghi" | "meyerhof",
+  phi: number,
+  c: number,
+  gamma: number,
+  Df: number,
+  B: number,
+  L: number,
+  FOS: number
+): {
+  Nc: number;
+  Nq: number;
+  Ngamma: number;
+  qu: number;
+  qAllowable: number;
+  qNet: number;
+  surcharge: number;
+} {
+  const phiRad = (phi * Math.PI) / 180;
+
+  let Nc: number, Nq: number, Ngamma: number;
+
+  if (method === "terzaghi") {
+    // Terzaghi's bearing capacity factors
+    Nq = Math.exp(Math.PI * Math.tan(phiRad)) * Math.pow(Math.tan(Math.PI / 4 + phiRad / 2), 2);
+    Nc = phi > 0 ? (Nq - 1) / Math.tan(phiRad) : 5.14;
+    Ngamma = 2 * (Nq + 1) * Math.tan(phiRad);
+  } else {
+    // Meyerhof's bearing capacity factors
+    Nq = Math.exp(Math.PI * Math.tan(phiRad)) * Math.pow(Math.tan(Math.PI / 4 + phiRad / 2), 2);
+    Nc = phi > 0 ? (Nq - 1) / Math.tan(phiRad) : 5.14;
+    Ngamma = 2 * (Nq + 1) * Math.tan(phiRad);
+  }
+
+  // Surcharge
+  const surcharge = gamma * Df;
+
+  // Shape factors (Meyerhof)
+  let sc = 1, sq = 1, sgamma = 1;
+  if (method === "meyerhof" && L > 0) {
+    sc = 1 + 0.2 * (B / L);
+    sq = 1 + 0.1 * (B / L) * Math.tan(Math.PI / 4 + phiRad / 2);
+    sgamma = sq;
+  }
+
+  // Depth factors (Meyerhof)
+  let dc = 1, dq = 1, dgamma = 1;
+  if (method === "meyerhof") {
+    dc = 1 + 0.2 * (Df / B);
+    dq = 1 + 0.1 * (Df / B) * Math.tan(Math.PI / 4 + phiRad / 2);
+    dgamma = dq;
+  }
+
+  // Ultimate bearing capacity
+  let qu: number;
+  if (method === "terzaghi") {
+    qu = c * Nc + surcharge * Nq + 0.5 * gamma * B * Ngamma;
+  } else {
+    qu = c * Nc * sc * dc + surcharge * Nq * sq * dq + 0.5 * gamma * B * Ngamma * sgamma * dgamma;
+  }
+
+  const qAllowable = qu / FOS;
+  const qNet = qAllowable - surcharge;
+
+  return { Nc, Nq, Ngamma, qu, qAllowable, qNet, surcharge };
+}
+
+/**
+ * Settlement Calculation — 1D Consolidation (Terzaghi)
+ * Sc = (Cc × H) / (1 + e0) × log10((σ0' + Δσ) / σ0')
+ * Reference: MS EN 1997-1, Malaysian Geotechnical Practice
+ */
+export function settlementCalc(
+  Cc: number,
+  Cs: number,
+  e0: number,
+  H: number,
+  sigma0: number,
+  deltaSigma: number,
+  sigmaP: number,
+  Cv: number,
+  drainagePath: number
+): {
+  OCR: number;
+  soilState: string;
+  Sc: number;
+  t50: number;
+  t90: number;
+} {
+  const OCR = sigmaP / sigma0;
+  const soilState = OCR > 1.05 ? "Over-consolidated" : OCR < 0.95 ? "Under-consolidated" : "Normally consolidated";
+
+  const sigmaFinal = sigma0 + deltaSigma;
+  let Sc: number;
+
+  if (sigmaFinal <= sigmaP) {
+    // Entirely on recompression line
+    Sc = (Cs * H * 1000) / (1 + e0) * Math.log10(sigmaFinal / sigma0);
+  } else if (sigma0 >= sigmaP) {
+    // Entirely on virgin compression line (NC soil)
+    Sc = (Cc * H * 1000) / (1 + e0) * Math.log10(sigmaFinal / sigma0);
+  } else {
+    // OC then NC
+    Sc =
+      (Cs * H * 1000) / (1 + e0) * Math.log10(sigmaP / sigma0) +
+      (Cc * H * 1000) / (1 + e0) * Math.log10(sigmaFinal / sigmaP);
+  }
+
+  // Time for consolidation (Tv = Cv × t / Hdr²)
+  // Tv for 50% = 0.197, for 90% = 0.848
+  const Hdr = drainagePath; // metres
+  const t50 = (0.197 * Hdr * Hdr) / Cv; // years (if Cv in m²/year)
+  const t90 = (0.848 * Hdr * Hdr) / Cv;
+
+  return { OCR, soilState, Sc, t50, t90 };
+}
+
+/**
+ * Slope Stability — Infinite Slope Method
+ * FOS = (c' + γ·z·cos²β·tanφ') / (γ·z·sinβ·cosβ)
+ * With water: FOS = (c' + (γ-γw)·z·cos²β·tanφ') / (γ·z·sinβ·cosβ)
+ * Reference: MS EN 1997-1, JKR Slope Stability Guidelines
+ */
+export function slopeStability(
+  c: number,
+  phi: number,
+  gamma: number,
+  z: number,
+  beta: number,
+  waterTable: boolean,
+  gammaW: number = 9.81
+): {
+  FOS: number;
+  drivingForce: number;
+  resistingForce: number;
+  status: string;
+} {
+  const betaRad = (beta * Math.PI) / 180;
+  const phiRad = (phi * Math.PI) / 180;
+
+  const drivingForce = gamma * z * Math.sin(betaRad) * Math.cos(betaRad);
+
+  const effectiveGamma = waterTable ? gamma - gammaW : gamma;
+  const resistingForce = c + effectiveGamma * z * Math.cos(betaRad) * Math.cos(betaRad) * Math.tan(phiRad);
+
+  const FOS = drivingForce > 0 ? resistingForce / drivingForce : 999;
+
+  let status: string;
+  if (FOS >= 1.5) status = "SAFE — FOS ≥ 1.5 (JKR permanent slope requirement)";
+  else if (FOS >= 1.3) status = "MARGINAL — FOS 1.3–1.5 (temporary works acceptable)";
+  else if (FOS >= 1.0) status = "UNSTABLE — FOS 1.0–1.3 (remedial measures needed)";
+  else status = "FAILURE — FOS < 1.0 (slope will fail)";
+
+  return { FOS, drivingForce, resistingForce, status };
+}
+
+/**
+ * Pile Capacity — Friction + End-Bearing
+ * Qult = Qb + Qs = Ab·Nb·c + Σ(αi·cui·Asi) [cohesive]
+ * Qult = Qb + Qs = Ab·Nq·σv' + Σ(Ki·σvi'·tanδ·Asi) [granular]
+ * Reference: MS EN 1997-1, Malaysian PWD/JKR Piling Practice
+ */
+export function pileCapacity(
+  pileType: "bored" | "driven",
+  soilType: "cohesive" | "granular",
+  pileDia: number,
+  pileLength: number,
+  cu: number,
+  phi: number,
+  gamma: number,
+  FOS: number,
+  numLayers: number,
+  layerThickness: number[]
+): {
+  Ab: number;
+  Qb: number;
+  Qs: number;
+  Qult: number;
+  Qallowable: number;
+  endBearingStress: number;
+  avgShaftFriction: number;
+} {
+  const Ab = (Math.PI * pileDia * pileDia) / 4;
+  const perimeter = Math.PI * pileDia;
+
+  let Qb: number;
+  let Qs = 0;
+
+  if (soilType === "cohesive") {
+    // End bearing: Nc × cu × Ab (Nc = 9 for deep pile)
+    const Nc = 9;
+    Qb = Nc * cu * Ab;
+
+    // Shaft friction: α × cu × As
+    const alpha = pileType === "driven" ? 1.0 : 0.45; // typical α values
+    for (let i = 0; i < numLayers && i < layerThickness.length; i++) {
+      const Li = layerThickness[i];
+      Qs += alpha * cu * perimeter * Li;
+    }
+    // If remaining length
+    const totalLayerLen = layerThickness.slice(0, numLayers).reduce((a, b) => a + b, 0);
+    if (totalLayerLen < pileLength) {
+      Qs += alpha * cu * perimeter * (pileLength - totalLayerLen);
+    }
+  } else {
+    // Granular soil
+    const phiRad = (phi * Math.PI) / 180;
+    const Nq = Math.exp(Math.PI * Math.tan(phiRad)) * Math.pow(Math.tan(Math.PI / 4 + phiRad / 2), 2);
+    const sigmaVBase = gamma * pileLength;
+    const critDepth = 20 * pileDia; // critical depth
+    const effectiveSigma = Math.min(sigmaVBase, gamma * critDepth);
+    Qb = Nq * effectiveSigma * Ab;
+
+    // Shaft friction: K × σv' × tan δ × As
+    const K = pileType === "driven" ? 1.0 : 0.7;
+    const delta = phi * 0.67; // interface friction angle
+    const deltaRad = (delta * Math.PI) / 180;
+    let depthSoFar = 0;
+    for (let i = 0; i < numLayers && i < layerThickness.length; i++) {
+      const Li = layerThickness[i];
+      const midDepth = depthSoFar + Li / 2;
+      const sigmaV = Math.min(gamma * midDepth, gamma * critDepth);
+      Qs += K * sigmaV * Math.tan(deltaRad) * perimeter * Li;
+      depthSoFar += Li;
+    }
+    if (depthSoFar < pileLength) {
+      const remaining = pileLength - depthSoFar;
+      const midDepth = depthSoFar + remaining / 2;
+      const sigmaV = Math.min(gamma * midDepth, gamma * critDepth);
+      Qs += K * sigmaV * Math.tan(deltaRad) * perimeter * remaining;
+    }
+  }
+
+  const Qult = Qb + Qs;
+  const Qallowable = Qult / FOS;
+  const endBearingStress = Qb / Ab;
+  const avgShaftFriction = Qs / (perimeter * pileLength);
+
+  return { Ab, Qb, Qs, Qult, Qallowable, endBearingStress, avgShaftFriction };
+}
+
+/**
+ * Sight Distance Calculator — SSD & OSD
+ * SSD = 0.278·V·t + V²/(254·(f±g))
+ * OSD per JKR / REAM standards
+ * Reference: JKR Arahan Teknik Jalan 8/86, REAM Guidelines
+ */
+export function sightDistance(
+  designSpeed: number,
+  reactionTime: number,
+  friction: number,
+  gradient: number,
+  objectHeight: number,
+  eyeHeight: number
+): {
+  SSD: number;
+  brakingDistance: number;
+  reactionDistance: number;
+  OSD: number;
+  verticalCurveK: number;
+} {
+  // Reaction distance (m)
+  const reactionDistance = 0.278 * designSpeed * reactionTime;
+
+  // Braking distance (m) — f adjusted for gradient
+  const effectiveF = friction + gradient / 100;
+  const brakingDistance = (designSpeed * designSpeed) / (254 * effectiveF);
+
+  // SSD
+  const SSD = reactionDistance + brakingDistance;
+
+  // OSD (simplified: JKR uses approximately 2× SSD for single carriageway)
+  const OSD = 4.5 * designSpeed; // empirical from REAM Table
+
+  // K value for vertical curve design
+  const heightDiff = Math.sqrt(eyeHeight / 1000) + Math.sqrt(objectHeight / 1000);
+  const verticalCurveK = (SSD * SSD) / (200 * heightDiff * heightDiff);
+
+  return { SSD, brakingDistance, reactionDistance, OSD, verticalCurveK };
+}
+
+/**
+ * Road Gradient & Curve Design
+ * Horizontal: R_min = V² / (127 × (e + f))
+ * Vertical: K = L/A (crest & sag)
+ * Reference: JKR ATJ 8/86, REAM Road Geometric Design Guide
+ */
+export function roadGradientCurve(
+  designSpeed: number,
+  superelevation: number,
+  sideFriction: number,
+  grade1: number,
+  grade2: number,
+  SSD: number
+): {
+  Rmin: number;
+  A: number;
+  curveType: string;
+  Kcrest: number;
+  Ksag: number;
+  Lcrest: number;
+  Lsag: number;
+  maxGradient: number;
+  gradientOk: boolean;
+} {
+  // Minimum horizontal radius (m)
+  const Rmin = (designSpeed * designSpeed) / (127 * (superelevation / 100 + sideFriction));
+
+  // Algebraic difference in grade
+  const A = Math.abs(grade1 - grade2);
+
+  // Curve type
+  const curveType = grade2 < grade1 ? "Crest" : "Sag";
+
+  // K values (SSD-based)
+  // Crest: K = S²/(200×(√h1 + √h2)²) where h1=1.05m (eye), h2=0.15m (object)
+  const Kcrest = (SSD * SSD) / (200 * Math.pow(Math.sqrt(1.05) + Math.sqrt(0.15), 2));
+  // Sag: K = S²/(200×(H + S×tanα)) where H=0.6m (headlight), α=1°
+  const Ksag = (SSD * SSD) / (200 * (0.6 + SSD * Math.tan(Math.PI / 180)));
+
+  // Minimum curve length
+  const Lcrest = Kcrest * A;
+  const Lsag = Ksag * A;
+
+  // Maximum gradient check per JKR/REAM (speed-dependent)
+  let maxGradient: number;
+  if (designSpeed >= 110) maxGradient = 3;
+  else if (designSpeed >= 80) maxGradient = 4;
+  else if (designSpeed >= 60) maxGradient = 6;
+  else if (designSpeed >= 40) maxGradient = 8;
+  else maxGradient = 10;
+
+  const maxAbsGrade = Math.max(Math.abs(grade1), Math.abs(grade2));
+  const gradientOk = maxAbsGrade <= maxGradient;
+
+  return { Rmin, A, curveType, Kcrest, Ksag, Lcrest, Lsag, maxGradient, gradientOk };
+}
+
+/**
+ * Traffic Volume — PCU Calculator
+ * PCU = Σ(vehicle_count × PCU_factor)
+ * LOS from V/C ratio per HCM / Malaysian practice
+ * Reference: JKR / HPU, Highway Capacity Manual (adapted for Malaysia)
+ */
+export function trafficVolumePCU(
+  cars: number,
+  motorcycles: number,
+  buses: number,
+  heavyVehicles: number,
+  mediumLorries: number,
+  peakHourFactor: number,
+  laneCapacity: number,
+  numLanes: number
+): {
+  pcuCars: number;
+  pcuMotorcycles: number;
+  pcuBuses: number;
+  pcuHeavy: number;
+  pcuMedium: number;
+  totalPCU: number;
+  totalVehicles: number;
+  designVolume: number;
+  capacity: number;
+  vcRatio: number;
+  LOS: string;
+  losDescription: string;
+} {
+  // Malaysian PCU factors (JKR / HPU standard)
+  const pcuCars = cars * 1.0;
+  const pcuMotorcycles = motorcycles * 0.33;
+  const pcuBuses = buses * 1.75;
+  const pcuHeavy = heavyVehicles * 2.25;
+  const pcuMedium = mediumLorries * 1.75;
+
+  const totalPCU = pcuCars + pcuMotorcycles + pcuBuses + pcuHeavy + pcuMedium;
+  const totalVehicles = cars + motorcycles + buses + heavyVehicles + mediumLorries;
+
+  // Design volume (PCU/hr)
+  const designVolume = totalPCU / peakHourFactor;
+
+  // Capacity
+  const capacity = laneCapacity * numLanes;
+
+  // V/C ratio
+  const vcRatio = designVolume / capacity;
+
+  // Level of Service
+  let LOS: string;
+  let losDescription: string;
+  if (vcRatio <= 0.35) { LOS = "A"; losDescription = "Free flow, minimal delay"; }
+  else if (vcRatio <= 0.54) { LOS = "B"; losDescription = "Reasonably free flow"; }
+  else if (vcRatio <= 0.77) { LOS = "C"; losDescription = "Stable flow, acceptable delay"; }
+  else if (vcRatio <= 0.93) { LOS = "D"; losDescription = "Approaching unstable flow"; }
+  else if (vcRatio <= 1.0) { LOS = "E"; losDescription = "Unstable flow, at capacity"; }
+  else { LOS = "F"; losDescription = "Forced/breakdown flow, over capacity"; }
+
+  return {
+    pcuCars, pcuMotorcycles, pcuBuses, pcuHeavy, pcuMedium,
+    totalPCU, totalVehicles, designVolume, capacity, vcRatio, LOS, losDescription,
+  };
+}
+
+/**
+ * Preliminary Cost Estimate (PCE)
+ * Cost = GFA × rate per m²
+ * Reference: JKR / BQSM / CIDB Cost Data
+ */
+export function preliminaryCostEstimate(
+  GFA: number,
+  buildingType: "residential" | "commercial" | "industrial" | "institutional" | "infrastructure",
+  storey: number,
+  location: "urban" | "suburban" | "rural",
+  year: number
+): {
+  baseRate: number;
+  locationFactor: number;
+  storeyFactor: number;
+  inflationFactor: number;
+  adjustedRate: number;
+  estimatedCost: number;
+  contingency: number;
+  professionalFees: number;
+  totalProjectCost: number;
+} {
+  // Base rates (RM/m²) — typical Malaysian rates 2024
+  const rateTable: Record<string, number> = {
+    residential: 1800,
+    commercial: 2200,
+    industrial: 1400,
+    institutional: 2000,
+    infrastructure: 2500,
+  };
+  const baseRate = rateTable[buildingType] ?? 2000;
+
+  // Location factor
+  const locFactor: Record<string, number> = { urban: 1.15, suburban: 1.0, rural: 0.90 };
+  const locationFactor = locFactor[location] ?? 1.0;
+
+  // Storey adjustment (high-rise premium)
+  const storeyFactor = storey <= 4 ? 1.0 : storey <= 10 ? 1.10 : storey <= 20 ? 1.20 : 1.35;
+
+  // Inflation adjustment (3% p.a. from base year 2024)
+  const inflationFactor = Math.pow(1.03, year - 2024);
+
+  // Adjusted rate
+  const adjustedRate = baseRate * locationFactor * storeyFactor * inflationFactor;
+
+  // Estimated building cost
+  const estimatedCost = GFA * adjustedRate;
+
+  // Contingency (10%)
+  const contingency = estimatedCost * 0.10;
+
+  // Professional fees (8%)
+  const professionalFees = estimatedCost * 0.08;
+
+  // Total project cost
+  const totalProjectCost = estimatedCost + contingency + professionalFees;
+
+  return {
+    baseRate, locationFactor, storeyFactor, inflationFactor, adjustedRate,
+    estimatedCost, contingency, professionalFees, totalProjectCost,
+  };
+}
+
+/**
+ * Build-up of Rates
+ * Rate = (Labour + Material + Plant) × (1 + OH&P%)
+ * Reference: BQSM / JKR Standard Method of Measurement (SMM2)
+ */
+export function buildUpRates(
+  labourCost: number,
+  labourProductivity: number,
+  materialCost: number,
+  materialWastage: number,
+  plantCost: number,
+  plantProductivity: number,
+  overheadPercent: number,
+  profitPercent: number
+): {
+  labourRate: number;
+  materialRate: number;
+  plantRate: number;
+  netRate: number;
+  overhead: number;
+  profit: number;
+  allInRate: number;
+} {
+  // Labour rate per unit
+  const labourRate = labourCost / labourProductivity;
+
+  // Material rate (with wastage)
+  const materialRate = materialCost * (1 + materialWastage / 100);
+
+  // Plant rate per unit
+  const plantRate = plantCost / plantProductivity;
+
+  // Net rate
+  const netRate = labourRate + materialRate + plantRate;
+
+  // Overheads
+  const overhead = netRate * (overheadPercent / 100);
+
+  // Profit
+  const profit = (netRate + overhead) * (profitPercent / 100);
+
+  // All-in rate
+  const allInRate = netRate + overhead + profit;
+
+  return { labourRate, materialRate, plantRate, netRate, overhead, profit, allInRate };
+}
+
+/**
+ * Variation Order (VO) Calculator
+ * Net VO = Additions − Omissions
+ * Reference: PWD Form 203A / JKR Contract Practice
+ */
+export function variationOrder(
+  originalContract: number,
+  additions: number[],
+  omissions: number[],
+  dayworkLabour: number,
+  dayworkMaterial: number,
+  dayworkPlant: number,
+  eot: number
+): {
+  totalAdditions: number;
+  totalOmissions: number;
+  netVO: number;
+  dayworkTotal: number;
+  totalVOValue: number;
+  revisedContract: number;
+  voPercent: number;
+  withinLimit: boolean;
+} {
+  const totalAdditions = additions.reduce((a, b) => a + b, 0);
+  const totalOmissions = omissions.reduce((a, b) => a + b, 0);
+  const netVO = totalAdditions - totalOmissions;
+  const dayworkTotal = dayworkLabour + dayworkMaterial + dayworkPlant;
+  const totalVOValue = netVO + dayworkTotal;
+  const revisedContract = originalContract + totalVOValue;
+  const voPercent = (Math.abs(totalVOValue) / originalContract) * 100;
+  // JKR guideline: VO should not exceed 30% of original contract
+  const withinLimit = voPercent <= 30;
+
+  return {
+    totalAdditions, totalOmissions, netVO, dayworkTotal,
+    totalVOValue, revisedContract, voPercent, withinLimit,
+  };
+}
+
+/**
+ * Tender Evaluation — Weighted Scoring Method
+ * Score = Σ(weight × mark) for each criterion
+ * Reference: Malaysian Government Procurement — MOF Guidelines
+ */
+export function tenderEvaluation(
+  tenderPrices: number[],
+  technicalScores: number[],
+  priceWeight: number,
+  technicalWeight: number
+): {
+  results: {
+    tenderer: number;
+    price: number;
+    technicalScore: number;
+    priceScore: number;
+    weightedTechnical: number;
+    weightedPrice: number;
+    totalScore: number;
+  }[];
+  recommendedIndex: number;
+  lowestPrice: number;
+} {
+  const lowestPrice = Math.min(...tenderPrices);
+
+  const results = tenderPrices.map((price, i) => {
+    // Price score: lowest price gets 100, others proportional
+    const priceScore = (lowestPrice / price) * 100;
+    const weightedTechnical = (technicalScores[i] / 100) * technicalWeight;
+    const weightedPrice = (priceScore / 100) * priceWeight;
+    const totalScore = weightedTechnical + weightedPrice;
+
+    return {
+      tenderer: i + 1,
+      price,
+      technicalScore: technicalScores[i],
+      priceScore,
+      weightedTechnical,
+      weightedPrice,
+      totalScore,
+    };
+  });
+
+  // Sort by total score descending
+  const sorted = [...results].sort((a, b) => b.totalScore - a.totalScore);
+  const recommendedIndex = sorted[0].tenderer;
+
+  return { results, recommendedIndex, lowestPrice };
+}
+
+/**
+ * Interim Payment Certificate (IPC) Calculator
+ * Amount Due = Work Done + Variations + Materials on Site − Retention − Previous Payments
+ * Reference: PWD Form 203A, JKR Contract Conditions
+ */
+export function interimPaymentCert(
+  workDone: number,
+  variations: number,
+  materialsOnSite: number,
+  advancePayment: number,
+  retentionPercent: number,
+  retentionLimit: number,
+  contractSum: number,
+  previousCertified: number,
+  previousRetention: number
+): {
+  grossValuation: number;
+  retention: number;
+  cumulativeRetention: number;
+  retentionCapped: boolean;
+  advanceRecovery: number;
+  netValuation: number;
+  amountDue: number;
+  percentComplete: number;
+} {
+  const grossValuation = workDone + variations + materialsOnSite;
+
+  // Retention calculation
+  const maxRetention = contractSum * (retentionLimit / 100);
+  const retentionThisCert = grossValuation * (retentionPercent / 100);
+  const cumulativeRetention = Math.min(previousRetention + retentionThisCert, maxRetention);
+  const retention = cumulativeRetention - previousRetention;
+  const retentionCapped = (previousRetention + retentionThisCert) > maxRetention;
+
+  // Advance payment recovery (proportional to work done)
+  const advanceRecovery = advancePayment > 0 ? advancePayment * (workDone / contractSum) : 0;
+
+  // Net valuation
+  const netValuation = grossValuation - cumulativeRetention - advanceRecovery;
+
+  // Amount due this certificate
+  const amountDue = netValuation - (previousCertified - previousRetention);
+
+  // Percent complete
+  const percentComplete = (workDone / contractSum) * 100;
+
+  return {
+    grossValuation, retention, cumulativeRetention, retentionCapped,
+    advanceRecovery, netValuation, amountDue, percentComplete,
+  };
+}
+
+/**
+ * Final Account Summary
+ * Final Account = Original Contract + Net VO ± Claims − LAD
+ * Reference: PWD Form 203A, JKR Final Account Practice
+ */
+export function finalAccountSummary(
+  originalContract: number,
+  totalVO: number,
+  provisionalSumExpended: number,
+  provisionalSumAllowed: number,
+  primeCostExpended: number,
+  primeCostAllowed: number,
+  claimsApproved: number,
+  ladDays: number,
+  ladRate: number
+): {
+  adjustedContractSum: number;
+  psAdjustment: number;
+  pcAdjustment: number;
+  totalLAD: number;
+  finalAccountValue: number;
+  netDifference: number;
+  percentVariation: number;
+} {
+  // Provisional sum adjustment
+  const psAdjustment = provisionalSumExpended - provisionalSumAllowed;
+
+  // Prime cost adjustment
+  const pcAdjustment = primeCostExpended - primeCostAllowed;
+
+  // LAD (Liquidated Ascertained Damages)
+  const totalLAD = ladDays * ladRate;
+
+  // Adjusted contract sum
+  const adjustedContractSum = originalContract + totalVO + psAdjustment + pcAdjustment;
+
+  // Final account value
+  const finalAccountValue = adjustedContractSum + claimsApproved - totalLAD;
+
+  // Net difference from original
+  const netDifference = finalAccountValue - originalContract;
+  const percentVariation = (netDifference / originalContract) * 100;
+
+  return {
+    adjustedContractSum, psAdjustment, pcAdjustment, totalLAD,
+    finalAccountValue, netDifference, percentVariation,
+  };
+}
+
+/**
+ * Water Demand Calculation
+ * Demand = Population × Per Capita Rate × Factors
+ * Reference: SPAN Guidelines, Suruhanjaya Perkhidmatan Air Negara
+ */
+export function waterDemandCalc(
+  population: number,
+  perCapitaDemand: number,
+  nonRevenueFactor: number,
+  peakDayFactor: number,
+  peakHourFactor: number,
+  fireFlow: number,
+  commercialDemand: number,
+  industrialDemand: number
+): {
+  avgDailyDemand: number;
+  domesticDemand: number;
+  totalAvgDaily: number;
+  nrwAllowance: number;
+  productionDemand: number;
+  peakDayDemand: number;
+  peakHourDemand: number;
+  withFireFlow: number;
+  storageTankSize: number;
+} {
+  // Domestic demand (L/day → m³/day)
+  const domesticDemand = (population * perCapitaDemand) / 1000;
+
+  // Total average daily demand
+  const totalAvgDaily = domesticDemand + commercialDemand + industrialDemand;
+
+  // NRW allowance
+  const nrwAllowance = totalAvgDaily * (nonRevenueFactor / 100);
+  const productionDemand = totalAvgDaily + nrwAllowance;
+
+  // Peak demands
+  const peakDayDemand = productionDemand * peakDayFactor;
+  const peakHourDemand = productionDemand * peakHourFactor;
+
+  // With fire flow (m³/hr added)
+  const withFireFlow = peakHourDemand + fireFlow;
+
+  // Average daily demand (m³/day)
+  const avgDailyDemand = productionDemand;
+
+  // Storage tank (SPAN: typically 1 day average demand)
+  const storageTankSize = productionDemand;
+
+  return {
+    avgDailyDemand, domesticDemand, totalAvgDaily, nrwAllowance,
+    productionDemand, peakDayDemand, peakHourDemand, withFireFlow, storageTankSize,
+  };
+}
+
+/**
+ * EIA Screening Checklist — DOE Project Threshold
+ * Checks project type against EIA Order 2015 thresholds
+ * Reference: Environmental Quality (Prescribed Activities) (EIA) Order 2015, DOE Malaysia
+ */
+export interface EIAResult {
+  category: string;
+  requiresEIA: boolean;
+  eiaType: string;
+  threshold: string;
+  remarks: string;
+}
+
+export function eiaScreening(
+  projectType: string,
+  siteArea: number,
+  units: number,
+  roadLength: number
+): EIAResult {
+  // Screening based on EIA Order 2015 thresholds
+  const screeningRules: Record<string, { threshold: string; checkFn: () => boolean; eiaType: string; remarks: string }> = {
+    housing: {
+      threshold: "≥ 50 ha or ≥ 500 units (Preliminary EIA); ≥ 500 ha or ≥ 5000 units (Detailed EIA)",
+      checkFn: () => siteArea >= 50 || units >= 500,
+      eiaType: siteArea >= 500 || units >= 5000 ? "Detailed EIA (DEIA)" : siteArea >= 50 || units >= 500 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Housing development per First/Second Schedule, EIA Order 2015",
+    },
+    resort_commercial: {
+      threshold: "≥ 50 ha (PEIA); ≥ 500 ha (DEIA)",
+      checkFn: () => siteArea >= 50,
+      eiaType: siteArea >= 500 ? "Detailed EIA (DEIA)" : siteArea >= 50 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Resort/commercial development",
+    },
+    industrial: {
+      threshold: "≥ 20 ha (heavy); ≥ 50 ha (light/medium)",
+      checkFn: () => siteArea >= 20,
+      eiaType: siteArea >= 20 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Industrial estate/zone development",
+    },
+    infrastructure_road: {
+      threshold: "New road ≥ 15km or upgrading to 4+ lanes > 25km",
+      checkFn: () => roadLength >= 15,
+      eiaType: roadLength >= 15 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Road infrastructure per EIA Order Schedule",
+    },
+    quarry_mining: {
+      threshold: "All quarry/mining activities ≥ 2 ha",
+      checkFn: () => siteArea >= 2,
+      eiaType: siteArea >= 2 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Quarry, sand mining, rock blasting operations",
+    },
+    land_reclamation: {
+      threshold: "≥ 20 ha (PEIA); ≥ 50 ha (DEIA)",
+      checkFn: () => siteArea >= 20,
+      eiaType: siteArea >= 50 ? "Detailed EIA (DEIA)" : siteArea >= 20 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Coastal/riverine land reclamation",
+    },
+    dam: {
+      threshold: "All dams (irrigation/hydroelectric)",
+      checkFn: () => true,
+      eiaType: "Detailed EIA (DEIA)",
+      remarks: "Dam construction for irrigation, water supply, or hydroelectric",
+    },
+    waste_management: {
+      threshold: "All landfill, incineration, or toxic waste facilities",
+      checkFn: () => true,
+      eiaType: "Detailed EIA (DEIA)",
+      remarks: "Solid waste, hazardous waste, scheduled waste facilities",
+    },
+    agriculture: {
+      threshold: "≥ 500 ha (permanent crops); ≥ 50 ha (hillside/swamp)",
+      checkFn: () => siteArea >= 50,
+      eiaType: siteArea >= 500 ? "Preliminary EIA (PEIA)" : siteArea >= 50 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Agricultural land development",
+    },
+    hospital: {
+      threshold: "≥ 100 beds",
+      checkFn: () => units >= 100,
+      eiaType: units >= 100 ? "Preliminary EIA (PEIA)" : "Not required",
+      remarks: "Hospital or medical institution development",
+    },
+  };
+
+  const rule = screeningRules[projectType];
+  if (!rule) {
+    return {
+      category: projectType,
+      requiresEIA: false,
+      eiaType: "Unknown project type",
+      threshold: "Select a valid project type",
+      remarks: "Project type not found in EIA Order 2015 categories",
+    };
+  }
+
+  return {
+    category: projectType,
+    requiresEIA: rule.checkFn(),
+    eiaType: rule.eiaType,
+    threshold: rule.threshold,
+    remarks: rule.remarks,
+  };
+}
