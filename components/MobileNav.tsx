@@ -18,6 +18,7 @@ export default function MobileNav() {
   return (
     <div className="md:hidden">
       <button
+        type="button"
         onClick={() => setOpen(!open)}
         className="p-2 text-stone-600 hover:text-amber-700 transition-colors"
         aria-label={open ? "Close menu" : "Open menu"}
@@ -35,67 +36,69 @@ export default function MobileNav() {
 
       {open && (
         <>
-        {/* Backdrop overlay */}
-        <div
-          className="fixed inset-0 top-0 z-40 bg-black/20"
-          onClick={() => setOpen(false)}
-        />
-        <div className="absolute left-0 right-0 top-full z-50 border-b border-stone-200 bg-white shadow-lg">
-          <nav className="mx-auto max-w-5xl px-4 py-3 flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
-              >
-                {link.label}
-              </a>
-            ))}
+          {/* Full-screen backdrop */}
+          <div
+            className="fixed inset-0 z-40 bg-black/30"
+            onClick={() => setOpen(false)}
+          />
 
-            {/* Auth links */}
-            <div className="border-t border-stone-100 mt-1 pt-1">
-              {session ? (
-                <>
-                  <a
-                    href="/profile"
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
-                  >
-                    My Profile
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setOpen(false);
-                      signOut({ callbackUrl: "/" });
-                    }}
-                    className="block w-full text-left rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
-                  >
-                    Sign Out
-                  </button>
-                </>
-              ) : (
-                <>
-                  <a
-                    href="/login"
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-50 transition-colors"
-                  >
-                    Sign In
-                  </a>
-                  <a
-                    href="/register"
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
-                  >
-                    Create Account
-                  </a>
-                </>
-              )}
-            </div>
-          </nav>
-        </div>
+          {/* Menu panel — fixed below header */}
+          <div className="fixed left-0 right-0 top-[65px] z-50 border-b border-stone-200 bg-white shadow-lg max-h-[calc(100vh-65px)] overflow-y-auto">
+            <nav className="px-4 py-3 flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+
+              {/* Auth links */}
+              <div className="border-t border-stone-100 mt-1 pt-1">
+                {session ? (
+                  <>
+                    <a
+                      href="/profile"
+                      onClick={() => setOpen(false)}
+                      className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                    >
+                      My Profile
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setOpen(false);
+                        signOut({ callbackUrl: "/" });
+                      }}
+                      className="block w-full text-left rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <a
+                      href="/login"
+                      onClick={() => setOpen(false)}
+                      className="block rounded-lg px-3 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-50 transition-colors"
+                    >
+                      Sign In
+                    </a>
+                    <a
+                      href="/register"
+                      onClick={() => setOpen(false)}
+                      className="block rounded-lg px-3 py-2.5 text-sm font-medium text-stone-700 hover:bg-amber-50 hover:text-amber-700 transition-colors"
+                    >
+                      Create Account
+                    </a>
+                  </>
+                )}
+              </div>
+            </nav>
+          </div>
         </>
       )}
     </div>
