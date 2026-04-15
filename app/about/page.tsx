@@ -248,7 +248,7 @@ export default function AboutPage() {
             Welcome to
           </p>
           <h1 className="text-3xl sm:text-4xl font-bold text-stone-800 mb-3">
-            CivilCalc<span className="text-amber-600">.my</span>
+            CivilCalc<span className="text-amber-600">.online</span>
           </h1>
           <p className="text-lg text-stone-600 max-w-xl mx-auto leading-relaxed">
             Standards-compliant civil engineering calculators — built for Malaysia.
@@ -298,7 +298,7 @@ export default function AboutPage() {
       <FadeIn>
         <section>
           <h2 className="text-xl font-semibold text-stone-800 mb-2">
-            What CivilCalc.my Is
+            What CivilCalc.online Is
           </h2>
           <p className="text-stone-500 text-sm mb-8 max-w-2xl mx-auto leading-relaxed">
             An online platform covering the five core disciplines of Malaysian
@@ -556,7 +556,7 @@ export default function AboutPage() {
             Built For You
           </h2>
           <p className="text-sm text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Select your role to see how CivilCalc.my fits your workflow.
+            Select your role to see how CivilCalc.online fits your workflow.
           </p>
 
           {/* Role tabs */}
@@ -647,7 +647,7 @@ export default function AboutPage() {
       <FadeIn>
         <section className="max-w-2xl mx-auto">
           <h2 className="text-xl font-semibold text-stone-800 mb-5">
-            Who&rsquo;s Behind CivilCalc.my
+            Who&rsquo;s Behind CivilCalc.online
           </h2>
 
           <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl border border-stone-200 shadow-sm p-9 overflow-hidden">
@@ -664,7 +664,7 @@ export default function AboutPage() {
             </div>
 
             <p className="text-[15px] text-stone-600 leading-relaxed relative z-10">
-              CivilCalc.my is built by Malaysian civil engineers with hands-on
+              CivilCalc.online is built by Malaysian civil engineers with hands-on
               experience in infrastructure design, construction supervision, and
               engineering education. Our goal is to make standards-compliant
               calculations faster and more accessible for every engineer in

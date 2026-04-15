@@ -93,7 +93,7 @@ export default function RootLayout({
         <header className="relative border-b border-stone-200/80 bg-white/90 backdrop-blur-sm print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
             <a href="/" className="text-xl font-bold text-amber-700 shrink-0">
-              CivilCalc<span className="text-stone-400">.my</span>
+              CivilCalc<span className="text-stone-400">.online</span>
             </a>
 
             {/* Desktop nav */}
@@ -129,7 +129,7 @@ export default function RootLayout({
               {/* About column */}
               <div className="space-y-4">
                 <h4 className="text-sm font-semibold text-stone-800">
-                  CivilCalc<span className="text-stone-400">.my</span>
+                  CivilCalc<span className="text-stone-400">.online</span>
                 </h4>
                 <p className="text-xs text-stone-500 leading-relaxed">
                   Free civil engineering calculators based on Malaysian

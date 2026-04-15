@@ -117,7 +117,7 @@ export default function NewsPage() {
             Latest Updates
           </h2>
           <p className="text-sm text-stone-500 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Recent changes and progress on CivilCalc.my.
+            Recent changes and progress on CivilCalc.online.
           </p>
 
           <div className="max-w-2xl mx-auto space-y-4">
@@ -215,7 +215,7 @@ export default function NewsPage() {
             </div>
 
             <h2 className="text-xl font-semibold text-stone-800 mb-3">
-              Help Shape CivilCalc.my
+              Help Shape CivilCalc.online
             </h2>
             <p className="text-sm text-stone-700 leading-relaxed mb-6">
               Want to influence what we build first? Share your feedback,

@@ -22,7 +22,7 @@ if (process.env.RESEND_API_KEY) {
   providers.push(
     Resend({
       apiKey: process.env.RESEND_API_KEY,
-      from: process.env.EMAIL_FROM || "CivilCalc <noreply@civilcalc.my>",
+      from: process.env.EMAIL_FROM || "CivilCalc <noreply@civilcalc.online>",
     })
   );
 }
