@@ -5,6 +5,7 @@ import NavSearch from "@/components/NavSearch";
 import UserMenu from "@/components/UserMenu";
 import SessionProvider from "@/components/SessionProvider";
 import FeedbackButton from "@/components/FeedbackButton";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -90,7 +91,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#faf8f5] text-stone-900`}
       >
         <SessionProvider>
-        <header className="relative border-b border-stone-200/80 bg-white/90 backdrop-blur-sm print:hidden">
+        <header className="sticky top-0 z-30 border-b border-stone-200/80 bg-white print:hidden">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
             <a href="/" className="text-xl font-bold text-amber-700 shrink-0">
               CivilCalc<span className="text-stone-400">.online</span>
@@ -226,6 +227,7 @@ export default function RootLayout({
           </div>
         </footer>
         <FeedbackButton />
+        <Analytics />
         </SessionProvider>
       </body>
     </html>
