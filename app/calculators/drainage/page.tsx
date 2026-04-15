@@ -1,160 +1,69 @@
-"use client";
+import Link from "next/link";
 
-import { useState } from "react";
-import CalcInput from "@/components/CalcInput";
-import CalcResult from "@/components/CalcResult";
-import FormulaBox from "@/components/FormulaBox";
-import Disclaimer from "@/components/Disclaimer";
-import PrintNote from "@/components/PrintNote";
-import { rationalMethod } from "@/lib/calcEngine";
-import formulaData from "@/data/formulas.json";
-import PdfExportButton from "@/components/PdfExportButton";
-import { useCalcStorage } from "@/lib/useCalcStorage";
-import SaveLoadBar from "@/components/SaveLoadBar";
-import Breadcrumbs from "@/components/Breadcrumbs";
-import KeyTerms from "@/components/KeyTerms";
-import { keyTerms } from "@/data/key-terms";
+const calculators = [
+  {
+    name: "Rational Method — Peak Flow",
+    description: "Peak stormwater flow using MSMA rational method (Q = CiA/360).",
+    href: "/calculators/drainage/rational-method",
+    standard: "MSMA 2nd Ed, Ch 2",
+  },
+  {
+    name: "IDF Curve — Rainfall Intensity",
+    description: "Look up rainfall intensity from IDF equation with presets for major Malaysian stations.",
+    href: "/calculators/drainage/idf",
+    standard: "MSMA 2nd Ed & DID HP1",
+  },
+  {
+    name: "Time of Concentration (Tc)",
+    description: "Compute tc using Friend's formula for overland flow and drain travel time.",
+    href: "/calculators/drainage/tc",
+    standard: "MSMA 2nd Ed, Ch 2",
+  },
+  {
+    name: "Manning's Drain Sizing",
+    description: "Size rectangular & trapezoidal open channel drains with MSMA velocity checks.",
+    href: "/calculators/drainage/drain-sizing",
+    standard: "MSMA 2nd Ed, Ch 14 & 16",
+  },
+  {
+    name: "Culvert Hydraulic Design",
+    description: "Size box (RCBC) and pipe (RCP) culverts using Manning's full-flow equation.",
+    href: "/calculators/drainage/culvert",
+    standard: "MSMA 2nd Ed, Ch 36 & REAM Vol 4",
+  },
+  {
+    name: "Detention Pond Volume",
+    description: "Size detention storage using MSMA simplified rational method with pre/post-development flows.",
+    href: "/calculators/drainage/detention-pond",
+    standard: "MSMA 2nd Ed, Ch 5",
+  },
+];
 
-const data = formulaData.rational_method;
-
-export default function DrainagePage() {
-  const [C, setC] = useState("");
-  const [i, setI] = useState("");
-  const [A, setA] = useState("");
-
-  const cVal = parseFloat(C);
-  const iVal = parseFloat(i);
-  const aVal = parseFloat(A);
-
-  const { savedList, save, remove, clearAll } = useCalcStorage("rational-method");
-
-  // Validation
-  const cError = C !== "" && !isNaN(cVal)
-    ? cVal < 0 ? "Value cannot be negative"
-    : cVal > 1 ? "Runoff coefficient must be between 0 and 1 (per MSMA)"
-    : undefined
-    : undefined;
-
-  const iError = i !== "" && !isNaN(iVal) && iVal < 0
-    ? "Value cannot be negative" : undefined;
-
-  const aError = A !== "" && !isNaN(aVal) && aVal < 0
-    ? "Value cannot be negative" : undefined;
-
-  const aWarning = A !== "" && !isNaN(aVal) && aVal > 80
-    ? "Rational Method is typically valid for A ≤ 80 ha (MSMA)" : undefined;
-
-  const hasErrors = !!cError || !!iError || !!aError;
-  const allValid = !isNaN(cVal) && !isNaN(iVal) && !isNaN(aVal) && !hasErrors;
-  const result = allValid ? rationalMethod(cVal, iVal, aVal) : null;
-
+export default function DrainageCategoryPage() {
   return (
-    <>
-      {/* Screen view */}
-      <div className="print:hidden">
-        <Breadcrumbs items={[{ label: "Drainage", href: "/calculators/drainage" }, { label: "Rational Method" }]} />
-        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
-        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
+    <div>
+      <h1 className="text-3xl font-bold text-stone-800 mb-2">Drainage Calculators</h1>
+      <p className="text-stone-600 mb-8 max-w-2xl">
+        Stormwater hydrology, IDF curves, drain sizing, culvert design, and detention ponds per MSMA 2nd Edition and JPS guidelines.
+      </p>
 
-        <SaveLoadBar
-          savedList={savedList}
-          onSave={(name) => save(name, { C, i, A })}
-          onLoad={(v) => { setC(v.C ?? ""); setI(v.i ?? ""); setA(v.A ?? ""); }}
-          onRemove={remove}
-          onClearAll={clearAll}
-        />
-
-        <FormulaBox formula={data.formula} reference={data.reference} />
-        <KeyTerms terms={keyTerms["rational-method"].terms} standard={keyTerms["rational-method"].standard} />
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            <CalcInput
-              name="C"
-              label={data.variables.C.label}
-              unit={data.variables.C.unit}
-              hint={data.variables.C.hint}
-              value={C}
-              onChange={setC}
-              min={0}
-              max={1}
-              error={cError}
-            />
-            <CalcInput
-              name="i"
-              label={data.variables.i.label}
-              unit={data.variables.i.unit}
-              hint={data.variables.i.hint}
-              value={i}
-              onChange={setI}
-              min={0}
-              error={iError}
-            />
-            <CalcInput
-              name="A"
-              label={data.variables.A.label}
-              unit={data.variables.A.unit}
-              hint={data.variables.A.hint}
-              value={A}
-              onChange={setA}
-              min={0}
-              error={aError}
-              warning={aWarning}
-            />
-
-            {allValid && result !== null && (
-              <PdfExportButton
-                data={{
-                  title: data.name,
-                  reference: data.reference,
-                  formula: data.formula,
-                  inputs: [
-                    { label: data.variables.C.label, value: C, unit: data.variables.C.unit || "—" },
-                    { label: data.variables.i.label, value: i, unit: data.variables.i.unit },
-                    { label: data.variables.A.label, value: A, unit: data.variables.A.unit },
-                  ],
-                  result: {
-                    label: data.result.Q.label,
-                    value: result.toFixed(4),
-                    unit: data.result.Q.unit,
-                  },
-                  disclaimer: data.disclaimer,
-                }}
-              />
-            )}
-          </div>
-
-          <div>
-            <CalcResult
-              label={data.result.Q.label}
-              value={result}
-              unit={data.result.Q.unit}
-            />
-          </div>
-        </div>
-
-        <Disclaimer text={data.disclaimer} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        {calculators.map((calc) => (
+          <Link
+            key={calc.href}
+            href={calc.href}
+            className="group block rounded-2xl border border-sky-200 bg-white p-5 transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-sky-400"
+          >
+            <h3 className="font-semibold text-stone-800 group-hover:text-amber-700 transition-colors">
+              {calc.name}
+            </h3>
+            <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">
+              {calc.description}
+            </p>
+            <p className="mt-2 text-xs text-stone-400">{calc.standard}</p>
+          </Link>
+        ))}
       </div>
-
-      {/* Print view */}
-      {allValid && result !== null && (
-        <PrintNote
-          title={data.name}
-          reference={data.reference}
-          formula={data.formula}
-          inputs={[
-            { label: data.variables.C.label, value: C, unit: data.variables.C.unit || "—" },
-            { label: data.variables.i.label, value: i, unit: data.variables.i.unit },
-            { label: data.variables.A.label, value: A, unit: data.variables.A.unit },
-          ]}
-          result={{
-            label: data.result.Q.label,
-            value: result.toFixed(4),
-            unit: data.result.Q.unit,
-          }}
-          disclaimer={data.disclaimer}
-        />
-      )}
-    </>
+    </div>
   );
 }

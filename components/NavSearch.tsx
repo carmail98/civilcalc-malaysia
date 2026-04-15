@@ -4,20 +4,20 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 const calculators = [
-  { name: "Rational Method — Peak Flow", href: "/calculators/drainage", category: "Drainage" },
+  { name: "Rational Method — Peak Flow", href: "/calculators/drainage/rational-method", category: "Drainage" },
   { name: "IDF Curve — Rainfall Intensity", href: "/calculators/drainage/idf", category: "Drainage" },
   { name: "Time of Concentration (Tc)", href: "/calculators/drainage/tc", category: "Drainage" },
   { name: "Manning's Drain Sizing", href: "/calculators/drainage/drain-sizing", category: "Drainage" },
   { name: "Culvert Hydraulic Design", href: "/calculators/drainage/culvert", category: "Drainage" },
   { name: "Detention Pond Volume", href: "/calculators/drainage/detention-pond", category: "Drainage" },
-  { name: "Earthworks Cut & Fill Volume", href: "/calculators/earthworks", category: "Earthworks" },
+  { name: "Earthworks Cut & Fill Volume", href: "/calculators/earthworks/cut-fill", category: "Earthworks" },
   { name: "Slope Gradient & Batter", href: "/calculators/earthworks/slope", category: "Earthworks" },
   { name: "Dry Density & Compaction Check", href: "/calculators/earthworks/compaction", category: "Earthworks" },
   { name: "Flexible Pavement Design (JKR)", href: "/calculators/roads/pavement", category: "Roads" },
-  { name: "Road Carriageway Width Check", href: "/calculators/roads", category: "Roads" },
-  { name: "Sewer Pipe Sizing (MSIG/SPAN)", href: "/calculators/sewerage", category: "Sewerage" },
+  { name: "Road Carriageway Width Check", href: "/calculators/roads/width-check", category: "Roads" },
+  { name: "Sewer Pipe Sizing (MSIG/SPAN)", href: "/calculators/sewerage/sewer-sizing", category: "Sewerage" },
   { name: "Load Take-Off (Slab to Beam)", href: "/calculators/concrete/load-takeoff", category: "Structural" },
-  { name: "RC Beam Moment Capacity", href: "/calculators/concrete", category: "Structural" },
+  { name: "RC Beam Moment Capacity", href: "/calculators/concrete/beam-moment", category: "Structural" },
 ];
 
 export default function NavSearch() {

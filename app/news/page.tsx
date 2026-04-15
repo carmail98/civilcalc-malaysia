@@ -39,7 +39,7 @@ function FadeIn({
   delay?: number;
 }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "0px" });
   return (
     <motion.div
       ref={ref}
@@ -217,7 +217,7 @@ export default function NewsPage() {
             <h2 className="text-xl font-semibold text-stone-800 mb-3">
               Help Shape CivilCalc.my
             </h2>
-            <p className="text-sm text-stone-600 leading-relaxed mb-6">
+            <p className="text-sm text-stone-700 leading-relaxed mb-6">
               Want to influence what we build first? Share your feedback,
               request a calculator, or join the conversation.
             </p>

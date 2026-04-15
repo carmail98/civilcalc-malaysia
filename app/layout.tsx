@@ -35,7 +35,7 @@ const footerCalcCategories = [
   {
     category: "Drainage",
     items: [
-      { href: "/calculators/drainage", label: "Rational Method" },
+      { href: "/calculators/drainage/rational-method", label: "Rational Method" },
       { href: "/calculators/drainage/idf", label: "IDF Curve" },
       { href: "/calculators/drainage/drain-sizing", label: "Drain Sizing" },
     ],
@@ -43,7 +43,7 @@ const footerCalcCategories = [
   {
     category: "Earthworks",
     items: [
-      { href: "/calculators/earthworks", label: "Cut & Fill" },
+      { href: "/calculators/earthworks/cut-fill", label: "Cut & Fill" },
       { href: "/calculators/earthworks/compaction", label: "Compaction" },
       { href: "/calculators/earthworks/slope", label: "Slope Gradient" },
     ],
@@ -57,13 +57,13 @@ const footerCalcCategories = [
   {
     category: "Sewerage",
     items: [
-      { href: "/calculators/sewerage", label: "Sewer Pipe Sizing" },
+      { href: "/calculators/sewerage/sewer-sizing", label: "Sewer Pipe Sizing" },
     ],
   },
   {
     category: "Concrete",
     items: [
-      { href: "/calculators/concrete", label: "RC Beam Capacity" },
+      { href: "/calculators/concrete/beam-moment", label: "RC Beam Capacity" },
       { href: "/calculators/concrete/beam-shear", label: "Beam Shear" },
       { href: "/calculators/concrete/column-interaction", label: "Column N-M" },
       { href: "/calculators/concrete/pad-footing", label: "Pad Footing" },

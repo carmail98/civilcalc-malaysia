@@ -5,7 +5,7 @@ const featured = [
   {
     name: "Rational Method — Peak Flow",
     description: "Peak stormwater flow using MSMA rational method (Q = CiA/360).",
-    href: "/calculators/drainage",
+    href: "/calculators/drainage/rational-method",
     standard: "MSMA 2nd Ed",
     category: "Drainage",
     color: "blue",
@@ -29,7 +29,7 @@ const featured = [
   {
     name: "RC Beam Moment Capacity",
     description: "Beam moment capacity and utilisation check per EC2 Malaysia NA.",
-    href: "/calculators/concrete",
+    href: "/calculators/concrete/beam-moment",
     standard: "MS EN 1992-1-1",
     category: "Structural",
     color: "orange",
@@ -37,7 +37,7 @@ const featured = [
   {
     name: "Sewer Pipe Sizing",
     description: "DWF, Harmon's peak factor, design flow, and pipe capacity per MSIG.",
-    href: "/calculators/sewerage",
+    href: "/calculators/sewerage/sewer-sizing",
     standard: "MSIG / SPAN",
     category: "Sewerage",
     color: "green",
@@ -117,8 +117,8 @@ const categoryCards = [
   },
   {
     name: "Structural",
-    count: 2,
-    description: "Load take-off, RC beam moment capacity (Eurocode)",
+    count: 6,
+    description: "RC beam, shear, column interaction, crack width, pad footing, load take-off (Eurocode)",
     href: "/calculators?cat=Structural",
     icon: (
       <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
@@ -145,7 +145,7 @@ const steps = [
   {
     num: "1",
     title: "Choose a Calculator",
-    description: "Pick from 14 tools covering drainage, earthworks, roads, sewerage, and structural design.",
+    description: "Pick from 19 tools covering drainage, earthworks, roads, sewerage, and structural design.",
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -241,7 +241,7 @@ export default function Home() {
             Civil Engineering Calculators for Malaysia
           </h1>
           <p className="text-amber-100 text-lg leading-relaxed mb-8">
-            14 free tools built on MSMA, JKR, and MS EN standards.
+            19 free tools built on MSMA, JKR, and MS EN standards.
             Get instant, code-compliant results for drainage, earthworks, roads,
             sewerage, and structural design.
           </p>
@@ -294,7 +294,7 @@ export default function Home() {
             href="/calculators"
             className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors hidden sm:inline-flex items-center gap-1"
           >
-            View all 14
+            View all 19
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
             </svg>
@@ -330,7 +330,7 @@ export default function Home() {
             href="/calculators"
             className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors"
           >
-            View all 14 calculators &rarr;
+            View all 19 calculators &rarr;
           </Link>
         </div>
       </section>

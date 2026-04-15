@@ -123,7 +123,7 @@ function LoginForm() {
         <div className="mb-4 flex rounded-lg border border-stone-200 p-0.5 text-sm">
           <button
             type="button"
-            onClick={() => setMode("password")}
+            onClick={() => { setMode("password"); setError(""); }}
             className={`flex-1 rounded-md py-1.5 text-center font-medium transition-colors ${
               mode === "password"
                 ? "bg-amber-700 text-white"
@@ -134,7 +134,7 @@ function LoginForm() {
           </button>
           <button
             type="button"
-            onClick={() => setMode("magic")}
+            onClick={() => { setMode("magic"); setError(""); }}
             className={`flex-1 rounded-md py-1.5 text-center font-medium transition-colors ${
               mode === "magic"
                 ? "bg-amber-700 text-white"

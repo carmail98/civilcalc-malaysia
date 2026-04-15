@@ -30,6 +30,7 @@ export default function PadFootingPage() {
   const [h, setH] = useState("500");
   const [cover, setCover] = useState("40");
   const [barDia, setBarDia] = useState("16");
+  const [linkDia, setLinkDia] = useState("0");
   const [fck, setFck] = useState("30");
   const [fyk, setFyk] = useState("500");
   const [qAllowable, setQAllowable] = useState("150");
@@ -45,6 +46,7 @@ export default function PadFootingPage() {
   const hVal = parseFloat(h);
   const coverVal = parseFloat(cover);
   const barDiaVal = parseFloat(barDia);
+  const linkDiaVal = parseFloat(linkDia) || 0;
   const fckVal = parseFloat(fck);
   const fykVal = parseFloat(fyk);
   const qAllVal = parseFloat(qAllowable);
@@ -73,7 +75,8 @@ export default function PadFootingPage() {
         BVal, LVal, hVal, coverVal, barDiaVal,
         fckVal, fykVal, qAllVal,
         MslsVal > 0 ? MslsVal : undefined,
-        MulsVal > 0 ? MulsVal : undefined
+        MulsVal > 0 ? MulsVal : undefined,
+        linkDiaVal
       )
     : null;
 
@@ -103,7 +106,7 @@ export default function PadFootingPage() {
         <SaveLoadBar
           savedList={savedList}
           onSave={(name) =>
-            save(name, { colWidth, colDepth, Nsls, Nuls, B, L, h, cover, barDia, fck, fyk, qAllowable, Msls, Muls })
+            save(name, { colWidth, colDepth, Nsls, Nuls, B, L, h, cover, barDia, linkDia, fck, fyk, qAllowable, Msls, Muls })
           }
           onLoad={(v) => {
             setColWidth(v.colWidth ?? "300");
@@ -115,6 +118,7 @@ export default function PadFootingPage() {
             setH(v.h ?? "500");
             setCover(v.cover ?? "40");
             setBarDia(v.barDia ?? "16");
+            setLinkDia(v.linkDia ?? "0");
             setFck(v.fck ?? "30");
             setFyk(v.fyk ?? "500");
             setQAllowable(v.qAllowable ?? "150");
@@ -153,6 +157,7 @@ export default function PadFootingPage() {
             <CalcInput name="h" label={data.variables.h.label} unit={data.variables.h.unit} hint={data.variables.h.hint} value={h} onChange={setH} min={0} />
             <CalcInput name="cover" label={data.variables.cover.label} unit={data.variables.cover.unit} hint={data.variables.cover.hint} value={cover} onChange={setCover} min={0} />
             <CalcInput name="barDia" label={data.variables.barDia.label} unit={data.variables.barDia.unit} hint={data.variables.barDia.hint} value={barDia} onChange={setBarDia} min={0} />
+            <CalcInput name="linkDia" label="Link / Stirrup Diameter" unit="mm" hint="Enter 0 if no links (e.g. 0, 8, 10)" value={linkDia} onChange={setLinkDia} min={0} />
 
             <h3 className="text-xs font-semibold uppercase tracking-wide text-stone-500 mb-3 mt-4">Materials &amp; Soil</h3>
             <CalcInput name="fck" label={data.variables.fck.label} unit={data.variables.fck.unit} hint={data.variables.fck.hint} value={fck} onChange={setFck} min={0} />

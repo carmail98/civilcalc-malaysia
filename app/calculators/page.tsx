@@ -81,7 +81,7 @@ const calculators = [
   {
     name: "Rational Method — Peak Flow",
     description: "Calculate peak stormwater flow using MSMA 2nd Edition rational method (Q = CiA/360).",
-    href: "/calculators/drainage",
+    href: "/calculators/drainage/rational-method",
     standard: "MSMA 2nd Ed, Ch 2",
     category: "Drainage",
   },
@@ -123,7 +123,7 @@ const calculators = [
   {
     name: "Earthworks Cut & Fill Volume",
     description: "Calculate earthworks volume using Average End Area or Prismoidal method.",
-    href: "/calculators/earthworks",
+    href: "/calculators/earthworks/cut-fill",
     standard: "JKR Earthworks Manual",
     category: "Earthworks",
   },
@@ -151,14 +151,14 @@ const calculators = [
   {
     name: "Road Carriageway Width Check",
     description: "Verify carriageway width against ATJ 8/86 lane width requirements.",
-    href: "/calculators/roads",
+    href: "/calculators/roads/width-check",
     standard: "ATJ 8/86",
     category: "Roads",
   },
   {
     name: "Sewer Pipe Sizing (MSIG/SPAN)",
     description: "Calculate DWF, Harmon's peak factor, design flow, and check pipe capacity per MSIG guidelines.",
-    href: "/calculators/sewerage",
+    href: "/calculators/sewerage/sewer-sizing",
     standard: "MSIG / SPAN UTG",
     category: "Sewerage",
   },
@@ -172,7 +172,7 @@ const calculators = [
   {
     name: "RC Beam Moment Capacity",
     description: "Determine beam moment capacity and utilisation check per EC2 Malaysia NA.",
-    href: "/calculators/concrete",
+    href: "/calculators/concrete/beam-moment",
     standard: "MS EN 1992-1-1",
     category: "Structural",
   },

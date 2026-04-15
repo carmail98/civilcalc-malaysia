@@ -1,294 +1,45 @@
-"use client";
+import Link from "next/link";
 
-import { useState } from "react";
-import CalcInput from "@/components/CalcInput";
-import CalcResult from "@/components/CalcResult";
-import FormulaBox from "@/components/FormulaBox";
-import Disclaimer from "@/components/Disclaimer";
-import PrintNote from "@/components/PrintNote";
-import { roadCarriagewayWidth } from "@/lib/calcEngine";
-import formulaData from "@/data/formulas.json";
-import PdfExportButton from "@/components/PdfExportButton";
-import { useCalcStorage } from "@/lib/useCalcStorage";
-import SaveLoadBar from "@/components/SaveLoadBar";
-import Breadcrumbs from "@/components/Breadcrumbs";
+const calculators = [
+  {
+    name: "Flexible Pavement Design (JKR)",
+    description: "ESAL calculation, traffic category, and recommended pavement layer thicknesses per JKR ATJ 5/85.",
+    href: "/calculators/roads/pavement",
+    standard: "JKR ATJ 5/85 (Rev 2013)",
+  },
+  {
+    name: "Road Carriageway Width Check",
+    description: "Verify carriageway width against ATJ 8/86 lane width requirements for rural and urban roads.",
+    href: "/calculators/roads/width-check",
+    standard: "ATJ 8/86",
+  },
+];
 
-const data = formulaData.road_width;
-
-// ATJ 8/86 Table 3 — Lane widths (m)
-const ruralLaneWidths: Record<string, Record<string, number>> = {
-  R6: { flat: 3.65, rolling: 3.65, mountain: 3.5 },
-  R5: { flat: 3.65, rolling: 3.5, mountain: 3.5 },
-  R4: { flat: 3.5, rolling: 3.5, mountain: 3.25 },
-  R3: { flat: 3.5, rolling: 3.25, mountain: 3.0 },
-  R2: { flat: 3.25, rolling: 3.0, mountain: 3.0 },
-  R1: { flat: 3.0, rolling: 3.0, mountain: 3.0 },
-};
-
-const urbanLaneWidths: Record<string, Record<string, number>> = {
-  U6: { I: 3.65, II: 3.5, III: 3.5 },
-  U5: { I: 3.5, II: 3.5, III: 3.25 },
-  U4: { I: 3.5, II: 3.25, III: 3.25 },
-  U3: { I: 3.25, II: 3.25, III: 3.0 },
-  U2: { I: 3.25, II: 3.0, III: 3.0 },
-  U1: { I: 3.0, II: 3.0, III: 3.0 },
-};
-
-const ruralClasses = Object.keys(ruralLaneWidths);
-const urbanClasses = Object.keys(urbanLaneWidths);
-const ruralTerrains = ["flat", "rolling", "mountain"];
-const urbanTerrains = ["I", "II", "III"];
-
-export default function RoadWidthPage() {
-  const [roadType, setRoadType] = useState<"rural" | "urban">("rural");
-  const [roadClass, setRoadClass] = useState("R4");
-  const [terrain, setTerrain] = useState("flat");
-  const [numLanes, setNumLanes] = useState("2");
-  const [proposedWidth, setProposedWidth] = useState("");
-
-  const nlVal = parseInt(numLanes);
-  const pwVal = parseFloat(proposedWidth);
-
-  const { savedList, save, remove, clearAll } = useCalcStorage("road-width");
-
-  const nlError =
-    numLanes !== "" && !isNaN(nlVal) && (nlVal < 1 || nlVal > 8)
-      ? "Number of lanes must be 1–8"
-      : undefined;
-  const pwError =
-    proposedWidth !== "" && !isNaN(pwVal) && pwVal <= 0
-      ? "Width must be positive"
-      : undefined;
-
-  const hasErrors = !!nlError || !!pwError;
-
-  // Get lane width from table
-  const laneWidthTable =
-    roadType === "rural" ? ruralLaneWidths : urbanLaneWidths;
-  const laneWidth = laneWidthTable[roadClass]?.[terrain] ?? 0;
-
-  const allValid =
-    !isNaN(nlVal) &&
-    !isNaN(pwVal) &&
-    nlVal >= 1 &&
-    pwVal > 0 &&
-    laneWidth > 0 &&
-    !hasErrors;
-
-  const result = allValid
-    ? roadCarriagewayWidth(laneWidth, nlVal, pwVal)
-    : null;
-
-  // Handle road type change
-  const handleRoadTypeChange = (newType: "rural" | "urban") => {
-    setRoadType(newType);
-    if (newType === "rural") {
-      setRoadClass("R4");
-      setTerrain("flat");
-    } else {
-      setRoadClass("U4");
-      setTerrain("I");
-    }
-  };
-
-  const classes = roadType === "rural" ? ruralClasses : urbanClasses;
-  const terrains = roadType === "rural" ? ruralTerrains : urbanTerrains;
-  const terrainLabels =
-    roadType === "rural"
-      ? { flat: "Flat", rolling: "Rolling", mountain: "Mountainous" }
-      : { I: "Area I", II: "Area II", III: "Area III" };
-
+export default function RoadsCategoryPage() {
   return (
-    <>
-      {/* Screen view */}
-      <div className="print:hidden">
-        <Breadcrumbs items={[{ label: "Roads", href: "/calculators/roads" }, { label: "Carriageway Width" }]} />
-        <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
-        <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
+    <div>
+      <h1 className="text-3xl font-bold text-stone-800 mb-2">Roads Calculators</h1>
+      <p className="text-stone-600 mb-8 max-w-2xl">
+        Pavement design and carriageway width compliance checks per JKR standard specifications.
+      </p>
 
-        <SaveLoadBar
-          savedList={savedList}
-          onSave={(name) => save(name, { roadType, roadClass, terrain, numLanes, proposedWidth })}
-          onLoad={(v) => { setRoadType((v.roadType as "rural" | "urban") ?? "rural"); setRoadClass(v.roadClass ?? "R4"); setTerrain(v.terrain ?? "flat"); setNumLanes(v.numLanes ?? "2"); setProposedWidth(v.proposedWidth ?? ""); }}
-          onRemove={remove}
-          onClearAll={clearAll}
-        />
-
-        <FormulaBox formula={data.formula} reference={data.reference} />
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <div>
-            {/* Road type */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Road Type
-              </label>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleRoadTypeChange("rural")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium border ${
-                    roadType === "rural"
-                      ? "bg-amber-50 border-amber-400 text-amber-700"
-                      : "bg-white border-stone-300 text-stone-600 hover:bg-stone-50"
-                  }`}
-                >
-                  Rural (R1–R6)
-                </button>
-                <button
-                  onClick={() => handleRoadTypeChange("urban")}
-                  className={`flex-1 rounded-lg px-3 py-2 text-sm font-medium border ${
-                    roadType === "urban"
-                      ? "bg-amber-50 border-amber-400 text-amber-700"
-                      : "bg-white border-stone-300 text-stone-600 hover:bg-stone-50"
-                  }`}
-                >
-                  Urban (U1–U6)
-                </button>
-              </div>
-            </div>
-
-            {/* Road class */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Road Class
-              </label>
-              <select
-                value={roadClass}
-                onChange={(e) => setRoadClass(e.target.value)}
-                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
-              >
-                {classes.map((cls) => (
-                  <option key={cls} value={cls}>
-                    {cls}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            {/* Terrain */}
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-stone-700 mb-1">
-                Terrain / Area
-              </label>
-              <select
-                value={terrain}
-                onChange={(e) => setTerrain(e.target.value)}
-                className="w-full rounded-2xl border border-stone-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:border-amber-500 focus:ring-amber-500"
-              >
-                {terrains.map((t) => (
-                  <option key={t} value={t}>
-                    {terrainLabels[t as keyof typeof terrainLabels]}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <CalcInput
-              name="numLanes"
-              label="Number of Lanes"
-              unit=""
-              hint="Typical 1–8 lanes"
-              value={numLanes}
-              onChange={setNumLanes}
-              min={1}
-              max={8}
-              error={nlError}
-            />
-            <CalcInput
-              name="proposedWidth"
-              label="Proposed Carriageway Width"
-              unit="m"
-              hint="Your proposed design width"
-              value={proposedWidth}
-              onChange={setProposedWidth}
-              min={0}
-              error={pwError}
-            />
-
-            {laneWidth > 0 && (
-              <p className="mt-1 text-xs text-stone-500">
-                Lane width from ATJ 8/86: <strong>{laneWidth} m</strong> ({roadClass}, {terrainLabels[terrain as keyof typeof terrainLabels]})
-              </p>
-            )}
-
-            {allValid && result !== null && (
-              <PdfExportButton
-                data={{
-                  title: data.name,
-                  reference: data.reference,
-                  formula: data.formula,
-                  inputs: [
-                    { label: "Road Type", value: roadType === "rural" ? "Rural" : "Urban", unit: "—" },
-                    { label: "Road Class", value: roadClass, unit: "—" },
-                    { label: "Terrain", value: terrainLabels[terrain as keyof typeof terrainLabels] ?? terrain, unit: "—" },
-                    { label: "Lane Width (ATJ 8/86)", value: laneWidth.toString(), unit: "m" },
-                    { label: "Number of Lanes", value: numLanes, unit: "—" },
-                    { label: "Proposed Width", value: proposedWidth, unit: "m" },
-                  ],
-                  result: {
-                    label: `Min Width: ${result.minWidth.toFixed(2)} m — ${result.pass ? "PASS" : "FAIL"}`,
-                    value: `${pwVal} m ${result.pass ? "≥" : "<"} ${result.minWidth.toFixed(2)} m`,
-                    unit: "",
-                  },
-                  disclaimer: data.disclaimer,
-                }}
-              />
-            )}
-          </div>
-
-          <div className="space-y-4">
-            <CalcResult
-              label="Minimum Carriageway Width"
-              value={result ? result.minWidth : null}
-              unit="m"
-            />
-            <CalcResult
-              label="Proposed Width"
-              value={allValid ? pwVal : null}
-              unit="m"
-            />
-
-            {result && (
-              <div
-                className={`rounded-2xl border p-4 text-center text-lg font-bold ${
-                  result.pass
-                    ? "border-green-200 bg-green-50 text-green-800"
-                    : "border-red-200 bg-red-50 text-red-800"
-                }`}
-              >
-                {result.pass ? "PASS" : "FAIL"} — {pwVal} m
-                {result.pass ? " ≥ " : " < "}
-                {result.minWidth.toFixed(2)} m required
-              </div>
-            )}
-          </div>
-        </div>
-
-        <Disclaimer text={data.disclaimer} />
+      <div className="grid gap-4 sm:grid-cols-2">
+        {calculators.map((calc) => (
+          <Link
+            key={calc.href}
+            href={calc.href}
+            className="group block rounded-2xl border border-stone-300 bg-white p-5 transition-all hover:shadow-md hover:-translate-y-0.5 hover:border-stone-400"
+          >
+            <h3 className="font-semibold text-stone-800 group-hover:text-amber-700 transition-colors">
+              {calc.name}
+            </h3>
+            <p className="mt-1.5 text-sm text-stone-500 leading-relaxed">
+              {calc.description}
+            </p>
+            <p className="mt-2 text-xs text-stone-400">{calc.standard}</p>
+          </Link>
+        ))}
       </div>
-
-      {/* Print view */}
-      {allValid && result !== null && (
-        <PrintNote
-          title={data.name}
-          reference={data.reference}
-          formula={data.formula}
-          inputs={[
-            { label: "Road Type", value: roadType === "rural" ? "Rural" : "Urban", unit: "—" },
-            { label: "Road Class", value: roadClass, unit: "—" },
-            { label: "Terrain", value: terrainLabels[terrain as keyof typeof terrainLabels] ?? terrain, unit: "—" },
-            { label: "Lane Width (ATJ 8/86)", value: laneWidth.toString(), unit: "m" },
-            { label: "Number of Lanes", value: numLanes, unit: "—" },
-            { label: "Proposed Width", value: proposedWidth, unit: "m" },
-          ]}
-          result={{
-            label: `Min Width: ${result.minWidth.toFixed(2)} m — ${result.pass ? "PASS" : "FAIL"}`,
-            value: `${pwVal} m ${result.pass ? "≥" : "<"} ${result.minWidth.toFixed(2)} m`,
-            unit: "",
-          }}
-          disclaimer={data.disclaimer}
-        />
-      )}
-    </>
+    </div>
   );
 }

@@ -912,7 +912,8 @@ export function padFootingDesign(
   fyk: number,
   qAllowable: number,
   Msls?: number,
-  Muls?: number
+  Muls?: number,
+  linkDia: number = 0
 ): {
   footingSW: number;
   qMaxSLS: number;
@@ -935,8 +936,8 @@ export function padFootingDesign(
 } {
   const gammaC = 1.5;
 
-  // Effective depth (mm)
-  const dEff = h - cover - barDia;
+  // Effective depth (mm) — EC2: d = h - cover - linkDia - barDia/2
+  const dEff = h - cover - linkDia - barDia / 2;
 
   // Footing self-weight (kN)
   const footingSW = 24 * (B / 1000) * (L / 1000) * (h / 1000);

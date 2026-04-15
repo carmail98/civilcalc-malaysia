@@ -10,7 +10,7 @@ import { motion, useInView } from "framer-motion";
    ═══════════════════════════════════════════════ */
 
 const stats = [
-  { label: "Calculators", value: 14, suffix: "+" },
+  { label: "Calculators", value: 19, suffix: "+" },
   { label: "Standards", value: 8, suffix: "" },
   { label: "Free to Start", value: 100, suffix: "%" },
 ];
@@ -61,6 +61,17 @@ const disciplines = [
     detail: "Sewer pipe sizing, minimum velocity (0.6 m/s), gradient and cover checks per SPAN technical guidelines and MSIG.",
     color: "rose",
   },
+  {
+    icon: (
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+      </svg>
+    ),
+    title: "Earthworks",
+    subtitle: "JKR / General",
+    detail: "Cut & fill volume estimation, slope gradient checks, and dry density compaction verification for site earthworks.",
+    color: "ochre",
+  },
 ];
 
 const colorMap: Record<string, { bg: string; border: string; text: string; iconBg: string }> = {
@@ -68,6 +79,7 @@ const colorMap: Record<string, { bg: string; border: string; text: string; iconB
   amber: { bg: "bg-amber-50/60",   border: "border-amber-200/60",   text: "text-amber-700",   iconBg: "bg-amber-100/80" },
   sage:  { bg: "bg-emerald-50/60", border: "border-emerald-200/60", text: "text-emerald-700", iconBg: "bg-emerald-100/80" },
   rose:  { bg: "bg-rose-50/60",    border: "border-rose-200/60",    text: "text-rose-700",    iconBg: "bg-rose-100/80" },
+  ochre: { bg: "bg-yellow-50/60",  border: "border-yellow-200/60",  text: "text-yellow-700",  iconBg: "bg-yellow-100/80" },
 };
 
 const freeFeatures = [
@@ -172,7 +184,7 @@ const authorities = [
 
 function FadeIn({ children, className = "", delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-60px" });
+  const isInView = useInView(ref, { once: true, margin: "0px" });
   return (
     <motion.div
       ref={ref}
@@ -289,11 +301,11 @@ export default function AboutPage() {
             What CivilCalc.my Is
           </h2>
           <p className="text-stone-500 text-sm mb-8 max-w-2xl mx-auto leading-relaxed">
-            An online platform covering the four core disciplines of Malaysian
+            An online platform covering the five core disciplines of Malaysian
             civil engineering — tap a card to learn more.
           </p>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-5 max-w-4xl mx-auto">
             {disciplines.map((d, i) => {
               const c = colorMap[d.color];
               const isFlipped = flippedCard === i;
@@ -461,7 +473,7 @@ export default function AboutPage() {
           <h2 className="text-xl font-semibold text-stone-800 mb-2">
             Roadmap
           </h2>
-          <p className="text-sm text-stone-500 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed">
             We&rsquo;re actively building. Here&rsquo;s where we are and
             what&rsquo;s next.
           </p>
@@ -543,7 +555,7 @@ export default function AboutPage() {
           <h2 className="text-xl font-semibold text-stone-800 mb-2">
             Built For You
           </h2>
-          <p className="text-sm text-stone-500 mb-8 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed">
             Select your role to see how CivilCalc.my fits your workflow.
           </p>
 
