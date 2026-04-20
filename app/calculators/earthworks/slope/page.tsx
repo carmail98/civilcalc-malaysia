@@ -67,6 +67,7 @@ export default function SlopePage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setVertical(""); setHorizontal(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

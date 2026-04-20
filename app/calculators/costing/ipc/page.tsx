@@ -69,6 +69,7 @@ export default function InterimPaymentCertPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setWorkDone(""); setVariations(""); setMaterialsOnSite(""); setAdvancePayment("0"); setRetentionPercent("5"); setRetentionLimit("5"); setContractSum(""); setPreviousCertified("0"); setPreviousRetention("0"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

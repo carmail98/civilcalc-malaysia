@@ -126,6 +126,7 @@ export default function ColumnInteractionPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setB("300"); setH("400"); setDPrime("50"); setAsFace1("1570"); setAsFace2("1570"); setFck("30"); setFyk("500"); setNEd(""); setMEd(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

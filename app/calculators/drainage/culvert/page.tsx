@@ -148,6 +148,7 @@ export default function CulvertPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setCulvertType("box"); setN("0.013"); setSlope(""); setNumBarrels("1"); setBoxB(""); setBoxD(""); setPipeD(""); setQdesign(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

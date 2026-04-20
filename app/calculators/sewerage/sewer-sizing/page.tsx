@@ -138,6 +138,7 @@ export default function SewerSizingPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setPe(""); setPcf("225"); setDia(""); setSlope(""); setN("0.011"); setInf("0"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

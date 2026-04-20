@@ -149,6 +149,7 @@ export default function PavementPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setAdtCV(""); setTf(""); setGr(""); setDp(""); setDd("0.5"); setLdf("1.0"); setCbr(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

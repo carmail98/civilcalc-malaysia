@@ -81,6 +81,7 @@ export default function SlopeStabilityPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setC(""); setPhi(""); setGamma(""); setZ(""); setBeta(""); setWaterTable(false); setGammaW("9.81"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

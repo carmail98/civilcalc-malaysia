@@ -301,10 +301,10 @@ export default function Home() {
             Get instant, code-compliant results across 9 categories — drainage,
             earthworks, roads, structural, geotechnical, costing, and more.
           </p>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
             <Link
               href="/calculators"
-              className="inline-flex items-center gap-2 rounded-2xl bg-white text-amber-800 px-6 py-3 text-sm font-semibold shadow-lg hover:bg-amber-50 transition-colors"
+              className="inline-flex items-center gap-2 rounded-2xl bg-white text-amber-800 px-7 py-3.5 text-base font-semibold shadow-xl hover:bg-amber-50 transition-colors"
             >
               Explore Calculators
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
@@ -313,9 +313,12 @@ export default function Home() {
             </Link>
             <Link
               href="/about"
-              className="inline-flex items-center rounded-2xl border border-amber-400 text-amber-100 px-6 py-3 text-sm font-medium hover:bg-amber-800/50 transition-colors"
+              className="inline-flex items-center gap-1 text-sm font-medium text-amber-100/90 hover:text-white transition-colors underline underline-offset-4 decoration-amber-400/40 hover:decoration-amber-200"
             >
-              Learn About Our Standards
+              Learn about our standards
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+              </svg>
             </Link>
           </div>
         </div>
@@ -416,7 +419,8 @@ export default function Home() {
 
           {/* Request a calculator CTA */}
           <Link
-            href="/community"
+            href="/feedback?category=FEATURE_REQUEST&topic=calculator-request"
+            title="Open a pre-filled feedback form to suggest a new calculator"
             className="group rounded-xl border-2 border-dashed border-stone-300 p-5 transition-all hover:border-amber-400 hover:bg-amber-50 flex items-center justify-center"
           >
             <div className="text-center">

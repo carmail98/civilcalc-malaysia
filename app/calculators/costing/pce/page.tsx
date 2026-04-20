@@ -79,6 +79,7 @@ export default function PreliminaryCostEstimatePage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setGfa(""); setBuildingType("residential"); setStorey(""); setLocation("urban"); setYear("2026"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

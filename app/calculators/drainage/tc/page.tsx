@@ -114,6 +114,7 @@ export default function TcPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setN(""); setL(""); setS(""); setLd(""); setV(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

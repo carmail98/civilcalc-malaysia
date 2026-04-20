@@ -94,6 +94,7 @@ export default function PileCapacityPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setPileType("bored"); setSoilType("cohesive"); setPileDia(""); setPileLength(""); setCu(""); setPhi(""); setGamma(""); setFOS("2.5"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

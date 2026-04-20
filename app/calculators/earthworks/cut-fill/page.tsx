@@ -83,6 +83,7 @@ export default function CutFillPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setA1(""); setA2(""); setL(""); setMethod("average"); setType("Cut"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

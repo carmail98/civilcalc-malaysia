@@ -80,6 +80,7 @@ export default function GradientCurvePage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setDesignSpeed(""); setSuperelevation(""); setSideFriction("0.15"); setGrade1(""); setGrade2(""); setSSD(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

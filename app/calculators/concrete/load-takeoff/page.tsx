@@ -100,6 +100,7 @@ export default function LoadTakeOffPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setThickness(""); setFinishes("1.2"); setImposed("1.5"); setImposedPreset("1.5"); setTribWidth(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

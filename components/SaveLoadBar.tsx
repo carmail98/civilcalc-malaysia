@@ -11,6 +11,7 @@ interface SaveLoadBarProps {
   onClearAll: () => void;
   onExport?: () => void;
   onImport?: (file: File) => void;
+  onReset?: () => void;
   isLoggedIn?: boolean;
   syncing?: boolean;
 }
@@ -23,6 +24,7 @@ export default function SaveLoadBar({
   onClearAll,
   onExport,
   onImport,
+  onReset,
   isLoggedIn,
   syncing,
 }: SaveLoadBarProps) {
@@ -58,10 +60,21 @@ export default function SaveLoadBar({
         </button>
         {savedList.length > 0 && (
           <button
+            type="button"
             onClick={() => setShowList(!showList)}
             className="rounded-lg bg-stone-100 px-3 py-1.5 text-sm font-medium text-stone-700 hover:bg-stone-200 transition-colors"
           >
             Load ({savedList.length})
+          </button>
+        )}
+        {onReset && (
+          <button
+            type="button"
+            onClick={onReset}
+            title="Clear all input fields"
+            className="rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-sm font-medium text-stone-500 hover:text-red-600 hover:border-red-200 transition-colors"
+          >
+            Reset inputs
           </button>
         )}
       </div>

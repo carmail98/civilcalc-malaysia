@@ -121,6 +121,7 @@ export default function DrainSizingPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setShape("rectangular"); setN(""); setB(""); setY(""); setS(""); setZ(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

@@ -118,6 +118,7 @@ export default function TrafficVolumePage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setCars(""); setMotorcycles(""); setBuses(""); setHeavyVehicles(""); setMediumLorries(""); setPeakHourFactor("0.90"); setLaneCapacity("1500"); setNumLanes(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

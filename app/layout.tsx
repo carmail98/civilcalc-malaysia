@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import MobileNav from "@/components/MobileNav";
+import MainNav from "@/components/MainNav";
 import NavSearch from "@/components/NavSearch";
 import UserMenu from "@/components/UserMenu";
 import SessionProvider from "@/components/SessionProvider";
@@ -23,14 +24,6 @@ export const metadata: Metadata = {
   description:
     "Free civil engineering calculators based on Malaysian standards: MSMA, JKR, MS EN. Built for engineers, students, and consultants.",
 };
-
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/calculators", label: "Calculators" },
-  { href: "/news", label: "News" },
-  { href: "/community", label: "Community" },
-  { href: "/about", label: "About" },
-];
 
 const footerCalcCategories = [
   {
@@ -124,16 +117,8 @@ export default function RootLayout({
             </a>
 
             {/* Desktop nav */}
-            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-stone-600">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  className="hover:text-amber-700 transition-colors"
-                >
-                  {link.label}
-                </a>
-              ))}
+            <nav className="hidden md:flex items-center gap-6 text-sm">
+              <MainNav />
               <NavSearch />
             </nav>
 

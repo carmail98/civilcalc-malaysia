@@ -70,6 +70,7 @@ export default function FinalAccountPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setOriginalContract(""); setTotalVO(""); setProvisionalSumAllowed(""); setProvisionalSumExpended(""); setPrimeCostAllowed(""); setPrimeCostExpended(""); setClaimsApproved("0"); setLadDays("0"); setLadRate("0"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

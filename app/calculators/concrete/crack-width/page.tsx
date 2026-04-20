@@ -103,6 +103,7 @@ export default function CrackWidthPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setB("300"); setH("500"); setD("450"); setAs("1570"); setPhi("20"); setCover("35"); setFck("30"); setMsls(""); setKt("0.4"); setWkLimit("0.3"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

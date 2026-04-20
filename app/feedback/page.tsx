@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 const categories = [
   {
@@ -31,10 +32,41 @@ const categories = [
   },
 ];
 
+const PREFILL_MESSAGES: Record<string, string> = {
+  "calculator-request":
+    "Calculator request: \n\nStandard / reference: \n\nTypical inputs: \n\nExpected output: \n\nWhy this is needed: ",
+  "broken-link":
+    "Broken link report:\n\nURL attempted: \n\nWhere I clicked from: \n\nWhat I expected: ",
+};
+
+const VALID_CATEGORIES = new Set([
+  "CALCULATION_ERROR",
+  "STANDARD_OUTDATED",
+  "FEATURE_REQUEST",
+  "UI_ISSUE",
+  "OTHER",
+]);
+
 export default function FeedbackPage() {
+  return (
+    <Suspense fallback={null}>
+      <FeedbackForm />
+    </Suspense>
+  );
+}
+
+function FeedbackForm() {
   const { data: session } = useSession();
-  const [category, setCategory] = useState("");
-  const [message, setMessage] = useState("");
+  const searchParams = useSearchParams();
+  const initialCategory = (() => {
+    const c = searchParams.get("category");
+    return c && VALID_CATEGORIES.has(c) ? c : "";
+  })();
+  const initialTopic = searchParams.get("topic") ?? "";
+  const initialMessage = initialTopic ? PREFILL_MESSAGES[initialTopic] ?? "" : "";
+
+  const [category, setCategory] = useState(initialCategory);
+  const [message, setMessage] = useState(initialMessage);
   const [pageUrl, setPageUrl] = useState("");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");

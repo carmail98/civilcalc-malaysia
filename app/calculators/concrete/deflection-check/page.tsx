@@ -72,6 +72,7 @@ export default function DeflectionCheckPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setLSpan(""); setDEff(""); setB("1000"); setAsReq(""); setAsProv(""); setFck("30"); setFyk("500"); setSupportType("simply_supported"); setIsFlange(false); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

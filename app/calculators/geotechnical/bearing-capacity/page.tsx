@@ -80,6 +80,7 @@ export default function BearingCapacityPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setMethod("terzaghi"); setPhi(""); setC(""); setGamma(""); setDf(""); setB(""); setL(""); setFOS("3"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

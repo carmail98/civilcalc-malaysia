@@ -81,6 +81,7 @@ export default function SightDistancePage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setDesignSpeed(""); setReactionTime("2.5"); setFriction("0.35"); setGradient(""); setObjectHeight("150"); setEyeHeight("1050"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

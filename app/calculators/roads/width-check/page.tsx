@@ -113,6 +113,7 @@ export default function RoadWidthPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setRoadType("rural"); setRoadClass("R4"); setTerrain("flat"); setNumLanes("2"); setProposedWidth(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

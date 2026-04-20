@@ -89,6 +89,7 @@ export default function BeamShearPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setBw("300"); setD("450"); setAsl("1570"); setFck("30"); setFyk("500"); setVEd(""); setAswProvided(""); setSProvided(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

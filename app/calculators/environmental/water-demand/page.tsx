@@ -137,6 +137,7 @@ export default function WaterDemandPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setPopulation(""); setPerCapitaDemand("230"); setNonRevenueFactor("35"); setPeakDayFactor("1.3"); setPeakHourFactor("2.0"); setFireFlow("0"); setCommercialDemand("0"); setIndustrialDemand("0"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

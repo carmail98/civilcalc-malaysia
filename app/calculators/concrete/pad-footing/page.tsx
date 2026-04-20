@@ -128,6 +128,7 @@ export default function PadFootingPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setColWidth("300"); setColDepth("300"); setNsls(""); setNuls(""); setB("1800"); setL("1800"); setH("500"); setCover("40"); setBarDia("16"); setLinkDia("0"); setFck("30"); setFyk("500"); setQAllowable("150"); setMsls(""); setMuls(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

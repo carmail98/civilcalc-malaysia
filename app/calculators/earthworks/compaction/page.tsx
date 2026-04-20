@@ -103,6 +103,7 @@ export default function CompactionPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setWetMass(""); setMouldMass(""); setMouldVol("944"); setMoisture(""); setMDD(""); setRequirement("95"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

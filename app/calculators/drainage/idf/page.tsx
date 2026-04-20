@@ -126,6 +126,17 @@ export default function IDFPage() {
         <h1 className="text-2xl font-bold text-stone-800 mb-1">{data.name}</h1>
         <p className="text-sm text-stone-500 mb-6">Ref: {data.reference}</p>
 
+        {/* Preset constants source note */}
+        <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-800">
+          <p>
+            <strong>Note on presets:</strong> station constants (λ, κ, θ, η) follow the MSMA 2nd
+            Edition Appendix 2.B / HP1 published form (duration in hours); the input below accepts
+            minutes and is converted internally. Preset values are representative — verify against
+            your local MSMA/HP1 station table before final submission, or use <em>Custom</em> mode
+            to enter site-specific constants.
+          </p>
+        </div>
+
         <SaveLoadBar
           savedList={savedList}
           onSave={(name) => save(name, { station, lambda, kappa, theta, eta, ari, duration })}
@@ -133,6 +144,7 @@ export default function IDFPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setStation("kl"); setLambda(""); setKappa(""); setTheta(""); setEta(""); setAri(""); setDuration(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

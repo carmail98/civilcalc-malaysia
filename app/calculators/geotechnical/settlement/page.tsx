@@ -88,6 +88,7 @@ export default function SettlementPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setCc(""); setCs(""); setE0(""); setH(""); setSigma0(""); setDeltaSigma(""); setSigmaP(""); setCv(""); setDrainagePath(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

@@ -81,6 +81,7 @@ export default function SlabDesignPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setLx(""); setLy(""); setH(""); setCover("25"); setBarDia("10"); setFck("30"); setFyk("500"); setGk(""); setQk(""); setSupport("simply_supported"); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

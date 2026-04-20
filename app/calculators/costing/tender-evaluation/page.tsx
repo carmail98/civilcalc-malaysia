@@ -66,6 +66,7 @@ export default function TenderEvaluationPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setPriceWeight("30"); setTechnicalWeight("70"); setPrice1(""); setPrice2(""); setPrice3(""); setTech1(""); setTech2(""); setTech3(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

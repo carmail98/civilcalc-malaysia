@@ -133,6 +133,7 @@ export default function EiaScreeningPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setProjectType(""); setSiteArea(""); setUnits(""); setRoadLength(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

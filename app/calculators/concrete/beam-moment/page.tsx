@@ -88,6 +88,7 @@ export default function RCBeamPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setB(""); setD(""); setAs(""); setFck("30"); setMEd(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

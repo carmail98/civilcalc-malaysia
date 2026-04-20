@@ -137,6 +137,7 @@ export default function DetentionPondPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setArea(""); setCPre(""); setCPost(""); setIntensity(""); setDuration(""); setPsd(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

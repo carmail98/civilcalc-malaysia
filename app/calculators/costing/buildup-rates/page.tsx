@@ -65,6 +65,7 @@ export default function BuildUpRatesPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setLabourCost(""); setLabourProductivity(""); setMaterialCost(""); setMaterialWastage(""); setPlantCost(""); setPlantProductivity(""); setOverheadPercent(""); setProfitPercent(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

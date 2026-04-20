@@ -342,8 +342,11 @@ export function culvertDesign(
  * Where:
  *   i  = rainfall intensity (mm/hr)
  *   T  = Average Recurrence Interval, ARI (years)
- *   d  = storm duration (minutes)
+ *   d  = storm duration (HOURS — MSMA published form)
  *   λ, κ, θ, η = station-specific fitting constants
+ *
+ * UI input is in minutes for user convenience; this function converts
+ * to hours internally to match the MSMA/HP1 published constant form.
  * Reference: MSMA 2nd Edition, Appendix 2.B & DID HP1
  */
 export interface IDFConstants {
@@ -388,10 +391,12 @@ export const IDF_PRESETS: Record<string, { label: string; constants: IDFConstant
 export function rainfallIntensity(
   constants: IDFConstants,
   ari: number,
+  /** Storm duration in MINUTES (UI unit). Converted to hours internally. */
   duration: number
 ): number {
   const { lambda, kappa, theta, eta } = constants;
-  return (lambda * Math.pow(ari, kappa)) / Math.pow(duration + theta, eta);
+  const durationHours = duration / 60;
+  return (lambda * Math.pow(ari, kappa)) / Math.pow(durationHours + theta, eta);
 }
 
 /** Generate intensity table for multiple ARIs and durations */

@@ -1,0 +1,75 @@
+"use client";
+
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+
+export default function NotFound() {
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+
+  return (
+    <div className="mx-auto max-w-2xl py-12">
+      <div className="rounded-3xl border border-amber-200 bg-white/80 backdrop-blur-sm p-8 sm:p-12 text-center">
+        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z" />
+          </svg>
+        </div>
+
+        <h1 className="text-3xl font-bold text-stone-800 mb-2">
+          We couldn&apos;t find that calculator
+        </h1>
+        <p className="text-stone-500 mb-8">
+          The page you&apos;re looking for may have moved, been renamed, or never existed.
+          Try searching below or jump back to all calculators.
+        </p>
+
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const q = search.trim();
+            router.push(q ? `/calculators?search=${encodeURIComponent(q)}` : "/calculators");
+          }}
+          className="relative mb-8 max-w-md mx-auto"
+        >
+          <svg
+            className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search calculators..."
+            className="w-full rounded-2xl border border-stone-200 bg-white py-2.5 pl-10 pr-4 text-sm text-stone-800 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400"
+          />
+        </form>
+
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Link
+            href="/calculators"
+            className="inline-flex items-center gap-2 rounded-2xl bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 transition-colors"
+          >
+            Browse All Calculators
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </Link>
+          <Link
+            href="/feedback?category=UI_ISSUE&topic=broken-link"
+            className="text-sm font-medium text-stone-500 hover:text-amber-700 transition-colors underline underline-offset-4 decoration-stone-300 hover:decoration-amber-400"
+          >
+            Report a broken link
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

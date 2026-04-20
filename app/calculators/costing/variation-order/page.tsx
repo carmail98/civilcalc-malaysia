@@ -63,6 +63,7 @@ export default function VariationOrderPage() {
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
+          onReset={() => { setOriginalContract(""); setAdditions(""); setOmissions(""); setDayworkLabour(""); setDayworkMaterial(""); setDayworkPlant(""); setEot(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 /* ── Category config: colors & icons ── */
 const categoryConfig: Record<
@@ -111,7 +112,16 @@ const categoryConfig: Record<
   },
 };
 
-const calculators = [
+type Role = "Consultant" | "Contractor";
+
+const calculators: {
+  name: string;
+  description: string;
+  href: string;
+  standard: string;
+  category: string;
+  roles: Role[];
+}[] = [
   // Drainage
   {
     name: "Rational Method — Peak Flow",
@@ -119,6 +129,7 @@ const calculators = [
     href: "/calculators/drainage/rational-method",
     standard: "MSMA 2nd Ed, Ch 2",
     category: "Drainage",
+    roles: ["Consultant"],
   },
   {
     name: "IDF Curve — Rainfall Intensity",
@@ -126,6 +137,7 @@ const calculators = [
     href: "/calculators/drainage/idf",
     standard: "MSMA 2nd Ed & DID HP1",
     category: "Drainage",
+    roles: ["Consultant"],
   },
   {
     name: "Time of Concentration (Tc)",
@@ -133,6 +145,7 @@ const calculators = [
     href: "/calculators/drainage/tc",
     standard: "MSMA 2nd Ed, Ch 2",
     category: "Drainage",
+    roles: ["Consultant"],
   },
   {
     name: "Manning's Drain Sizing",
@@ -140,6 +153,7 @@ const calculators = [
     href: "/calculators/drainage/drain-sizing",
     standard: "MSMA 2nd Ed, Ch 14 & 16",
     category: "Drainage",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Culvert Hydraulic Design",
@@ -147,6 +161,7 @@ const calculators = [
     href: "/calculators/drainage/culvert",
     standard: "MSMA 2nd Ed, Ch 36 & REAM Vol 4",
     category: "Drainage",
+    roles: ["Consultant"],
   },
   {
     name: "Detention Pond Volume (MSMA)",
@@ -154,6 +169,7 @@ const calculators = [
     href: "/calculators/drainage/detention-pond",
     standard: "MSMA 2nd Ed, Ch 5",
     category: "Drainage",
+    roles: ["Consultant"],
   },
   // Earthworks
   {
@@ -162,6 +178,7 @@ const calculators = [
     href: "/calculators/earthworks/cut-fill",
     standard: "JKR Earthworks Manual",
     category: "Earthworks",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Slope Gradient & Batter",
@@ -169,6 +186,7 @@ const calculators = [
     href: "/calculators/earthworks/slope",
     standard: "JKR / MASMA",
     category: "Earthworks",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Dry Density & Compaction Check",
@@ -176,6 +194,7 @@ const calculators = [
     href: "/calculators/earthworks/compaction",
     standard: "JKR Spec S/4",
     category: "Earthworks",
+    roles: ["Contractor"],
   },
   // Roads
   {
@@ -184,6 +203,7 @@ const calculators = [
     href: "/calculators/roads/pavement",
     standard: "JKR ATJ 5/85 (Rev 2013)",
     category: "Roads",
+    roles: ["Consultant"],
   },
   {
     name: "Road Carriageway Width Check",
@@ -191,6 +211,7 @@ const calculators = [
     href: "/calculators/roads/width-check",
     standard: "ATJ 8/86",
     category: "Roads",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Sight Distance Calculator (SSD & OSD)",
@@ -198,6 +219,7 @@ const calculators = [
     href: "/calculators/roads/sight-distance",
     standard: "JKR ATJ 8/86 / REAM",
     category: "Roads",
+    roles: ["Consultant"],
   },
   {
     name: "Road Gradient & Curve Design",
@@ -205,6 +227,7 @@ const calculators = [
     href: "/calculators/roads/gradient-curve",
     standard: "JKR ATJ 8/86 / REAM",
     category: "Roads",
+    roles: ["Consultant"],
   },
   {
     name: "Traffic Volume (PCU) & LOS",
@@ -212,6 +235,7 @@ const calculators = [
     href: "/calculators/roads/traffic-volume",
     standard: "JKR / HPU / HCM",
     category: "Roads",
+    roles: ["Consultant"],
   },
   // Sewerage
   {
@@ -220,6 +244,7 @@ const calculators = [
     href: "/calculators/sewerage/sewer-sizing",
     standard: "MSIG / SPAN UTG",
     category: "Sewerage",
+    roles: ["Consultant"],
   },
   // Structural
   {
@@ -228,6 +253,7 @@ const calculators = [
     href: "/calculators/concrete/load-takeoff",
     standard: "MS EN 1991-1-1",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "RC Slab Design (One-Way & Two-Way)",
@@ -235,6 +261,7 @@ const calculators = [
     href: "/calculators/concrete/slab-design",
     standard: "MS EN 1992-1-1",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "RC Beam Moment Capacity",
@@ -242,6 +269,7 @@ const calculators = [
     href: "/calculators/concrete/beam-moment",
     standard: "MS EN 1992-1-1",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "RC Beam Shear Design",
@@ -249,6 +277,7 @@ const calculators = [
     href: "/calculators/concrete/beam-shear",
     standard: "MS EN 1992-1-1, Cl. 6.2.3",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "Deflection Check — Span/Depth Ratio",
@@ -256,6 +285,7 @@ const calculators = [
     href: "/calculators/concrete/deflection-check",
     standard: "MS EN 1992-1-1, Cl. 7.4.2",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "RC Column N-M Interaction",
@@ -263,6 +293,7 @@ const calculators = [
     href: "/calculators/concrete/column-interaction",
     standard: "MS EN 1992-1-1, Cl. 6.1",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "Isolated Pad Footing Design",
@@ -270,6 +301,7 @@ const calculators = [
     href: "/calculators/concrete/pad-footing",
     standard: "MS EN 1992-1-1 Cl. 6.4 & EN 1997-1",
     category: "Structural",
+    roles: ["Consultant"],
   },
   {
     name: "Crack Width Control SLS",
@@ -277,6 +309,7 @@ const calculators = [
     href: "/calculators/concrete/crack-width",
     standard: "MS EN 1992-1-1, Cl. 7.3.4",
     category: "Structural",
+    roles: ["Consultant"],
   },
   // Geotechnical
   {
@@ -285,6 +318,7 @@ const calculators = [
     href: "/calculators/geotechnical/bearing-capacity",
     standard: "MS EN 1997-1 (EC7)",
     category: "Geotechnical",
+    roles: ["Consultant"],
   },
   {
     name: "Settlement Calculation",
@@ -292,6 +326,7 @@ const calculators = [
     href: "/calculators/geotechnical/settlement",
     standard: "MS EN 1997-1, Terzaghi Theory",
     category: "Geotechnical",
+    roles: ["Consultant"],
   },
   {
     name: "Slope Stability (FOS)",
@@ -299,6 +334,7 @@ const calculators = [
     href: "/calculators/geotechnical/slope-stability",
     standard: "MS EN 1997-1 / JKR Guidelines",
     category: "Geotechnical",
+    roles: ["Consultant"],
   },
   {
     name: "Pile Capacity",
@@ -306,6 +342,7 @@ const calculators = [
     href: "/calculators/geotechnical/pile-capacity",
     standard: "MS EN 1997-1 / JKR Piling",
     category: "Geotechnical",
+    roles: ["Consultant"],
   },
   // QS / Costing
   {
@@ -314,6 +351,7 @@ const calculators = [
     href: "/calculators/costing/pce",
     standard: "JKR / BQSM / CIDB",
     category: "Costing",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Build-up of Rates",
@@ -321,6 +359,7 @@ const calculators = [
     href: "/calculators/costing/buildup-rates",
     standard: "BQSM / JKR SMM2",
     category: "Costing",
+    roles: ["Contractor"],
   },
   {
     name: "Variation Order (VO) Calculator",
@@ -328,6 +367,7 @@ const calculators = [
     href: "/calculators/costing/variation-order",
     standard: "PWD Form 203A",
     category: "Costing",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Tender Evaluation",
@@ -335,6 +375,7 @@ const calculators = [
     href: "/calculators/costing/tender-evaluation",
     standard: "MOF Procurement Guidelines",
     category: "Costing",
+    roles: ["Consultant"],
   },
   {
     name: "Interim Payment Certificate (IPC)",
@@ -342,6 +383,7 @@ const calculators = [
     href: "/calculators/costing/ipc",
     standard: "PWD Form 203A",
     category: "Costing",
+    roles: ["Consultant", "Contractor"],
   },
   {
     name: "Final Account Summary",
@@ -349,6 +391,7 @@ const calculators = [
     href: "/calculators/costing/final-account",
     standard: "PWD Form 203A",
     category: "Costing",
+    roles: ["Consultant", "Contractor"],
   },
   // Environmental
   {
@@ -357,6 +400,7 @@ const calculators = [
     href: "/calculators/environmental/water-demand",
     standard: "SPAN Guidelines",
     category: "Environmental",
+    roles: ["Consultant"],
   },
   {
     name: "EIA Screening Checklist",
@@ -364,6 +408,7 @@ const calculators = [
     href: "/calculators/environmental/eia-screening",
     standard: "DOE EIA Order 2015",
     category: "Environmental",
+    roles: ["Consultant"],
   },
   // Tools
   {
@@ -372,26 +417,49 @@ const calculators = [
     href: "/calculators/report-generator",
     standard: "BEM / JKR submission format",
     category: "Tools",
+    roles: ["Consultant", "Contractor"],
   },
 ];
 
 const categories = ["All", "Drainage", "Earthworks", "Roads", "Sewerage", "Structural", "Geotechnical", "Costing", "Environmental", "Tools"];
 
+const roleFilters: ("All" | Role)[] = ["All", "Consultant", "Contractor"];
+
+const roleStyles: Record<Role, { bg: string; text: string }> = {
+  Consultant: { bg: "bg-sky-100", text: "text-sky-700" },
+  Contractor: { bg: "bg-rose-100", text: "text-rose-700" },
+};
+
 export default function CalculatorsPage() {
+  return (
+    <Suspense fallback={null}>
+      <CalculatorsIndex />
+    </Suspense>
+  );
+}
+
+function CalculatorsIndex() {
+  const searchParams = useSearchParams();
+  const initialSearch = searchParams.get("search") ?? "";
   const [activeFilter, setActiveFilter] = useState("All");
-  const [search, setSearch] = useState("");
+  const [activeRole, setActiveRole] = useState<"All" | Role>("All");
+  const [search, setSearch] = useState(initialSearch);
 
   const filtered = calculators.filter((calc) => {
     const matchesCategory = activeFilter === "All" || calc.category === activeFilter;
+    const matchesRole = activeRole === "All" || calc.roles.includes(activeRole);
     const matchesSearch =
       search === "" ||
       calc.name.toLowerCase().includes(search.toLowerCase()) ||
       calc.description.toLowerCase().includes(search.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesRole && matchesSearch;
   });
 
   const categoryCount = (cat: string) =>
     calculators.filter((c) => c.category === cat).length;
+
+  const roleCount = (role: Role) =>
+    calculators.filter((c) => c.roles.includes(role)).length;
 
   return (
     <div>
@@ -424,6 +492,38 @@ export default function CalculatorsPage() {
             placeholder="Search calculators..."
             className="w-full rounded-2xl border border-stone-200 bg-white py-2.5 pl-10 pr-4 text-sm text-stone-800 placeholder:text-stone-400 focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400 transition-colors"
           />
+        </div>
+      </section>
+
+      {/* Role filter */}
+      <section className="mb-3">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium uppercase tracking-wide text-stone-500 mr-1">
+            I am a
+          </span>
+          {roleFilters.map((role) => {
+            const isActive = activeRole === role;
+            const style = role !== "All" ? roleStyles[role] : null;
+            return (
+              <button
+                type="button"
+                key={role}
+                onClick={() => setActiveRole(role)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
+                  isActive
+                    ? style
+                      ? `${style.bg} ${style.text}`
+                      : "bg-stone-900 text-white"
+                    : "bg-white text-stone-500 border border-stone-200 hover:border-stone-300 hover:text-stone-700"
+                }`}
+              >
+                {role}
+                {role !== "All" && (
+                  <span className="ml-1.5 text-xs opacity-60">{roleCount(role)}</span>
+                )}
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -472,11 +572,24 @@ export default function CalculatorsPage() {
                     {config.icon}
                   </div>
                   <div className="min-w-0">
-                    <span
-                      className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium mb-1.5 ${config.bg} ${config.text}`}
-                    >
-                      {calc.category}
-                    </span>
+                    <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                      <span
+                        className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${config.bg} ${config.text}`}
+                      >
+                        {calc.category}
+                      </span>
+                      {calc.roles.map((role) => {
+                        const rs = roleStyles[role];
+                        return (
+                          <span
+                            key={role}
+                            className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${rs.bg} ${rs.text}`}
+                          >
+                            {role}
+                          </span>
+                        );
+                      })}
+                    </div>
                     <h3 className="font-semibold text-stone-800 group-hover:text-amber-700 transition-colors">
                       {calc.name}
                     </h3>
