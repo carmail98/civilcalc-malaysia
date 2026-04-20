@@ -9,6 +9,20 @@ import { motion, useInView } from "framer-motion";
 
 const updates = [
   {
+    date: "20 Apr 2026",
+    title: "Role tagging and UX audit fixes shipped",
+    items: [
+      "Every calculator is now tagged as Consultant, Contractor, or both — filter the index by your role with the new 'I am a' selector, and see role chips on every card.",
+      "Fixed IDF Rainfall Intensity: duration is now correctly converted from minutes to the MSMA HP1 published form (hours). Kuala Lumpur 10-yr / 60-min intensity now reads within the expected 70–90 mm/hr band (previously under-reported by a factor of ~30).",
+      "New on-brand 404 page with a search box, 'Browse All Calculators' CTA, and a 'Report a broken link' shortcut that pre-fills the feedback form.",
+      "Fixed broken URL /calculators/concrete/rc-beam — now redirects to the correct /calculators/concrete/beam-moment page.",
+      "Every calculator now has a 'Reset inputs' button in the save bar to clear all fields at once.",
+      "Each result card now shows a condensed BEM disclaimer line and a 'Calculated HH:MM' timestamp so you always know the result reflects your current inputs.",
+      "Navigation now highlights your current section with an amber underline, and the homepage 'Explore Calculators' CTA is given clearer visual priority.",
+      "Homepage 'Request a Calculator' card now opens the feedback form with the category and a request template pre-filled.",
+    ],
+  },
+  {
     date: "15 Apr 2026",
     title: "Major Update — 17 new calculators deployed (36 total)",
     items: [
@@ -111,7 +125,7 @@ export default function NewsPage() {
                 Status: Public Beta (2026)
               </p>
               <p className="text-xs text-amber-600">
-                Last updated: 15 Apr 2026
+                Last updated: 20 Apr 2026
               </p>
             </div>
             <p className="mt-2 text-sm text-amber-700 leading-relaxed">
