@@ -9,6 +9,11 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    // The Prisma CLI (migrate, db push, etc.) needs a session-mode Postgres
+    // connection because Supabase's transaction-mode pooler breaks the schema
+    // engine's prepared statements. Prefer DIRECT_DATABASE_URL when set; fall
+    // back to DATABASE_URL so local/non-Supabase setups still work. The runtime
+    // Prisma Client in lib/db.ts reads DATABASE_URL directly and is unaffected.
+    url: process.env["DIRECT_DATABASE_URL"] || process.env["DATABASE_URL"],
   },
 });
