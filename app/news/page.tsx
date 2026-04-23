@@ -9,6 +9,19 @@ import { motion, useInView } from "framer-motion";
 
 const updates = [
   {
+    date: "23 Apr 2026",
+    title: "MSMA 2nd Edition alignment — 3 new stormwater calculators",
+    items: [
+      "Audited every drainage calculator against MSMA 2nd Edition (2012). Replaced the IDF fitting constants (λ, κ, θ, η) with verbatim values from Table 2.B1 — the previous constants were mis-labelled across stations (e.g. the 'Kuala Lumpur' preset was actually carrying Johor Bahru's values). Expanded coverage to 13 major stations including Ibu Pejabat JPS, SK Kepong, Penang, Alor Setar, Kuala Terengganu, and Melaka.",
+      "Fixed a material Time-of-Concentration bug: the overland sheet flow formula (MSMA Table 2.1) requires slope in PERCENT, not m/m. Entering 1 % as 0.01 was producing tc values roughly 5× too large. Variable relabelled from Manning's n to Horton's n* (MSMA Table 2.2) with the correct 0.015–0.060 range.",
+      "Corrected the Culvert calculator reference from the non-existent 'Ch 36' to Chapter 18. Detention Pond reference moved from Ch 5 (OSD) to Ch 7.",
+      "New: On-Site Detention (OSD) calculator — simplified procedure per MSMA §5.8.3 using Table 5.A1 Five Design Regions. Pick region + terrain slope + impervious %, get PSD (L/s) and SSR (m³) with linear interpolation across the 25/40/50/75/90 % impervious bands.",
+      "New: Rainwater Harvesting Tank Sizing — MSMA Eq 6.1 (St = 0.01 × Ar) with AARY scaling from Table 6.4 for 17 Malaysian towns, plus first-flush volume from Table 6.3.",
+      "New: Bioretention Filter Bed Sizing — MSMA Eq 9.1 / 9.2 with automatic Water Quality Volume (40 mm 3-month ARI), permeability values from Table 9.7, and 24-hour emptying-time validation.",
+      "Added lib/msmaReferences.ts as a single source of truth for MSMA citations and data tables (Manning Table 2.3, Horton Table 2.2, runoff-C Table 2.5, OSD Table 5.A1, RWH Table 6.2/6.4, Bioretention Tables 9.6–9.7).",
+    ],
+  },
+  {
     date: "20 Apr 2026",
     title: "Role tagging and UX audit fixes shipped",
     items: [
@@ -125,11 +138,11 @@ export default function NewsPage() {
                 Status: Public Beta (2026)
               </p>
               <p className="text-xs text-amber-600">
-                Last updated: 20 Apr 2026
+                Last updated: 23 Apr 2026
               </p>
             </div>
             <p className="mt-2 text-sm text-amber-700 leading-relaxed">
-              CivilCalc.online now features 36 free calculators across 9
+              CivilCalc.online now features 39 free calculators across 9
               categories, all built on Malaysian standards. We are actively
               testing and refining — your feedback helps us improve!
             </p>

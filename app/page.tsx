@@ -64,8 +64,8 @@ const colorMap: Record<string, { bg: string; text: string; border: string }> = {
 const categoryCards = [
   {
     name: "Drainage",
-    count: 6,
-    description: "Stormwater, IDF curves, drains, culverts, detention ponds",
+    count: 9,
+    description: "Stormwater, IDF curves, drains, culverts, detention, OSD, RWH, bioretention",
     href: "/calculators?cat=Drainage",
     icon: (
       <svg className="w-7 h-7" viewBox="0 0 20 20" fill="currentColor">
@@ -201,7 +201,7 @@ const steps = [
   {
     num: "1",
     title: "Choose a Calculator",
-    description: "Pick from 36 tools covering drainage, earthworks, roads, structural, geotechnical, costing, and environmental.",
+    description: "Pick from 39 tools covering drainage, earthworks, roads, structural, geotechnical, costing, and environmental.",
     icon: (
       <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -297,7 +297,7 @@ export default function Home() {
             Civil Engineering Calculators for Malaysia
           </h1>
           <p className="text-amber-100 text-lg leading-relaxed mb-8">
-            36 free tools built on MSMA, JKR, MS EN, SPAN, DOE, and BQSM standards.
+            39 free tools built on MSMA, JKR, MS EN, SPAN, DOE, and BQSM standards.
             Get instant, code-compliant results across 9 categories — drainage,
             earthworks, roads, structural, geotechnical, costing, and more.
           </p>
@@ -389,7 +389,7 @@ export default function Home() {
             href="/calculators"
             className="text-sm font-medium text-amber-600 hover:text-amber-800 transition-colors"
           >
-            View all 36 tools &rarr;
+            View all 39 tools &rarr;
           </Link>
         </div>
       </section>
