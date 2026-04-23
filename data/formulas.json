@@ -1,12 +1,12 @@
 {
   "rational_method": {
     "name": "Rational Method — Peak Flow",
-    "reference": "MSMA 2nd Edition, Chapter 2",
+    "reference": "MSMA 2nd Edition (2012), Chapter 2, Eq. 2.3",
     "formula": "Q = C × i × A / 360",
     "variables": {
-      "C": { "label": "Runoff Coefficient", "unit": "", "hint": "Typical 0.3–0.9 depending on land use" },
+      "C": { "label": "Runoff Coefficient", "unit": "", "hint": "MSMA Table 2.5 — e.g. 0.80 terrace house (minor), 0.90 (major)" },
       "i": { "label": "Rainfall Intensity", "unit": "mm/hr", "hint": "From IDF curve for selected ARI and Tc" },
-      "A": { "label": "Catchment Area", "unit": "ha", "hint": "Total contributing catchment area" }
+      "A": { "label": "Catchment Area", "unit": "ha", "hint": "Total contributing area — Rational Method valid only for ≤ 80 ha (MSMA §2.3.1.2)" }
     },
     "result": {
       "Q": { "label": "Peak Flow", "unit": "m³/s" }
@@ -15,18 +15,18 @@
   },
   "time_of_concentration": {
     "name": "Time of Concentration (Tc)",
-    "reference": "MSMA 2nd Edition, Chapter 2, Eq. 2.3 & 2.5",
+    "reference": "MSMA 2nd Edition (2012), Chapter 2, §2.2.2 & Table 2.1",
     "formula": "tc = to + td",
     "sub_formulas": {
-      "to": "to = 107·n·L^(1/3) / S^(1/5)",
-      "td": "td = L_d / (60·V)"
+      "to": "to = 107·n*·L^(1/3) / S^(1/5)  (S in %)",
+      "td": "td = L / (60·V)"
     },
     "variables": {
-      "n": { "label": "Manning Roughness (Overland)", "unit": "", "hint": "Typical 0.01–0.80" },
-      "L": { "label": "Overland Flow Path Length", "unit": "m", "hint": "Max 50m steep (>10%), max 100m gentle" },
-      "S": { "label": "Surface Slope", "unit": "m/m", "hint": "Range 0.001–0.5" },
-      "Ld": { "label": "Drain/Channel Length", "unit": "m", "hint": "Length of drain to outlet" },
-      "V": { "label": "Flow Velocity in Drain", "unit": "m/s", "hint": "Typical 0.5–3.0 m/s" }
+      "n": { "label": "Horton's Roughness n* (overland)", "unit": "", "hint": "MSMA Table 2.2: Paved 0.015, Bare soil 0.0275, Poor grass 0.035, Average grass 0.045, Dense grass 0.060" },
+      "L": { "label": "Overland Flow Path Length", "unit": "m", "hint": "Max 50 m for steep (>10%), 100 m for moderate (<5%), 200 m for mild (<1%)" },
+      "S": { "label": "Overland Surface Slope", "unit": "%", "hint": "In PERCENT per MSMA Table 2.1 (e.g. 2 for 2 %, not 0.02)" },
+      "Ld": { "label": "Drain/Channel Length", "unit": "m", "hint": "Length of drain/channel to outlet" },
+      "V": { "label": "Flow Velocity in Drain", "unit": "m/s", "hint": "Typical 0.6–2.0 m/s per MSMA Ch 14" }
     },
     "result": {
       "tc": { "label": "Time of Concentration", "unit": "min" }
@@ -128,15 +128,15 @@
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
   },
   "culvert_design": {
-    "name": "Culvert Hydraulic Design",
-    "reference": "MSMA 2nd Edition Ch 36 & REAM Road Drainage Design Vol 4",
-    "formula": "Q = (1/n) × A × R^(2/3) × S^(1/2) × N",
+    "name": "Culvert Hydraulic Design (Preliminary)",
+    "reference": "MSMA 2nd Edition (2012), Chapter 18 — Culvert (based on FHWA HEC-5)",
+    "formula": "Q = (1/n) × A × R^(2/3) × S^(1/2) × N  (full-flow / outlet control)",
     "sub_formulas": {
       "box": "A = B×D  |  P = 2(B + D)",
       "pipe": "A = π·d²/4  |  P = π·d"
     },
     "variables": {
-      "n": { "label": "Manning Roughness Coefficient", "unit": "", "hint": "Concrete pipe 0.013, Corrugated metal 0.024, RCBC 0.013–0.015" },
+      "n": { "label": "Manning Roughness Coefficient", "unit": "", "hint": "MSMA Table 2.3 — Concrete pipe 0.013, uPVC 0.011, CMP 0.024" },
       "slope": { "label": "Culvert Slope", "unit": "m/m", "hint": "Typical 0.005–0.02, match drain invert" },
       "numBarrels": { "label": "Number of Barrels", "unit": "", "hint": "Single, twin, or triple barrel" },
       "B": { "label": "Box Width (Span)", "unit": "m", "hint": "Internal clear width" },
@@ -152,18 +152,18 @@
   },
   "drain_sizing": {
     "name": "Manning's Drain Sizing",
-    "reference": "MSMA 2nd Edition, Chapter 14 & 16",
+    "reference": "MSMA 2nd Edition (2012), Chapters 14 (Drains & Swales) and 16 (Engineered Channel); Manning n from Table 2.3",
     "formula": "Q = (1/n) × A × R^(2/3) × S^(1/2)",
     "sub_formulas": {
       "rectangular": "A = b×y  |  P = b + 2y",
       "trapezoidal": "A = (b + z·y)·y  |  P = b + 2y·√(1 + z²)"
     },
     "variables": {
-      "n": { "label": "Manning Roughness Coefficient", "unit": "", "hint": "Concrete 0.013, Stone masonry 0.020, Earth 0.025, Grass 0.030" },
-      "b": { "label": "Base Width", "unit": "m", "hint": "Bottom width of drain channel" },
-      "y": { "label": "Flow Depth", "unit": "m", "hint": "Depth of water in drain" },
-      "S": { "label": "Bed Slope", "unit": "m/m", "hint": "Typical 0.001–0.05, min 0.001 for self-cleansing" },
-      "z": { "label": "Side Slope (H:V)", "unit": "", "hint": "Trapezoidal only — e.g. 1.0 for 1H:1V, 1.5 for 1.5H:1V" }
+      "n": { "label": "Manning Roughness Coefficient", "unit": "", "hint": "MSMA Table 2.3: Concrete smooth 0.015, Brick 0.020, Grassed (short) 0.035, uPVC 0.011" },
+      "b": { "label": "Base Width", "unit": "m", "hint": "Bottom width of drain channel (min 0.5 m for lined open drain)" },
+      "y": { "label": "Flow Depth", "unit": "m", "hint": "Depth of water in drain (max 0.6 m without cover, 1.2 m with cover)" },
+      "S": { "label": "Bed Slope", "unit": "m/m", "hint": "Typical 0.002–0.05; ensure 0.6–2.0 m/s velocity" },
+      "z": { "label": "Side Slope (H:V)", "unit": "", "hint": "Trapezoidal only — e.g. 1.0 for 1H:1V, 1.5 for 1.5H:1V (max 2H:1V for grassed per MSMA §14.2.4.1)" }
     },
     "result": {
       "Q": { "label": "Discharge Capacity", "unit": "m³/s" },
@@ -173,16 +173,16 @@
   },
   "idf_curve": {
     "name": "IDF Curve — Rainfall Intensity",
-    "reference": "MSMA 2nd Edition, Appendix 2.B & DID Hydrological Procedure No. 1 (HP1)",
+    "reference": "MSMA 2nd Edition (2012), Chapter 2, Eq. 2.2; constants from Table 2.B1 (Appendix 2.B)",
     "formula": "i = (λ × T^κ) / (d + θ)^η",
     "variables": {
       "station": { "label": "Rainfall Station / Region", "unit": "", "hint": "Select preset or enter custom IDF constants" },
-      "lambda": { "label": "λ (Lambda)", "unit": "", "hint": "Fitting constant from MSMA/HP1 table" },
-      "kappa": { "label": "κ (Kappa)", "unit": "", "hint": "ARI exponent from MSMA/HP1 table" },
-      "theta": { "label": "θ (Theta)", "unit": "", "hint": "Duration offset from MSMA/HP1 table" },
-      "eta": { "label": "η (Eta)", "unit": "", "hint": "Duration exponent from MSMA/HP1 table" },
-      "ari": { "label": "Average Recurrence Interval (ARI)", "unit": "years", "hint": "Common: 2, 5, 10, 20, 50, 100 years" },
-      "duration": { "label": "Storm Duration", "unit": "min", "hint": "Typically 5–360 minutes" }
+      "lambda": { "label": "λ (Lambda)", "unit": "", "hint": "Fitting constant from MSMA 2nd Ed Table 2.B1" },
+      "kappa": { "label": "κ (Kappa)", "unit": "", "hint": "ARI exponent from MSMA 2nd Ed Table 2.B1" },
+      "theta": { "label": "θ (Theta)", "unit": "", "hint": "Duration offset from MSMA 2nd Ed Table 2.B1" },
+      "eta": { "label": "η (Eta)", "unit": "", "hint": "Duration exponent from MSMA 2nd Ed Table 2.B1" },
+      "ari": { "label": "Average Recurrence Interval (ARI)", "unit": "years", "hint": "Common: 2, 5, 10, 20, 50, 100 years (valid 2–100 yr per Table 2.B1)" },
+      "duration": { "label": "Storm Duration", "unit": "min", "hint": "Valid range 5 min to 72 hr (4320 min) per MSMA Eq 2.2" }
     },
     "result": {
       "i": { "label": "Rainfall Intensity", "unit": "mm/hr" }
@@ -190,8 +190,8 @@
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
   },
   "detention_pond": {
-    "name": "Detention Pond Volume (MSMA)",
-    "reference": "MSMA 2nd Edition, Chapter 5 — On-Site Detention (OSD)",
+    "name": "Detention Pond Volume (Simplified)",
+    "reference": "MSMA 2nd Edition (2012), Chapter 7 (Detention Pond) + Ch 2 Eq. 2.3 (Rational)",
     "formula": "V_s = (Q_post − PSD) × t_d × 60",
     "sub_formulas": {
       "q_pre": "Q_pre = C_pre × i × A / 360",
@@ -199,14 +199,72 @@
     },
     "variables": {
       "area": { "label": "Catchment Area", "unit": "ha", "hint": "Total contributing catchment area" },
-      "cPre": { "label": "Pre-Development Runoff Coefficient", "unit": "", "hint": "Undeveloped: 0.1–0.3 (forest/grass)" },
-      "cPost": { "label": "Post-Development Runoff Coefficient", "unit": "", "hint": "Developed: 0.6–0.9 (residential/commercial)" },
-      "intensity": { "label": "Rainfall Intensity", "unit": "mm/hr", "hint": "From IDF curve for design ARI (typically 10yr or 100yr)" },
-      "stormDuration": { "label": "Storm Duration", "unit": "min", "hint": "Try several durations to find critical (max) storage" },
-      "psd": { "label": "Permissible Site Discharge (PSD)", "unit": "m³/s", "hint": "Optional — leave blank to use Q_pre as PSD" }
+      "cPre": { "label": "Pre-Development Runoff Coefficient", "unit": "", "hint": "MSMA Table 2.5 — e.g. 0.30 forest, 0.40 grass cover (major)" },
+      "cPost": { "label": "Post-Development Runoff Coefficient", "unit": "", "hint": "MSMA Table 2.5 — e.g. 0.90 terrace house (major), 0.95 commercial" },
+      "intensity": { "label": "Rainfall Intensity", "unit": "mm/hr", "hint": "From IDF curve for design ARI (typically 100-yr for major system)" },
+      "stormDuration": { "label": "Storm Duration", "unit": "min", "hint": "Try several durations to find critical (maximum storage) case" },
+      "psd": { "label": "Permissible Site Discharge (PSD)", "unit": "m³/s", "hint": "Optional — leave blank to use pre-development Q as PSD" }
     },
     "result": {
       "V": { "label": "Required Storage Volume", "unit": "m³" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "osd": {
+    "name": "On-Site Detention (OSD) — Simplified Sizing",
+    "reference": "MSMA 2nd Edition (2012), Chapter 5 §5.8.3; Table 5.A1 (Five Regions)",
+    "formula": "PSD (L/s) = PSD_lps/ha × A ; SSR (m³) = SSR_m³/ha × A",
+    "sub_formulas": {
+      "note": "Values are read from MSMA Table 5.A1 by region + terrain slope, then linearly interpolated across 25/40/50/75/90 % impervious bands."
+    },
+    "variables": {
+      "region": { "label": "Design Region", "unit": "", "hint": "Region 1 West Coast, 2 East Coast, 3 Northern, 4 Highland, 5 Southern (per Fig 5.A1)" },
+      "terrain": { "label": "Terrain / Slope", "unit": "", "hint": "Low-lying (1:2000–5000), Mild (1:875–1999), Steep (1:100–874)" },
+      "imperviousPct": { "label": "Impervious Area", "unit": "%", "hint": "Percentage of project area that is impervious (valid 25–90 %)" },
+      "projectArea": { "label": "Project Area", "unit": "ha", "hint": "Site area that drains to the OSD facility" }
+    },
+    "result": {
+      "PSD": { "label": "Permissible Site Discharge", "unit": "L/s" },
+      "SSR": { "label": "Site Storage Requirement", "unit": "m³" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "rainwater_harvesting": {
+    "name": "Rainwater Harvesting Tank Sizing",
+    "reference": "MSMA 2nd Edition (2012), Chapter 6 — Rainwater Harvesting; Eq. 6.1, Tables 6.2–6.4",
+    "formula": "St = 0.01 × Ar   (tank size m³ per roof area m²)",
+    "variables": {
+      "roofArea": { "label": "Roof Catchment Area (Ar)", "unit": "m²", "hint": "Plan (horizontal projected) area of the roof" },
+      "town": { "label": "Nearest Town / Region", "unit": "", "hint": "Select from MSMA Table 6.2 — used for AARY scaling" },
+      "demand": { "label": "Daily Rainwater Demand (optional)", "unit": "L/day", "hint": "e.g. toilet flushing 120 L/day, car wash 200 L/wash — see MSMA Table 6.1" }
+    },
+    "result": {
+      "tankSize": { "label": "Recommended Tank Size (St)", "unit": "m³" },
+      "aary": { "label": "Indicative Annual Yield (AARY)", "unit": "m³/yr" }
+    },
+    "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
+  },
+  "bioretention": {
+    "name": "Bioretention System — Filter Bed Sizing",
+    "reference": "MSMA 2nd Edition (2012), Chapter 9 — Bioretention System; Eq. 9.1–9.2, Tables 9.6–9.7",
+    "formula": "Af = (WQv × df) / [k × (hf + df) × tf]",
+    "sub_formulas": {
+      "wqv": "WQv = A_catch × C × 0.040   (runoff from 40 mm 3-month ARI storm)",
+      "impermeable": "Eq 9.1 (underdrain): k = permeability of filter media (m/day)",
+      "permeable": "Eq 9.2 (no underdrain): i = infiltration rate of underlying soil (m/day)"
+    },
+    "variables": {
+      "catchmentArea": { "label": "Contributing Catchment Area", "unit": "m²", "hint": "Area draining to the bioretention cell" },
+      "runoffC": { "label": "Runoff Coefficient (C)", "unit": "", "hint": "MSMA Table 2.5 — same as Rational Method" },
+      "wqv": { "label": "Water Quality Volume (WQv)", "unit": "m³", "hint": "Auto-computed: A × C × 0.040 m (40 mm = 3-month ARI)" },
+      "df": { "label": "Filter Bed Depth (df)", "unit": "m", "hint": "MSMA Table 9.6: 0.45–1.0 m planting soil depth" },
+      "hf": { "label": "Average Head Above Filter (hf)", "unit": "m", "hint": "Typically half of ponding depth (0.075–0.15 m)" },
+      "tf": { "label": "Design Drain Time (tf)", "unit": "day", "hint": "Maximum 1 day per MSMA §9.3.1" },
+      "k": { "label": "Permeability (k) or Infiltration (i)", "unit": "m/day", "hint": "Table 9.7: Sand 1.0, Bioretention soil 0.312, Leaf compost 2.65" },
+      "systemType": { "label": "System Type", "unit": "", "hint": "Impermeable (with underdrain) or Permeable (no underdrain)" }
+    },
+    "result": {
+      "Af": { "label": "Filter Bed Surface Area", "unit": "m²" }
     },
     "disclaimer": "This output is an engineering calculation aid only and does not constitute a final or endorsed design. All designs submitted to Malaysian authorities must be endorsed by a registered Professional Engineer (PE) under the Board of Engineers Malaysia (BEM) in accordance with the Registration of Engineers Act 1967."
   },

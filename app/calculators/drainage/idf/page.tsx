@@ -26,7 +26,7 @@ const ARI_LIST = [2, 5, 10, 20, 50, 100];
 const DURATION_LIST = [5, 10, 15, 30, 60, 120, 180, 360];
 
 export default function IDFPage() {
-  const [station, setStation] = useState("kl");
+  const [station, setStation] = useState("kl_ibupejabat");
   const [lambda, setLambda] = useState("");
   const [kappa, setKappa] = useState("");
   const [theta, setTheta] = useState("");
@@ -129,22 +129,23 @@ export default function IDFPage() {
         {/* Preset constants source note */}
         <div className="mb-6 rounded-lg border border-amber-200 bg-amber-50/60 p-3 text-xs text-amber-800">
           <p>
-            <strong>Note on presets:</strong> station constants (λ, κ, θ, η) follow the MSMA 2nd
-            Edition Appendix 2.B / HP1 published form (duration in hours); the input below accepts
-            minutes and is converted internally. Preset values are representative — verify against
-            your local MSMA/HP1 station table before final submission, or use <em>Custom</em> mode
-            to enter site-specific constants.
+            <strong>Source:</strong> all station constants (λ, κ, θ, η) are taken verbatim from
+            MSMA 2nd Edition (2012) <strong>Table 2.B1</strong> in Appendix 2.B (high ARI, 2–100
+            year, storm duration 5 min – 72 hr). The manual publishes the equation with duration
+            in hours; this calculator accepts minutes for convenience and converts internally.
+            Use <em>Custom</em> mode to enter site-specific constants from Table 2.B1 (high ARI)
+            or Table 2.B2 (low ARI, 0.5–12 month).
           </p>
         </div>
 
         <SaveLoadBar
           savedList={savedList}
           onSave={(name) => save(name, { station, lambda, kappa, theta, eta, ari, duration })}
-          onLoad={(v) => { setStation(v.station ?? "kl"); setLambda(v.lambda ?? ""); setKappa(v.kappa ?? ""); setTheta(v.theta ?? ""); setEta(v.eta ?? ""); setAri(v.ari ?? ""); setDuration(v.duration ?? ""); }}
+          onLoad={(v) => { setStation(v.station ?? "kl_ibupejabat"); setLambda(v.lambda ?? ""); setKappa(v.kappa ?? ""); setTheta(v.theta ?? ""); setEta(v.eta ?? ""); setAri(v.ari ?? ""); setDuration(v.duration ?? ""); }}
           onRemove={remove}
           onExport={exportCalcs}
           onImport={importCalcs}
-          onReset={() => { setStation("kl"); setLambda(""); setKappa(""); setTheta(""); setEta(""); setAri(""); setDuration(""); }}
+          onReset={() => { setStation("kl_ibupejabat"); setLambda(""); setKappa(""); setTheta(""); setEta(""); setAri(""); setDuration(""); }}
           isLoggedIn={isLoggedIn}
           syncing={syncing}
           onClearAll={clearAll}
@@ -304,9 +305,9 @@ export default function IDFPage() {
 
             {/* Note about presets */}
             <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-              Preset constants are representative values. Always verify with your
-              local JPS/DID office or MSMA Appendix 2.B for site-specific
-              constants.
+              Preset constants are official values from MSMA 2nd Edition Table 2.B1
+              (Appendix 2.B). For design submission, confirm with the nearest
+              DID/JPS rainfall station to your site.
             </div>
           </div>
         </div>

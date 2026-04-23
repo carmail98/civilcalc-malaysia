@@ -36,13 +36,13 @@ export default function TcPage() {
 
   const { savedList, save, remove, clearAll, exportCalcs, importCalcs, isLoggedIn, syncing } = useCalcStorage("time-of-concentration");
 
-  // Validation
+  // Validation — n* is Horton's roughness (MSMA Table 2.2), typical 0.015–0.060
   const nError =
     n !== "" && !isNaN(nVal)
-      ? nVal < 0.01
-        ? "Minimum Manning n is 0.01"
-        : nVal > 0.8
-        ? "Maximum Manning n is 0.80"
+      ? nVal <= 0
+        ? "Horton's n* must be positive"
+        : nVal > 0.1
+        ? "Horton's n* exceeds expected range (max densely grassed ~0.060)"
         : undefined
       : undefined;
 
@@ -52,16 +52,17 @@ export default function TcPage() {
       : undefined;
 
   const lWarning =
-    L !== "" && !isNaN(lVal) && lVal > 100
-      ? "Overland flow path may be too long — check MSMA Clause 2.4"
+    L !== "" && !isNaN(lVal) && lVal > 200
+      ? "Overland flow path exceeds MSMA Table 2.1 limits (max 200 m even for mild slopes)"
       : undefined;
 
+  // Slope is in PERCENT per MSMA Table 2.1 (not m/m)
   const sError =
     S !== "" && !isNaN(sVal)
-      ? sVal < 0.001
-        ? "Minimum slope is 0.001 m/m"
-        : sVal > 0.5
-        ? "Maximum slope is 0.5 m/m"
+      ? sVal <= 0
+        ? "Slope must be positive"
+        : sVal > 50
+        ? "Slope exceeds 50 %"
         : undefined
       : undefined;
 
@@ -129,7 +130,7 @@ export default function TcPage() {
               {data.sub_formulas.to}
             </p>
             <p className="text-xs text-stone-400 mt-1">
-              Friend&apos;s Formula — Overland flow
+              Overland flow (MSMA Table 2.1, QUDM 2007)
             </p>
           </div>
           <div className="rounded-2xl bg-stone-50 border border-stone-200 p-3">
@@ -155,8 +156,8 @@ export default function TcPage() {
               hint={data.variables.n.hint}
               value={n}
               onChange={setN}
-              min={0.01}
-              max={0.8}
+              min={0}
+              max={0.1}
               error={nError}
             />
             <CalcInput
@@ -177,8 +178,8 @@ export default function TcPage() {
               hint={data.variables.S.hint}
               value={S}
               onChange={setS}
-              min={0.001}
-              max={0.5}
+              min={0}
+              max={50}
               error={sError}
             />
 
@@ -256,7 +257,7 @@ export default function TcPage() {
             />
             {tcClamped && (
               <div className="rounded-2xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
-                Minimum tc = 5 min applied (MSMA Ch 2, Clause 2.4.3)
+                Minimum tc = 5 min applied (MSMA Ch 2, §2.2.2)
               </div>
             )}
           </div>

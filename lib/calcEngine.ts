@@ -1,34 +1,64 @@
+import {
+  OSD_TABLE_5A1,
+  RWH_TOWNS,
+  firstFlushVolume_m3,
+  type OsdRegion,
+  type TerrainSlope,
+} from "./msmaReferences";
+
 /**
  * Rational Method — Peak Flow
- * Q = C × i × A / 360
- * Reference: MSMA 2nd Edition, Chapter 2
+ * Q = C × i × A / 360   (Q in m³/s; i in mm/hr; A in ha)
+ * Reference: MSMA 2nd Edition (2012), Chapter 2, Eq. 2.3.
+ * Note: MSMA recommends the Rational Method only for catchments ≤ 80 ha
+ * (TxDOT 2009 limit cited in §2.3.1.2).
  */
 export function rationalMethod(C: number, i: number, A: number): number {
   return (C * i * A) / 360;
 }
 
 /**
- * Overland Flow Time (Friend's Formula)
- * to = (107 × n × L^(1/3)) / S^(1/5)
- * Reference: MSMA 2nd Edition, Chapter 2, Eq. 2.5
+ * Overland Sheet Flow Time (QUDM 2007 kinematic formula, adopted by MSMA)
+ * to = (107 × n* × L^(1/3)) / S^(1/5)
+ * where:
+ *   to = overland flow time (min)
+ *   n* = Horton's roughness (MSMA Table 2.2) — NOT Manning's n
+ *   L  = overland flow path length (m)
+ *   S  = slope of overland surface (%) — MSMA specifies PERCENT, not m/m.
+ *
+ * L limits (MSMA Table 2.1): ≤ 50 m for steep (>10%), ≤ 100 m for moderate
+ * (<5%), ≤ 200 m for mild (<1%).
+ * Reference: MSMA 2nd Edition (2012), Chapter 2, Table 2.1.
  */
-export function overlandFlowTime(n: number, L: number, S: number): number {
-  return (107 * n * Math.pow(L, 1 / 3)) / Math.pow(S, 1 / 5);
+export function overlandFlowTime(nStar: number, L: number, slopePercent: number): number {
+  return (107 * nStar * Math.pow(L, 1 / 3)) / Math.pow(slopePercent, 1 / 5);
 }
 
 /**
  * Drain Flow Time
- * td = L_d / (60 × V)
- * Reference: MSMA 2nd Edition, Chapter 2
+ * td = L / (60 × V)   — equivalent to MSMA td = n·L / (60·R^(2/3)·S^(1/2))
+ * when V is the Manning velocity already computed from hydraulic radius
+ * and slope.
+ * Reference: MSMA 2nd Edition (2012), Chapter 2, Table 2.1.
  */
 export function drainFlowTime(Ld: number, V: number): number {
   return Ld / (60 * V);
 }
 
 /**
+ * Curb Gutter Flow Time
+ * tg = L / (40 × √S)   (S in percent)
+ * Reference: MSMA 2nd Edition (2012), Chapter 2, Table 2.1.
+ */
+export function curbGutterFlowTime(L: number, slopePercent: number): number {
+  return L / (40 * Math.sqrt(slopePercent));
+}
+
+/**
  * Time of Concentration
- * tc = to + td (min), minimum 5 minutes per MSMA Clause 2.4.3
- * Reference: MSMA 2nd Edition, Chapter 2, Eq. 2.3
+ * tc = to + td (+ tg if applicable), minimum 5 minutes per MSMA §2.2.2.
+ * The 5-minute floor applies particularly to roof drainage (§2.2.2).
+ * Reference: MSMA 2nd Edition (2012), Chapter 2, §2.2.2.
  */
 export function timeOfConcentration(to: number, td: number): number {
   const tc = to + td;
@@ -143,7 +173,13 @@ export function loadTakeOff(
  * Q = (1/n) × A × R^(2/3) × S^(1/2)
  * Rectangular: A = b×y, P = b + 2y
  * Trapezoidal: A = (b + z·y)·y, P = b + 2y·√(1 + z²)
- * Reference: MSMA 2nd Edition, Chapter 14 & 16
+ *
+ * MSMA Ch 14 design criteria: min velocity 0.6 m/s (self-cleansing),
+ * max 2.0 m/s (open drain); 2–4 m/s requires cover/handrail; min 50 mm
+ * freeboard above design water level; max depth 0.6 m without cover,
+ * 1.2 m with cover.
+ * Reference: MSMA 2nd Edition (2012), Chapters 14 (Drains & Swales) and
+ * 16 (Engineered Channel); Manning n from Table 2.3.
  */
 export function manningDrainSizing(
   n: number,
@@ -274,11 +310,17 @@ export function flexiblePavement(
 }
 
 /**
- * Culvert Hydraulic Design (Manning's Full-Flow)
+ * Culvert Hydraulic Design (Manning's Full-Flow approximation)
  * Q = (1/n) × A × R^(2/3) × S^(1/2) × N_barrels
  * Box: A = B×D, P = 2(B+D)
  * Pipe: A = π·d²/4, P = π·d
- * Reference: MSMA 2nd Edition Ch 36, REAM Road Drainage Design Vol 4
+ *
+ * This is a simplified full-flow (outlet control) approximation suitable
+ * for preliminary sizing. For design submission per MSMA Ch 18 §18.4, a
+ * full inlet-vs-outlet control analysis including entrance loss coefficient
+ * (Ke), headwater depth (HW) and critical depth (hc) should be performed.
+ * Reference: MSMA 2nd Edition (2012), Chapter 18 — Culvert (based on
+ * FHWA HEC-5); Manning n from Table 2.3.
  */
 export function culvertDesign(
   n: number,
@@ -346,8 +388,9 @@ export function culvertDesign(
  *   λ, κ, θ, η = station-specific fitting constants
  *
  * UI input is in minutes for user convenience; this function converts
- * to hours internally to match the MSMA/HP1 published constant form.
- * Reference: MSMA 2nd Edition, Appendix 2.B & DID HP1
+ * to hours internally to match the MSMA published constant form.
+ * Reference: MSMA 2nd Edition (2012), Chapter 2, Eq. 2.2; fitting
+ * constants from Table 2.B1 in Appendix 2.B (high ARI, 2–100 year).
  */
 export interface IDFConstants {
   lambda: number;
@@ -356,31 +399,63 @@ export interface IDFConstants {
   eta: number;
 }
 
-/** Preset IDF constants for major Malaysian regions (MSMA/HP1 representative) */
+/**
+ * Preset IDF fitting constants for major Malaysian stations.
+ * All values taken verbatim from MSMA 2nd Edition (2012) Table 2.B1
+ * (Appendix 2.B) — high ARI 2–100 year, storm duration 5 min – 72 hr.
+ */
 export const IDF_PRESETS: Record<string, { label: string; constants: IDFConstants }> = {
-  kl: {
-    label: "Kuala Lumpur (Stn 3116004)",
-    constants: { lambda: 59.972, kappa: 0.163, theta: 0.121, eta: 0.794 },
+  kl_ibupejabat: {
+    label: "Kuala Lumpur — Ibu Pejabat JPS (Stn 3116003)",
+    constants: { lambda: 61.976, kappa: 0.145, theta: 0.122, eta: 0.818 },
+  },
+  kl_kepong: {
+    label: "Kuala Lumpur — SK Jenis Keb. Kepong (Stn 3216004)",
+    constants: { lambda: 73.602, kappa: 0.164, theta: 0.330, eta: 0.874 },
+  },
+  selangor_kajang: {
+    label: "Selangor — Setor JPS Kajang (Stn 2917001)",
+    constants: { lambda: 59.153, kappa: 0.161, theta: 0.118, eta: 0.812 },
+  },
+  selangor_ampang: {
+    label: "Selangor — JPS Ampang (Stn 3117070)",
+    constants: { lambda: 65.809, kappa: 0.148, theta: 0.156, eta: 0.837 },
   },
   jb: {
-    label: "Johor Bahru (Stn 1437116)",
-    constants: { lambda: 54.265, kappa: 0.174, theta: 0.128, eta: 0.776 },
+    label: "Johor Bahru — Stor JPS (Stn 1437116)",
+    constants: { lambda: 59.972, kappa: 0.163, theta: 0.121, eta: 0.793 },
   },
   penang: {
-    label: "Penang (Stn 5302001)",
-    constants: { lambda: 55.360, kappa: 0.169, theta: 0.130, eta: 0.780 },
+    label: "Penang — Tangki Air Besar Sg Pinang (Stn 5302001)",
+    constants: { lambda: 67.949, kappa: 0.181, theta: 0.299, eta: 0.736 },
   },
   ipoh: {
-    label: "Ipoh (Stn 4207048)",
-    constants: { lambda: 58.118, kappa: 0.156, theta: 0.115, eta: 0.788 },
+    label: "Ipoh — Politeknik Ungku Umar (Stn 4511111)",
+    constants: { lambda: 70.238, kappa: 0.164, theta: 0.288, eta: 0.872 },
   },
   kuantan: {
-    label: "Kuantan (Stn 3930012)",
-    constants: { lambda: 52.910, kappa: 0.190, theta: 0.100, eta: 0.756 },
+    label: "Pahang — Sungai Lembing PCC Mill (Stn 3930012)",
+    constants: { lambda: 45.999, kappa: 0.210, theta: 0.074, eta: 0.590 },
   },
   kb: {
-    label: "Kota Bharu (Stn 5722057)",
-    constants: { lambda: 61.380, kappa: 0.182, theta: 0.105, eta: 0.768 },
+    label: "Kota Bharu — Setor JPS (Stn 6122064)",
+    constants: { lambda: 60.988, kappa: 0.214, theta: 0.148, eta: 0.616 },
+  },
+  alorsetar: {
+    label: "Alor Setar — Setor JPS (Stn 6103047)",
+    constants: { lambda: 64.832, kappa: 0.168, theta: 0.346, eta: 0.800 },
+  },
+  kterengganu: {
+    label: "Kuala Terengganu — Setor JPS (Stn 5331048)",
+    constants: { lambda: 58.307, kappa: 0.210, theta: 0.123, eta: 0.555 },
+  },
+  melaka: {
+    label: "Melaka — Chin Chin Tepi Jalan (Stn 2224038)",
+    constants: { lambda: 54.241, kappa: 0.161, theta: 0.114, eta: 0.846 },
+  },
+  seremban: {
+    label: "Seremban — Setor JPS Sikamat (Stn 2719001)",
+    constants: { lambda: 52.823, kappa: 0.167, theta: 0.159, eta: 0.811 },
   },
   custom: {
     label: "Custom (enter own constants)",
@@ -419,12 +494,19 @@ export function idfTable(
 }
 
 /**
- * Detention Pond Volume Sizing (MSMA Simplified Rational Method)
+ * Detention Pond Volume Sizing (Simplified Rational Method)
  * Q_pre  = C_pre  × i × A / 360
  * Q_post = C_post × i × A / 360
  * PSD = Permissible Site Discharge (= Q_pre or authority-specified)
  * V_s = (Q_post − PSD) × t_d × 60   (m³)
- * Reference: MSMA 2nd Edition, Chapter 5 (On-Site Detention / Quantity Control)
+ *
+ * This is a first-order sizing estimate based on the inflow-outflow
+ * difference over a single design storm duration. For community-scale
+ * detention ponds (> 0.1 ha per MSMA §5.2.1), full reservoir routing per
+ * Ch 7 should be performed. Users should iterate over storm durations to
+ * find the critical (maximum storage) case.
+ * Reference: MSMA 2nd Edition (2012), Chapter 7 — Detention Pond (sizing
+ * approach) combined with Chapter 2, Eq. 2.3 (Rational Method).
  */
 export function detentionPond(
   area: number,
@@ -2198,4 +2280,248 @@ export function eiaScreening(
     threshold: rule.threshold,
     remarks: rule.remarks,
   };
+}
+
+/**
+ * On-Site Detention (OSD) — Simplified Sizing per MSMA Ch 5 §5.8.3
+ *
+ * Uses the 5-region simplified procedure from MSMA 2nd Ed Table 5.A1:
+ *   PSD (L/s)  = PSD_lpsHa × project_area (ha)
+ *   SSR (m³)   = SSR_m3Ha  × project_area (ha)
+ *
+ * Both values are interpolated linearly between the tabulated impervious
+ * percentage bands (25, 40, 50, 75, 90 %).
+ *
+ * Reference: MSMA 2nd Edition (2012), Chapter 5 — On-Site Detention,
+ * §5.8.3 Simplified OSD Design Procedure, Tables 5.A1 & 5.A2.
+ */
+
+function interpolateBand(
+  bands: { pct: number; psd_lpsHa: number; ssr_m3Ha: number }[],
+  imperviousPct: number
+): { psd_lpsHa: number; ssr_m3Ha: number } {
+  const clamped = Math.min(90, Math.max(25, imperviousPct));
+  // Find bracketing bands
+  for (let i = 0; i < bands.length - 1; i++) {
+    const lo = bands[i];
+    const hi = bands[i + 1];
+    if (clamped >= lo.pct && clamped <= hi.pct) {
+      const t = (clamped - lo.pct) / (hi.pct - lo.pct);
+      return {
+        psd_lpsHa: lo.psd_lpsHa + t * (hi.psd_lpsHa - lo.psd_lpsHa),
+        ssr_m3Ha: lo.ssr_m3Ha + t * (hi.ssr_m3Ha - lo.ssr_m3Ha),
+      };
+    }
+  }
+  // Fallback: nearest band
+  return {
+    psd_lpsHa: bands[bands.length - 1].psd_lpsHa,
+    ssr_m3Ha: bands[bands.length - 1].ssr_m3Ha,
+  };
+}
+
+export function osdSimplified(
+  region: OsdRegion,
+  terrain: TerrainSlope,
+  imperviousPct: number,
+  projectAreaHa: number
+): {
+  psd_lpsHa: number;
+  ssr_m3Ha: number;
+  psd_Ls: number;
+  psd_m3s: number;
+  ssr_m3: number;
+  ssrWith20pctAllowance_m3: number;
+  designARI_years: number;
+} {
+  const regionData = OSD_TABLE_5A1[region];
+  const terrainEntry = regionData.find((e) => e.terrain === terrain);
+  if (!terrainEntry) {
+    throw new Error(`No OSD data for region=${region}, terrain=${terrain}`);
+  }
+  const { psd_lpsHa, ssr_m3Ha } = interpolateBand(
+    terrainEntry.imperviousBands,
+    imperviousPct
+  );
+  const psd_Ls = psd_lpsHa * projectAreaHa;
+  const psd_m3s = psd_Ls / 1000;
+  const ssr_m3 = ssr_m3Ha * projectAreaHa;
+  // MSMA §5.3.1 recommends 20 % additional storage for landscaped areas
+  // to allow for construction tolerance and vegetation loss over time.
+  const ssrWith20pctAllowance_m3 = ssr_m3 * 1.20;
+  return {
+    psd_lpsHa,
+    ssr_m3Ha,
+    psd_Ls,
+    psd_m3s,
+    ssr_m3,
+    ssrWith20pctAllowance_m3,
+    designARI_years: 10,
+  };
+}
+
+/**
+ * Rainwater Harvesting (RWH) Tank Sizing — MSMA Ch 6 §6.4.5
+ *
+ * MSMA Equation 6.1: St = 0.01 × Ar
+ * where St is tank size (m³) and Ar is roof catchment area (m²). This
+ * empirical rule is derived from Malaysian daily water balance modelling
+ * and represents near-optimum storage (storage ≈ 10 mm of rainfall over
+ * the roof area). A variation of ± 25 % is expected across locations.
+ *
+ * Also returns:
+ * - Indicative annual yield scaled from Table 6.4 (base case: 1 m³ tank
+ *   + 100 m² roof → AARY values tabulated for 17 Malaysian towns).
+ * - First flush volume requirement from Table 6.3.
+ *
+ * Reference: MSMA 2nd Edition (2012), Chapter 6 — Rainwater Harvesting.
+ */
+
+export function rainwaterHarvesting(
+  roofArea_m2: number,
+  townIndex: number,
+  demandLitresPerDay?: number
+): {
+  tankSize_m3: number;
+  tankSizeMin_m3: number;
+  tankSizeMax_m3: number;
+  aary_m3: number;
+  mar_mm: number;
+  town: string;
+  firstFlushMin_m3: number;
+  firstFlushMax_m3: number;
+  firstFlushNote: string;
+  demandSatisfiedDays: number | null;
+  notes: string[];
+} {
+  const town = RWH_TOWNS[townIndex] ?? RWH_TOWNS[0];
+  // Eq 6.1 — near-optimum tank size
+  const tankSize_m3 = 0.01 * roofArea_m2;
+  // ± 25 % variation noted in §6.4.5
+  const tankSizeMin_m3 = tankSize_m3 * 0.75;
+  const tankSizeMax_m3 = tankSize_m3 * 1.25;
+  // Table 6.4 base case: 1 m³ tank + 100 m² roof → tabulated AARY (m³)
+  // Scaled proportionally to roof area; scaling with tank size saturates
+  // quickly (§6.4.4 notes 3× tank → only +32 % yield), so we report the
+  // base-case value scaled to roof area as a conservative estimate.
+  const aary_m3 = (town.aary_m3 * roofArea_m2) / 100;
+
+  const ff = firstFlushVolume_m3(roofArea_m2);
+
+  let demandSatisfiedDays: number | null = null;
+  if (demandLitresPerDay && demandLitresPerDay > 0) {
+    const aaryLitres = aary_m3 * 1000;
+    demandSatisfiedDays = aaryLitres / demandLitresPerDay;
+  }
+
+  const notes: string[] = [
+    "Tank size from MSMA Eq 6.1 (≈ 10 mm of rainfall storage per m² of roof).",
+    "± 25 % range reflects variation in daily demand and rainfall characteristics.",
+    "Yield scaled from Table 6.4 base case (1 m³ tank + 100 m² roof).",
+  ];
+  if (roofArea_m2 < 50) {
+    notes.push("Small roof (< 50 m²): tank sizing may be dominated by demand rather than supply.");
+  }
+
+  return {
+    tankSize_m3,
+    tankSizeMin_m3,
+    tankSizeMax_m3,
+    aary_m3,
+    mar_mm: town.mar_mm,
+    town: town.town,
+    firstFlushMin_m3: ff.min,
+    firstFlushMax_m3: ff.max,
+    firstFlushNote: ff.note,
+    demandSatisfiedDays,
+    notes,
+  };
+}
+
+/**
+ * Bioretention Filter Bed Sizing — MSMA Ch 9 §9.3.1
+ *
+ * For impermeable systems (with underdrain), MSMA Eq 9.1:
+ *     Af = (WQv × df) / [k × (hf + df) × tf]
+ *
+ * For permeable systems (no underdrain), MSMA Eq 9.2:
+ *     Af = (WQv × df) / [i × (hf + df) × tf]
+ *
+ * where:
+ *   Af  = filter bed surface area (m²)
+ *   WQv = water quality volume (m³) — runoff from 40 mm (3-month ARI) storm
+ *   df  = filter bed depth (m) — typical 0.45–1.0 m
+ *   k   = permeability of filter media (m/day) — Table 9.7
+ *   i   = infiltration rate of underlying soil (m/day) — permeable only
+ *   hf  = average head of water above filter bed (m) — typical 0.075–0.15 m
+ *   tf  = design drain time (day) — maximum 1 day per §9.3.1
+ *
+ * Reference: MSMA 2nd Edition (2012), Chapter 9 — Bioretention System.
+ */
+export function bioretentionSizing(
+  wqv_m3: number,
+  df_m: number,
+  hf_m: number,
+  tf_days: number,
+  /** Permeability k (impermeable system) OR infiltration i (permeable) */
+  kOrI_m_day: number,
+  systemType: "impermeable" | "permeable" = "impermeable"
+): {
+  filterArea_m2: number;
+  meetsMinDimensions: boolean;
+  maxEmptyingTime_hrs: number;
+  systemType: "impermeable" | "permeable";
+  notes: string[];
+} {
+  // Guard against division by zero / invalid inputs
+  if (kOrI_m_day <= 0 || hf_m + df_m <= 0 || tf_days <= 0) {
+    return {
+      filterArea_m2: NaN,
+      meetsMinDimensions: false,
+      maxEmptyingTime_hrs: 0,
+      systemType,
+      notes: ["Invalid input — k/i, depths, and drain time must all be > 0."],
+    };
+  }
+
+  const Af = (wqv_m3 * df_m) / (kOrI_m_day * (hf_m + df_m) * tf_days);
+
+  // Minimum per Table 9.6: 3 m × 6 m = 18 m²
+  const meetsMinDimensions = Af >= 18;
+
+  // Estimate maximum emptying time — check against 24-hr limit (§9.3.1)
+  // Approximate: time = (hf + df) / k (stage-declining simplification)
+  const maxEmptyingTime_days = (hf_m + df_m) / kOrI_m_day;
+  const maxEmptyingTime_hrs = maxEmptyingTime_days * 24;
+
+  const notes: string[] = [];
+  if (tf_days > 1) {
+    notes.push("Design drain time tf exceeds MSMA §9.3.1 maximum of 1 day.");
+  }
+  if (hf_m < 0.075 || hf_m > 0.15) {
+    notes.push("Typical hf is 75–150 mm (half of 150–300 mm ponding depth).");
+  }
+  if (df_m < 0.45 || df_m > 1.0) {
+    notes.push("Typical filter bed depth df is 450–1000 mm per Table 9.6.");
+  }
+  if (!meetsMinDimensions) {
+    notes.push("Computed area < 18 m² — adopt minimum 3 m × 6 m per Table 9.6.");
+  }
+  if (maxEmptyingTime_hrs > 24) {
+    notes.push("Maximum emptying time exceeds 24 hours — increase k or reduce df.");
+  }
+
+  return {
+    filterArea_m2: Af,
+    meetsMinDimensions,
+    maxEmptyingTime_hrs,
+    systemType,
+    notes,
+  };
+}
+
+/** Water Quality Volume for bioretention: runoff from 40 mm design rainfall. */
+export function waterQualityVolume(catchmentArea_m2: number, runoffCoefficient: number): number {
+  const designRainfall_m = 0.040; // 40 mm = 3-month ARI per MSMA §9.3.1
+  return catchmentArea_m2 * runoffCoefficient * designRainfall_m;
 }
