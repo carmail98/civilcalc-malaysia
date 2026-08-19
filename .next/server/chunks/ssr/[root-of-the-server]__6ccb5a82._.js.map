@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../../app/calculators/concrete/rc-beam/page.tsx"],"sourcesContent":["import { redirect } from \"next/navigation\";\n\nexport default function RcBeamRedirect() {\n  redirect(\"/calculators/concrete/beam-moment\");\n}\n"],"names":[],"mappings":"oUAAA,EAAA,CAAA,CAAA,OAAA,IAAA,EAAA,EAAA,CAAA,CAAA,OAEe,SAAS,IACtB,CAAA,EAAA,EAAA,QAAA,AAAQ,EAAC,oCACX"}

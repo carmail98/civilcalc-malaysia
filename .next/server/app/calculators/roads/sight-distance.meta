@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/roads/layout,_N_T_/calculators/roads/sight-distance/layout,_N_T_/calculators/roads/sight-distance/page,_N_T_/calculators/roads/sight-distance"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/roads/sight-distance/__PAGE__",
+    "/calculators/roads/sight-distance",
+    "/calculators/roads",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

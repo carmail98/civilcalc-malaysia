@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/costing/layout,_N_T_/calculators/costing/final-account/layout,_N_T_/calculators/costing/final-account/page,_N_T_/calculators/costing/final-account"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/costing/final-account/__PAGE__",
+    "/calculators/costing/final-account",
+    "/calculators/costing",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

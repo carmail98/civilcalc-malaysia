@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/sewerage/layout,_N_T_/calculators/sewerage/sewer-sizing/layout,_N_T_/calculators/sewerage/sewer-sizing/page,_N_T_/calculators/sewerage/sewer-sizing"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/sewerage/sewer-sizing/__PAGE__",
+    "/calculators/sewerage/sewer-sizing",
+    "/calculators/sewerage",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

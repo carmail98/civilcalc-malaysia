@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/concrete/layout,_N_T_/calculators/concrete/beam-shear/layout,_N_T_/calculators/concrete/beam-shear/page,_N_T_/calculators/concrete/beam-shear"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/concrete/beam-shear/__PAGE__",
+    "/calculators/concrete/beam-shear",
+    "/calculators/concrete",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

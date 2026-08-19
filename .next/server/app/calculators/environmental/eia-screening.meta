@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/environmental/layout,_N_T_/calculators/environmental/eia-screening/layout,_N_T_/calculators/environmental/eia-screening/page,_N_T_/calculators/environmental/eia-screening"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/environmental/eia-screening/__PAGE__",
+    "/calculators/environmental/eia-screening",
+    "/calculators/environmental",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/drainage/layout,_N_T_/calculators/drainage/tc/layout,_N_T_/calculators/drainage/tc/page,_N_T_/calculators/drainage/tc"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/drainage/tc/__PAGE__",
+    "/calculators/drainage/tc",
+    "/calculators/drainage",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/concrete/layout,_N_T_/calculators/concrete/column-interaction/layout,_N_T_/calculators/concrete/column-interaction/page,_N_T_/calculators/concrete/column-interaction"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/concrete/column-interaction/__PAGE__",
+    "/calculators/concrete/column-interaction",
+    "/calculators/concrete",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

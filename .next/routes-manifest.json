@@ -1,0 +1,509 @@
+{
+  "version": 3,
+  "pages404": true,
+  "appType": "app",
+  "caseSensitive": false,
+  "basePath": "",
+  "redirects": [
+    {
+      "source": "/:path+/",
+      "destination": "/:path+",
+      "internal": true,
+      "priority": true,
+      "statusCode": 308,
+      "regex": "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))/$"
+    }
+  ],
+  "headers": [],
+  "rewrites": {
+    "beforeFiles": [],
+    "afterFiles": [],
+    "fallback": []
+  },
+  "dynamicRoutes": [
+    {
+      "page": "/api/answers/[id]/accept",
+      "regex": "^/api/answers/([^/]+?)/accept(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/answers/(?<nxtPid>[^/]+?)/accept(?:/)?$"
+    },
+    {
+      "page": "/api/answers/[id]/vote",
+      "regex": "^/api/answers/([^/]+?)/vote(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/answers/(?<nxtPid>[^/]+?)/vote(?:/)?$"
+    },
+    {
+      "page": "/api/auth/[...nextauth]",
+      "regex": "^/api/auth/(.+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPnextauth": "nxtPnextauth"
+      },
+      "namedRegex": "^/api/auth/(?<nxtPnextauth>.+?)(?:/)?$"
+    },
+    {
+      "page": "/api/questions/[id]",
+      "regex": "^/api/questions/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/questions/(?<nxtPid>[^/]+?)(?:/)?$"
+    },
+    {
+      "page": "/api/questions/[id]/answers",
+      "regex": "^/api/questions/([^/]+?)/answers(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/questions/(?<nxtPid>[^/]+?)/answers(?:/)?$"
+    },
+    {
+      "page": "/api/questions/[id]/vote",
+      "regex": "^/api/questions/([^/]+?)/vote(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/api/questions/(?<nxtPid>[^/]+?)/vote(?:/)?$"
+    },
+    {
+      "page": "/community/[id]",
+      "regex": "^/community/([^/]+?)(?:/)?$",
+      "routeKeys": {
+        "nxtPid": "nxtPid"
+      },
+      "namedRegex": "^/community/(?<nxtPid>[^/]+?)(?:/)?$"
+    }
+  ],
+  "staticRoutes": [
+    {
+      "page": "/",
+      "regex": "^/(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/(?:/)?$"
+    },
+    {
+      "page": "/_global-error",
+      "regex": "^/_global\\-error(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_global\\-error(?:/)?$"
+    },
+    {
+      "page": "/_not-found",
+      "regex": "^/_not\\-found(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/_not\\-found(?:/)?$"
+    },
+    {
+      "page": "/about",
+      "regex": "^/about(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/about(?:/)?$"
+    },
+    {
+      "page": "/admin/feedback",
+      "regex": "^/admin/feedback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/admin/feedback(?:/)?$"
+    },
+    {
+      "page": "/api/cron/keep-alive",
+      "regex": "^/api/cron/keep\\-alive(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/cron/keep\\-alive(?:/)?$"
+    },
+    {
+      "page": "/api/feedback",
+      "regex": "^/api/feedback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/feedback(?:/)?$"
+    },
+    {
+      "page": "/api/profile",
+      "regex": "^/api/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/profile(?:/)?$"
+    },
+    {
+      "page": "/api/questions",
+      "regex": "^/api/questions(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/questions(?:/)?$"
+    },
+    {
+      "page": "/api/register",
+      "regex": "^/api/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/register(?:/)?$"
+    },
+    {
+      "page": "/api/saved-calcs",
+      "regex": "^/api/saved\\-calcs(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/api/saved\\-calcs(?:/)?$"
+    },
+    {
+      "page": "/calculators",
+      "regex": "^/calculators(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete",
+      "regex": "^/calculators/concrete(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/beam-moment",
+      "regex": "^/calculators/concrete/beam\\-moment(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/beam\\-moment(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/beam-shear",
+      "regex": "^/calculators/concrete/beam\\-shear(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/beam\\-shear(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/column-interaction",
+      "regex": "^/calculators/concrete/column\\-interaction(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/column\\-interaction(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/crack-width",
+      "regex": "^/calculators/concrete/crack\\-width(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/crack\\-width(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/deflection-check",
+      "regex": "^/calculators/concrete/deflection\\-check(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/deflection\\-check(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/load-takeoff",
+      "regex": "^/calculators/concrete/load\\-takeoff(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/load\\-takeoff(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/pad-footing",
+      "regex": "^/calculators/concrete/pad\\-footing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/pad\\-footing(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/rc-beam",
+      "regex": "^/calculators/concrete/rc\\-beam(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/rc\\-beam(?:/)?$"
+    },
+    {
+      "page": "/calculators/concrete/slab-design",
+      "regex": "^/calculators/concrete/slab\\-design(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/concrete/slab\\-design(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing",
+      "regex": "^/calculators/costing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing/buildup-rates",
+      "regex": "^/calculators/costing/buildup\\-rates(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing/buildup\\-rates(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing/final-account",
+      "regex": "^/calculators/costing/final\\-account(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing/final\\-account(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing/ipc",
+      "regex": "^/calculators/costing/ipc(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing/ipc(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing/pce",
+      "regex": "^/calculators/costing/pce(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing/pce(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing/tender-evaluation",
+      "regex": "^/calculators/costing/tender\\-evaluation(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing/tender\\-evaluation(?:/)?$"
+    },
+    {
+      "page": "/calculators/costing/variation-order",
+      "regex": "^/calculators/costing/variation\\-order(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/costing/variation\\-order(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage",
+      "regex": "^/calculators/drainage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/bioretention",
+      "regex": "^/calculators/drainage/bioretention(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/bioretention(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/culvert",
+      "regex": "^/calculators/drainage/culvert(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/culvert(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/detention-pond",
+      "regex": "^/calculators/drainage/detention\\-pond(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/detention\\-pond(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/drain-sizing",
+      "regex": "^/calculators/drainage/drain\\-sizing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/drain\\-sizing(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/idf",
+      "regex": "^/calculators/drainage/idf(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/idf(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/osd",
+      "regex": "^/calculators/drainage/osd(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/osd(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/rational-method",
+      "regex": "^/calculators/drainage/rational\\-method(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/rational\\-method(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/rwh",
+      "regex": "^/calculators/drainage/rwh(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/rwh(?:/)?$"
+    },
+    {
+      "page": "/calculators/drainage/tc",
+      "regex": "^/calculators/drainage/tc(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/drainage/tc(?:/)?$"
+    },
+    {
+      "page": "/calculators/earthworks",
+      "regex": "^/calculators/earthworks(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/earthworks(?:/)?$"
+    },
+    {
+      "page": "/calculators/earthworks/compaction",
+      "regex": "^/calculators/earthworks/compaction(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/earthworks/compaction(?:/)?$"
+    },
+    {
+      "page": "/calculators/earthworks/cut-fill",
+      "regex": "^/calculators/earthworks/cut\\-fill(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/earthworks/cut\\-fill(?:/)?$"
+    },
+    {
+      "page": "/calculators/earthworks/slope",
+      "regex": "^/calculators/earthworks/slope(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/earthworks/slope(?:/)?$"
+    },
+    {
+      "page": "/calculators/environmental",
+      "regex": "^/calculators/environmental(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/environmental(?:/)?$"
+    },
+    {
+      "page": "/calculators/environmental/eia-screening",
+      "regex": "^/calculators/environmental/eia\\-screening(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/environmental/eia\\-screening(?:/)?$"
+    },
+    {
+      "page": "/calculators/environmental/water-demand",
+      "regex": "^/calculators/environmental/water\\-demand(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/environmental/water\\-demand(?:/)?$"
+    },
+    {
+      "page": "/calculators/geotechnical",
+      "regex": "^/calculators/geotechnical(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/geotechnical(?:/)?$"
+    },
+    {
+      "page": "/calculators/geotechnical/bearing-capacity",
+      "regex": "^/calculators/geotechnical/bearing\\-capacity(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/geotechnical/bearing\\-capacity(?:/)?$"
+    },
+    {
+      "page": "/calculators/geotechnical/pile-capacity",
+      "regex": "^/calculators/geotechnical/pile\\-capacity(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/geotechnical/pile\\-capacity(?:/)?$"
+    },
+    {
+      "page": "/calculators/geotechnical/settlement",
+      "regex": "^/calculators/geotechnical/settlement(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/geotechnical/settlement(?:/)?$"
+    },
+    {
+      "page": "/calculators/geotechnical/slope-stability",
+      "regex": "^/calculators/geotechnical/slope\\-stability(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/geotechnical/slope\\-stability(?:/)?$"
+    },
+    {
+      "page": "/calculators/report-generator",
+      "regex": "^/calculators/report\\-generator(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/report\\-generator(?:/)?$"
+    },
+    {
+      "page": "/calculators/roads",
+      "regex": "^/calculators/roads(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/roads(?:/)?$"
+    },
+    {
+      "page": "/calculators/roads/gradient-curve",
+      "regex": "^/calculators/roads/gradient\\-curve(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/roads/gradient\\-curve(?:/)?$"
+    },
+    {
+      "page": "/calculators/roads/pavement",
+      "regex": "^/calculators/roads/pavement(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/roads/pavement(?:/)?$"
+    },
+    {
+      "page": "/calculators/roads/sight-distance",
+      "regex": "^/calculators/roads/sight\\-distance(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/roads/sight\\-distance(?:/)?$"
+    },
+    {
+      "page": "/calculators/roads/traffic-volume",
+      "regex": "^/calculators/roads/traffic\\-volume(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/roads/traffic\\-volume(?:/)?$"
+    },
+    {
+      "page": "/calculators/roads/width-check",
+      "regex": "^/calculators/roads/width\\-check(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/roads/width\\-check(?:/)?$"
+    },
+    {
+      "page": "/calculators/sewerage",
+      "regex": "^/calculators/sewerage(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/sewerage(?:/)?$"
+    },
+    {
+      "page": "/calculators/sewerage/sewer-sizing",
+      "regex": "^/calculators/sewerage/sewer\\-sizing(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/calculators/sewerage/sewer\\-sizing(?:/)?$"
+    },
+    {
+      "page": "/community",
+      "regex": "^/community(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/community(?:/)?$"
+    },
+    {
+      "page": "/community/ask",
+      "regex": "^/community/ask(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/community/ask(?:/)?$"
+    },
+    {
+      "page": "/favicon.ico",
+      "regex": "^/favicon\\.ico(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/favicon\\.ico(?:/)?$"
+    },
+    {
+      "page": "/feedback",
+      "regex": "^/feedback(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/feedback(?:/)?$"
+    },
+    {
+      "page": "/login",
+      "regex": "^/login(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/login(?:/)?$"
+    },
+    {
+      "page": "/news",
+      "regex": "^/news(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/news(?:/)?$"
+    },
+    {
+      "page": "/profile",
+      "regex": "^/profile(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/profile(?:/)?$"
+    },
+    {
+      "page": "/register",
+      "regex": "^/register(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/register(?:/)?$"
+    }
+  ],
+  "dataRoutes": [],
+  "rsc": {
+    "header": "rsc",
+    "varyHeader": "rsc, next-router-state-tree, next-router-prefetch, next-router-segment-prefetch",
+    "prefetchHeader": "next-router-prefetch",
+    "didPostponeHeader": "x-nextjs-postponed",
+    "contentTypeHeader": "text/x-component",
+    "suffix": ".rsc",
+    "prefetchSegmentHeader": "next-router-segment-prefetch",
+    "prefetchSegmentSuffix": ".segment.rsc",
+    "prefetchSegmentDirSuffix": ".segments",
+    "clientParamParsing": false,
+    "dynamicRSCPrerender": false
+  },
+  "rewriteHeaders": {
+    "pathHeader": "x-nextjs-rewritten-path",
+    "queryHeader": "x-nextjs-rewritten-query"
+  }
+}
