@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/drainage/layout,_N_T_/calculators/drainage/detention-pond/layout,_N_T_/calculators/drainage/detention-pond/page,_N_T_/calculators/drainage/detention-pond"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/drainage/detention-pond/__PAGE__",
+    "/calculators/drainage/detention-pond",
+    "/calculators/drainage",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

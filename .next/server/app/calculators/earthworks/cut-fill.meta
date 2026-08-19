@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/earthworks/layout,_N_T_/calculators/earthworks/cut-fill/layout,_N_T_/calculators/earthworks/cut-fill/page,_N_T_/calculators/earthworks/cut-fill"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/earthworks/cut-fill/__PAGE__",
+    "/calculators/earthworks/cut-fill",
+    "/calculators/earthworks",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

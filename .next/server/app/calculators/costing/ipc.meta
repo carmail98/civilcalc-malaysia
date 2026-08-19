@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/costing/layout,_N_T_/calculators/costing/ipc/layout,_N_T_/calculators/costing/ipc/page,_N_T_/calculators/costing/ipc"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/costing/ipc/__PAGE__",
+    "/calculators/costing/ipc",
+    "/calculators/costing",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

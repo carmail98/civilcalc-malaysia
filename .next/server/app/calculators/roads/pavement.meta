@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/roads/layout,_N_T_/calculators/roads/pavement/layout,_N_T_/calculators/roads/pavement/page,_N_T_/calculators/roads/pavement"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/roads/pavement/__PAGE__",
+    "/calculators/roads/pavement",
+    "/calculators/roads",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/environmental/layout,_N_T_/calculators/environmental/water-demand/layout,_N_T_/calculators/environmental/water-demand/page,_N_T_/calculators/environmental/water-demand"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/environmental/water-demand/__PAGE__",
+    "/calculators/environmental/water-demand",
+    "/calculators/environmental",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

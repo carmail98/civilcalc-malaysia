@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/concrete/layout,_N_T_/calculators/concrete/pad-footing/layout,_N_T_/calculators/concrete/pad-footing/page,_N_T_/calculators/concrete/pad-footing"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/concrete/pad-footing/__PAGE__",
+    "/calculators/concrete/pad-footing",
+    "/calculators/concrete",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

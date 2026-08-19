@@ -1,0 +1,19 @@
+{
+  "status": 307,
+  "headers": {
+    "location": "/calculators/concrete/beam-moment",
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/concrete/layout,_N_T_/calculators/concrete/rc-beam/layout,_N_T_/calculators/concrete/rc-beam/page,_N_T_/calculators/concrete/rc-beam"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/concrete/rc-beam/__PAGE__",
+    "/calculators/concrete/rc-beam",
+    "/calculators/concrete",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

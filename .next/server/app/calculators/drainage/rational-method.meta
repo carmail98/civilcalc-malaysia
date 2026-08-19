@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/drainage/layout,_N_T_/calculators/drainage/rational-method/layout,_N_T_/calculators/drainage/rational-method/page,_N_T_/calculators/drainage/rational-method"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/drainage/rational-method/__PAGE__",
+    "/calculators/drainage/rational-method",
+    "/calculators/drainage",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

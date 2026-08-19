@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/concrete/layout,_N_T_/calculators/concrete/crack-width/layout,_N_T_/calculators/concrete/crack-width/page,_N_T_/calculators/concrete/crack-width"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/concrete/crack-width/__PAGE__",
+    "/calculators/concrete/crack-width",
+    "/calculators/concrete",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

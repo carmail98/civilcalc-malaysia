@@ -1,0 +1,16 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/earthworks/layout,_N_T_/calculators/earthworks/page,_N_T_/calculators/earthworks"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/earthworks/__PAGE__",
+    "/calculators/earthworks",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "./ThemeToggle";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -29,14 +30,15 @@ export default function MainNav() {
             aria-current={active ? "page" : undefined}
             className={
               active
-                ? "text-amber-700 font-semibold border-b-2 border-amber-500 pb-0.5 transition-colors"
-                : "text-stone-600 hover:text-amber-700 transition-colors"
+                ? "text-amber-700 dark:text-amber-400 font-semibold border-b-2 border-amber-500 pb-0.5 transition-colors"
+                : "text-stone-600 dark:text-stone-300 hover:text-amber-700 dark:hover:text-amber-400 transition-colors"
             }
           >
             {link.label}
           </Link>
         );
       })}
+      <ThemeToggle />
     </>
   );
 }

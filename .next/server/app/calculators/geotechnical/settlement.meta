@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/calculators/layout,_N_T_/calculators/geotechnical/layout,_N_T_/calculators/geotechnical/settlement/layout,_N_T_/calculators/geotechnical/settlement/page,_N_T_/calculators/geotechnical/settlement"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/calculators/geotechnical/settlement/__PAGE__",
+    "/calculators/geotechnical/settlement",
+    "/calculators/geotechnical",
+    "/calculators",
+    "/_index",
+    "/_head"
+  ]
+}
